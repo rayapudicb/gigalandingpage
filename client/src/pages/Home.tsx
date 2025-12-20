@@ -9,7 +9,6 @@ import {
   Sparkles,
   Calendar,
   Users,
-  Zap,
   Rocket,
   Menu,
   X,
@@ -22,7 +21,6 @@ import {
 } from "lucide-react";
 import { SiFacebook, SiInstagram } from "react-icons/si";
 
-import heroImage from "@assets/generated_images/corporate_team_collaboration_scene.png";
 import cultureImage from "@assets/generated_images/office_culture_lifestyle.png";
 
 // Theme toggle hook
@@ -61,22 +59,19 @@ function Navigation() {
     { label: "Innovation", href: "#innovation" },
     { label: "Events", href: "#events" },
     { label: "Products", href: "#products" },
-    { label: "Life at Gigays", href: "#culture" },
+    { label: "Life at Gigasys", href: "#culture" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4 h-16">
           <a
             href="/"
-            className="flex items-center gap-2 text-xl font-bold tracking-tight"
+            className="text-xl font-bold tracking-tight"
             data-testid="link-home"
           >
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-              <Zap className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span>Gigays</span>
+            Gigasys
           </a>
 
           {/* Desktop nav */}
@@ -141,46 +136,56 @@ function Navigation() {
   );
 }
 
-// Hero section
+// Hero section with carousel-style rounded corners
 function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Team collaboration"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
-      </div>
+    <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="max-w-6xl mx-auto">
+        {/* Carousel card with rounded corners */}
+        <div className="relative rounded-2xl overflow-hidden min-h-[500px] sm:min-h-[600px] flex items-center">
+          {/* Background gradient like Meta */}
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(135deg, #e0f2fe 0%, #dbeafe 25%, #fce7f3 50%, #fef3c7 75%, #d1fae5 100%)"
+            }}
+          />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <Badge
-          variant="secondary"
-          className="mb-6 bg-white/10 text-white border-white/20 backdrop-blur-sm"
-        >
-          GIGAYS CAREERS
-        </Badge>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight mb-6">
-          Build the future of{" "}
-          <span className="text-primary">technology</span> with us
-        </h1>
-        <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10">
-          Join our team of innovators, dreamers, and builders. We're creating
-          technologies that connect the world and shape tomorrow.
-        </p>
+          {/* Content */}
+          <div className="relative z-10 p-8 sm:p-12 lg:p-16 max-w-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-6">
+              Build the future with Gigasys
+            </h1>
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              Join our team of innovators, dreamers, and builders. We're creating
+              technologies that connect the world and shape tomorrow.
+            </p>
 
-        <Button size="lg" data-testid="button-view-opportunities">
-          View Opportunities
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
+            <Button variant="outline" size="lg" className="bg-white/80 backdrop-blur-sm border-gray-300 text-gray-900 hover:bg-white" data-testid="button-learn-more">
+              Learn more
+            </Button>
+          </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronRight className="w-6 h-6 text-white/60 rotate-90" />
+          {/* Gigasys logo watermark */}
+          <div className="absolute bottom-6 right-6 text-gray-400 text-lg font-semibold">
+            Gigasys
+          </div>
+        </div>
+
+        {/* Carousel navigation dots */}
+        <div className="flex items-center justify-center gap-4 mt-6">
+          <Button size="icon" variant="ghost" className="rounded-full" data-testid="button-carousel-prev">
+            <ChevronRight className="w-5 h-5 rotate-180" />
+          </Button>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-1 rounded-full bg-primary" />
+            <div className="w-8 h-1 rounded-full bg-muted" />
+            <div className="w-8 h-1 rounded-full bg-muted" />
+          </div>
+          <Button size="icon" variant="ghost" className="rounded-full" data-testid="button-carousel-next">
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
     </section>
   );
@@ -211,7 +216,7 @@ function TeamsSection() {
           </div>
           <h3 className="text-xl font-semibold mb-2">Teams Coming Soon</h3>
           <p className="text-muted-foreground max-w-md mx-auto">
-            We're building out our team pages. Check back soon to learn more about the amazing teams at Gigays.
+            We're building out our team pages. Check back soon to learn more about the amazing teams at Gigasys.
           </p>
         </Card>
       </div>
@@ -235,7 +240,7 @@ function InnovationSection() {
             At the forefront of innovation
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            At Gigays, we are pushing the limits of technology. From developing
+            At Gigasys, we are pushing the limits of technology. From developing
             category-defining products to testing and launching at global scale.
           </p>
         </div>
@@ -278,7 +283,7 @@ function EventsSection() {
           </div>
           <h3 className="text-xl font-semibold mb-2">Events Coming Soon</h3>
           <p className="text-muted-foreground max-w-md mx-auto">
-            Stay tuned for upcoming events and conferences hosted by Gigays.
+            Stay tuned for upcoming events and conferences hosted by Gigasys.
           </p>
         </Card>
       </div>
@@ -299,7 +304,7 @@ function ProductsSection() {
             We build awesome things
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover the innovative products and solutions we're building at Gigays.
+            Discover the innovative products and solutions we're building at Gigasys.
           </p>
         </div>
 
@@ -356,7 +361,7 @@ function CultureSection() {
 // Footer
 function Footer() {
   const footerLinks = {
-    Careers: ["All Jobs", "Teams", "Locations", "Students", "Life at Gigays"],
+    Careers: ["All Jobs", "Teams", "Locations", "Students", "Life at Gigasys"],
     Company: ["About Us", "News", "Investors", "Sustainability", "Contact"],
     Products: ["Nova AI", "Vision VR", "Smart Glasses", "AI Studio", "Developer Tools"],
     Resources: ["Help Center", "Blog", "Accessibility", "Privacy", "Terms"],
@@ -416,14 +421,9 @@ function Footer() {
 
         {/* Bottom */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-              <Zap className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold">Gigays</span>
-          </div>
+          <span className="text-xl font-bold">Gigasys</span>
           <p className="text-sm text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} Gigays Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Gigasys Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a
