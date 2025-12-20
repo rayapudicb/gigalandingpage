@@ -18,10 +18,21 @@ import {
   Github,
   Sun,
   Moon,
+  Database,
+  Shield,
+  Zap,
+  CreditCard,
+  Bot,
+  MessageSquare,
+  Globe,
+  BarChart3,
+  Lock,
+  Cpu,
+  Bell,
+  FileText,
 } from "lucide-react";
 import { SiFacebook, SiInstagram } from "react-icons/si";
 
-import cultureImage from "@assets/generated_images/office_culture_lifestyle.png";
 import carouselImage1 from "@assets/generated_images/ai_neural_network_visualization.png";
 import carouselImage2 from "@assets/generated_images/cloud_infrastructure_concept.png";
 import carouselImage3 from "@assets/generated_images/security_authentication_concept.png";
@@ -217,167 +228,325 @@ function HeroSection() {
   );
 }
 
-// Featured Teams Section
-function TeamsSection() {
+// Security & Authentication Section
+function SecuritySection() {
+  const securityModules = [
+    {
+      icon: Lock,
+      title: "Auth Service",
+      description: "JWT token management, password hashing with bcrypt, and session management for any web application.",
+      features: ["JWT Tokens", "Session Management", "Password Hashing"]
+    },
+    {
+      icon: Shield,
+      title: "RBAC System",
+      description: "Dynamic role hierarchy with permission inheritance and resource-level permissions for multi-tenant apps.",
+      features: ["Role Hierarchy", "Permission Inheritance", "Policy Caching"]
+    },
+    {
+      icon: MessageSquare,
+      title: "OTP Verification",
+      description: "Time-based OTP with multi-channel delivery via SMS and Email, with retry logic built-in.",
+      features: ["SMS & Email OTP", "Multi-provider", "Retry Logic"]
+    }
+  ];
+
   return (
     <section id="teams" className="py-20 md:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">
-            FEATURED TEAMS
+            SECURITY & AUTHENTICATION
           </Badge>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            Our best ideas happen together
+            Enterprise-grade security
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Teamwork drives innovation, cultivates human connection and supports
-            constant learning. Whatever role each of us plays, our best work
-            comes through collaboration.
+            Protect your users with battle-tested authentication and authorization modules.
           </p>
         </div>
 
-        <Card className="p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-            <Users className="w-8 h-8 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Teams Coming Soon</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            We're building out our team pages. Check back soon to learn more about the amazing teams at Gigasys.
-          </p>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {securityModules.map((module) => (
+            <Card key={module.title} className="p-6">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <module.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{module.title}</h3>
+              <p className="text-muted-foreground text-sm mb-4">{module.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {module.features.map((feature) => (
+                  <Badge key={feature} variant="secondary" className="text-xs">{feature}</Badge>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// Innovation Section
-function InnovationSection() {
+// AI & Automation Section
+function AISection() {
+  const aiModules = [
+    {
+      icon: Bot,
+      title: "Workflow Engine",
+      description: "State machine management with conditional branching, workflow templates, and instance tracking.",
+      features: ["State Machines", "Conditional Logic", "Templates"]
+    },
+    {
+      icon: Sparkles,
+      title: "AI Matching Service",
+      description: "Content-based filtering and user preference matching for recommendation engines.",
+      features: ["Content Filtering", "Preference Matching", "Recommendations"]
+    },
+    {
+      icon: Users,
+      title: "Trust Score System",
+      description: "User trust rating calculation with behavior-based scoring and historical tracking.",
+      features: ["Trust Ratings", "Behavior Scoring", "History Tracking"]
+    },
+    {
+      icon: Shield,
+      title: "Anti-Spam Service (ASAS)",
+      description: "Spam detection, content moderation, and rate limiting for user-generated content platforms.",
+      features: ["Spam Detection", "Content Moderation", "Rate Limiting"]
+    }
+  ];
+
   return (
-    <section
-      id="innovation"
-      className="py-20 md:py-28 bg-muted/30"
-    >
+    <section id="innovation" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">
-            INNOVATION
+            AI & AUTOMATION
           </Badge>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            At the forefront of innovation
+            Intelligent automation at scale
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            At Gigasys, we are pushing the limits of technology. From developing
-            category-defining products to testing and launching at global scale.
+            Power your applications with AI-driven workflows, matching algorithms, and trust systems.
           </p>
         </div>
 
-        <Card className="p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-            <Sparkles className="w-8 h-8 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Stories Coming Soon</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            Discover how our team members are building innovative solutions. Content coming soon.
-          </p>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {aiModules.map((module) => (
+            <Card key={module.title} className="p-6">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <module.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{module.title}</h3>
+              <p className="text-muted-foreground text-sm mb-4">{module.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {module.features.map((feature) => (
+                  <Badge key={feature} variant="secondary" className="text-xs">{feature}</Badge>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// Events Section
-function EventsSection() {
+// Analytics & Reporting Section
+function AnalyticsSection() {
+  const analyticsModules = [
+    {
+      icon: BarChart3,
+      title: "Dashboard Analytics",
+      description: "Real-time KPI tracking, user engagement metrics, and revenue analytics for admin panels.",
+      features: ["Real-time KPIs", "User Engagement", "Revenue Analytics"]
+    },
+    {
+      icon: Rocket,
+      title: "Campaign Analytics",
+      description: "Performance tracking, conversion metrics, and ROI calculation for marketing platforms.",
+      features: ["Performance Tracking", "Conversion Metrics", "ROI Calculation"]
+    },
+    {
+      icon: Cpu,
+      title: "Performance Monitoring",
+      description: "Response time tracking, slow query detection, and performance statistics for APIs.",
+      features: ["Response Times", "Slow Query Detection", "Statistics"]
+    }
+  ];
+
   return (
     <section id="events" className="py-20 md:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">
-            SIGNATURE EVENTS
+            ANALYTICS & REPORTING
           </Badge>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            Engage with big ideas
+            Data-driven insights
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We're building more than future technology — we're building a
-            community of creators and developers.
+            Comprehensive analytics and reporting tools to measure performance and drive growth.
           </p>
         </div>
 
-        <Card className="p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-            <Calendar className="w-8 h-8 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Events Coming Soon</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            Stay tuned for upcoming events and conferences hosted by Gigasys.
-          </p>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {analyticsModules.map((module) => (
+            <Card key={module.title} className="p-6">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <module.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{module.title}</h3>
+              <p className="text-muted-foreground text-sm mb-4">{module.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {module.features.map((feature) => (
+                  <Badge key={feature} variant="secondary" className="text-xs">{feature}</Badge>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// Products Section
-function ProductsSection() {
+// Infrastructure Section
+function InfrastructureSection() {
+  const infraModules = [
+    {
+      icon: Database,
+      title: "CacheService",
+      description: "Namespace-based caching with TTL management, hit/miss rate tracking, and cache invalidation patterns.",
+      features: ["TTL Management", "Hit/Miss Tracking", "Invalidation Patterns"]
+    },
+    {
+      icon: CreditCard,
+      title: "Billing & Wallet System",
+      description: "Multi-currency wallet management, transaction ledger, invoice generation, and payment processing.",
+      features: ["Multi-currency", "Stripe/Razorpay/PayPal", "Invoicing"]
+    },
+    {
+      icon: FileText,
+      title: "Subscription Management",
+      description: "Tiered pricing plans, usage-based billing, proration logic, and plan upgrades/downgrades.",
+      features: ["Tiered Plans", "Usage Billing", "Proration"]
+    },
+    {
+      icon: Globe,
+      title: "Tax Calculator",
+      description: "Multi-jurisdiction tax rules, tax category management, and automatic tax calculation.",
+      features: ["Multi-jurisdiction", "Tax Categories", "Auto Calculation"]
+    }
+  ];
+
   return (
     <section id="products" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">
-            OUR PRODUCTS
+            CORE INFRASTRUCTURE
           </Badge>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            We build awesome things
+            Built for scale
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover the innovative products and solutions we're building at Gigasys.
+            Enterprise-grade infrastructure modules for caching, billing, subscriptions, and global commerce.
           </p>
         </div>
 
-        <Card className="p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-            <Rocket className="w-8 h-8 text-primary" />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Products Coming Soon</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            We're working on exciting new products. Check back soon to learn more.
-          </p>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {infraModules.map((module) => (
+            <Card key={module.title} className="p-6">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <module.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{module.title}</h3>
+              <p className="text-muted-foreground text-sm mb-4">{module.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {module.features.map((feature) => (
+                  <Badge key={feature} variant="secondary" className="text-xs">{feature}</Badge>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// Culture Section
-function CultureSection() {
+// Communication & Localization Section
+function CommunicationSection() {
+  const commModules = [
+    {
+      icon: Mail,
+      title: "Email Service",
+      description: "Template-based emails, transactional email sending, and email queue management."
+    },
+    {
+      icon: MessageSquare,
+      title: "SMS Service",
+      description: "OTP generation & verification with multi-provider support for phone verification."
+    },
+    {
+      icon: Bell,
+      title: "Notification System",
+      description: "Push notifications, in-app notifications, and notification preferences management."
+    },
+    {
+      icon: Globe,
+      title: "Country & Currency",
+      description: "250+ countries with flags, dial codes, and independent currency enablement."
+    },
+    {
+      icon: FileText,
+      title: "Category Management",
+      description: "Hierarchical categories with country-specific and global category support."
+    },
+    {
+      icon: Zap,
+      title: "Localization",
+      description: "Full localization support for global SaaS and e-commerce platforms."
+    }
+  ];
+
   return (
     <section id="culture" className="py-20 md:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <Badge variant="outline" className="mb-4">
-              LIFE AT GIGAYS
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              Where great minds do their best work
-            </h2>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              We believe in creating an environment where everyone can thrive.
-              Our culture is built on collaboration, innovation, and a shared
-              commitment to making a positive impact on the world.
-            </p>
-            <Button size="lg" data-testid="button-explore-culture">
-              Explore our culture
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-          <div className="relative">
-            <img
-              src={cultureImage}
-              alt="Office culture"
-              className="rounded-lg w-full"
-            />
-          </div>
+        <div className="text-center mb-16">
+          <Badge variant="outline" className="mb-4">
+            COMMUNICATION & LOCALIZATION
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            Connect globally
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Multi-channel communication and localization modules for reaching users worldwide.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {commModules.map((module) => (
+            <Card key={module.title} className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <module.icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-1">{module.title}</h3>
+                  <p className="text-muted-foreground text-sm">{module.description}</p>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Button size="lg" data-testid="button-contact-sales">
+            Contact Sales
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
         </div>
       </div>
     </section>
@@ -500,11 +669,11 @@ export default function Home() {
       <Navigation />
       <main>
         <HeroSection />
-        <TeamsSection />
-        <InnovationSection />
-        <EventsSection />
-        <ProductsSection />
-        <CultureSection />
+        <SecuritySection />
+        <AISection />
+        <AnalyticsSection />
+        <InfrastructureSection />
+        <CommunicationSection />
       </main>
       <Footer />
     </div>
