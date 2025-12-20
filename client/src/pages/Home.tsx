@@ -185,7 +185,7 @@ function HeroSection() {
 
   return (
     <section className="pt-16 bg-background">
-      <div className="px-1">
+      <div className="px-4 sm:px-6 lg:px-8">
         {/* Carousel card with rounded corners */}
         <div className="relative rounded-2xl overflow-hidden h-[calc(100vh-120px)] min-h-[400px] max-h-[700px] flex items-center">
           {/* Background image */}
