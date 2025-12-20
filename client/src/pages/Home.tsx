@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  Search,
   Bot,
   Database,
   Shield,
@@ -106,25 +104,6 @@ function HeroSlider() {
           >
             <ChevronRight className="w-5 h-5" />
           </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SearchSection() {
-  return (
-    <section className="py-12 bg-background">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-lg font-semibold mb-4 text-center">Search GigaSys Careers</h2>
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search by job title, team, or keyword..."
-            className="pl-12 h-14 text-base rounded-full border-2"
-            data-testid="input-job-search"
-          />
         </div>
       </div>
     </section>
@@ -403,7 +382,6 @@ export default function Home() {
   return (
     <Layout>
       <HeroSlider />
-      <SearchSection />
       <FeaturedTeamsSection />
       <InnovationSection />
       <EventsSection />
