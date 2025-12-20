@@ -22,9 +22,9 @@ import {
 import { SiFacebook, SiInstagram } from "react-icons/si";
 
 import cultureImage from "@assets/generated_images/office_culture_lifestyle.png";
-import carouselImage1 from "@assets/generated_images/team_collaboration_office_scene.png";
-import carouselImage2 from "@assets/generated_images/tech_innovation_lab_workspace.png";
-import carouselImage3 from "@assets/generated_images/creative_brainstorming_meeting.png";
+import carouselImage1 from "@assets/generated_images/ai_neural_network_visualization.png";
+import carouselImage2 from "@assets/generated_images/cloud_infrastructure_concept.png";
+import carouselImage3 from "@assets/generated_images/security_authentication_concept.png";
 
 // Theme toggle hook
 function useTheme() {
@@ -58,11 +58,11 @@ function Navigation() {
   const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
-    { label: "Teams", href: "#teams" },
-    { label: "Innovation", href: "#innovation" },
-    { label: "Events", href: "#events" },
-    { label: "Products", href: "#products" },
-    { label: "Life at Gigasys", href: "#culture" },
+    { label: "AI & Automation", href: "#innovation" },
+    { label: "Infrastructure", href: "#products" },
+    { label: "Security", href: "#teams" },
+    { label: "Analytics", href: "#events" },
+    { label: "About", href: "#culture" },
   ];
 
   return (
@@ -146,18 +146,18 @@ function HeroSection() {
   const slides = [
     {
       image: carouselImage1,
-      title: "Build the future with Gigasys",
-      description: "Join our team of innovators, dreamers, and builders. We're creating technologies that connect the world and shape tomorrow."
+      title: "AI & Automation Platforms",
+      description: "Workflow engines, AI matching, trust scoring, and anti-spam systems that power intelligent applications at scale."
     },
     {
       image: carouselImage2,
-      title: "Innovation at scale",
-      description: "Work on cutting-edge technology that impacts billions of people worldwide. Push the boundaries of what's possible."
+      title: "Enterprise Infrastructure",
+      description: "RBAC systems, caching services, billing engines, and performance monitoring built for reliability and scale."
     },
     {
       image: carouselImage3,
-      title: "Where ideas come to life",
-      description: "Collaborate with brilliant minds in an environment that values creativity, diversity, and bold thinking."
+      title: "Security & Authentication",
+      description: "JWT authentication, OTP verification, and multi-channel communication services to keep your users secure."
     }
   ];
 
