@@ -59,17 +59,19 @@ const jobs = [
 export default function Jobs() {
   return (
     <Layout>
+      <div className="bg-muted/30 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Badge variant="outline" className="mb-4">CAREERS</Badge>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            All Jobs
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Join our team and help build the future of enterprise software.
+          </p>
+        </div>
+      </div>
       <div className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4">CAREERS</Badge>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              All Jobs
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join our team and help build the future of enterprise software.
-            </p>
-          </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <div className="relative flex-1">

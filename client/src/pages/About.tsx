@@ -55,18 +55,20 @@ const timeline = [
 export default function About() {
   return (
     <Layout>
+      <div className="bg-muted/30 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Badge variant="outline" className="mb-4">ABOUT US</Badge>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Building the Future of Enterprise Software
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            GigaSys provides enterprise-grade SaaS modules that help businesses scale globally. 
+            From authentication to AI automation, we build the infrastructure that powers modern applications.
+          </p>
+        </div>
+      </div>
       <div className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">ABOUT US</Badge>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Building the Future of Enterprise Software
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              GigaSys provides enterprise-grade SaaS modules that help businesses scale globally. 
-              From authentication to AI automation, we build the infrastructure that powers modern applications.
-            </p>
-          </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
             {stats.map((stat) => (

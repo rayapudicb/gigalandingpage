@@ -4,17 +4,19 @@ import { Badge } from "@/components/ui/badge";
 export default function Privacy() {
   return (
     <Layout>
+      <div className="bg-muted/30 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Badge variant="outline" className="mb-4">LEGAL</Badge>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Privacy Policy
+          </h1>
+          <p className="text-muted-foreground">
+            Last updated: December 2024
+          </p>
+        </div>
+      </div>
       <div className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4">LEGAL</Badge>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Privacy Policy
-            </h1>
-            <p className="text-muted-foreground">
-              Last updated: December 2024
-            </p>
-          </div>
 
           <div className="prose prose-gray dark:prose-invert max-w-none">
             <section className="mb-8">

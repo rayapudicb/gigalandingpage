@@ -74,18 +74,19 @@ const teams = [
 export default function Teams() {
   return (
     <Layout>
+      <div className="bg-muted/30 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Badge variant="outline" className="mb-4">OUR TEAMS</Badge>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Meet Our Teams
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Six specialized teams building the platforms that power modern enterprise applications.
+          </p>
+        </div>
+      </div>
       <div className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4">OUR TEAMS</Badge>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Meet the Teams
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover the talented teams behind GigaSys and find where you belong.
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teams.map((team) => (
               <Card key={team.id} className="p-6">
