@@ -375,10 +375,10 @@ function ProductsSection() {
               <div
                 key={index}
                 onClick={() => setActiveProduct(index)}
-                className={`p-6 rounded-lg cursor-pointer transition-all ${
+                className={`p-6 cursor-pointer transition-all ${
                   index === activeProduct 
-                    ? 'bg-card border-l-4 border-l-primary' 
-                    : 'hover:bg-muted/50'
+                    ? 'bg-card pl-8 border-l-4 border-l-primary' 
+                    : 'hover:bg-muted/50 rounded-lg'
                 }`}
                 data-testid={`product-${index}`}
               >
