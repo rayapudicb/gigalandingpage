@@ -79,7 +79,7 @@ function HeroSlider() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-6 py-4 pb-8">
+        <div className="flex items-center justify-center gap-6 py-3">
           <button 
             onClick={prevSlide} 
             className="text-muted-foreground hover:text-foreground transition-colors p-1"
