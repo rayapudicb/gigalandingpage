@@ -63,52 +63,60 @@ function HeroSection() {
   }, [slides.length]);
 
   return (
-    <section className="pt-16 bg-background">
+    <section className="pt-4 bg-background">
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Carousel card with rounded corners */}
-        <div className="relative rounded-2xl overflow-hidden h-[calc(100vh-120px)] min-h-[400px] max-h-[700px] flex items-center">
+        <div className="relative rounded-2xl overflow-hidden aspect-[16/9] max-h-[600px]">
           {/* Background image */}
           <img
             src={slides[currentSlide].image}
             alt={slides[currentSlide].title}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+          {/* Dark overlay for text readability - gradient from bottom-left */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/30 to-transparent" />
 
-          {/* Content */}
-          <div className="relative z-10 p-8 sm:p-12 lg:p-16 max-w-2xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
+          {/* Content - positioned at bottom left */}
+          <div className="absolute bottom-0 left-0 p-8 sm:p-12 lg:p-16 max-w-xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4">
               {slides[currentSlide].title}
             </h1>
-            <p className="text-lg text-white/90 mb-8 leading-relaxed">
+            <p className="text-sm sm:text-base text-white/80 mb-6 leading-relaxed">
               {slides[currentSlide].description}
             </p>
 
-            <Button variant="outline" size="lg" className="bg-white/20 backdrop-blur-sm border-white/40 text-white hover:bg-white/30" data-testid="button-learn-more">
+            <Button className="bg-neutral-800 text-white border-0" data-testid="button-learn-more">
               Learn more
             </Button>
           </div>
         </div>
 
-        {/* Carousel navigation dots */}
-        <div className="flex items-center justify-center gap-4 py-3">
-          <Button size="icon" variant="ghost" className="rounded-full" onClick={prevSlide} data-testid="button-carousel-prev">
+        {/* Carousel navigation - centered below image */}
+        <div className="flex items-center justify-center gap-6 py-4">
+          <button 
+            onClick={prevSlide} 
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            data-testid="button-carousel-prev"
+          >
             <ChevronRight className="w-5 h-5 rotate-180" />
-          </Button>
+          </button>
           <div className="flex items-center gap-2">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-8 h-1 rounded-full transition-colors ${index === currentSlide ? 'bg-primary' : 'bg-muted'}`}
+                className={`h-1 rounded-full transition-all ${index === currentSlide ? 'w-8 bg-primary' : 'w-8 bg-muted'}`}
                 data-testid={`button-carousel-dot-${index}`}
               />
             ))}
           </div>
-          <Button size="icon" variant="ghost" className="rounded-full" onClick={nextSlide} data-testid="button-carousel-next">
+          <button 
+            onClick={nextSlide} 
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            data-testid="button-carousel-next"
+          >
             <ChevronRight className="w-5 h-5" />
-          </Button>
+          </button>
         </div>
       </div>
     </section>
