@@ -175,16 +175,24 @@ function HeroSection() {
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
+  // Auto-slide every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
   return (
-    <section className="pt-16 pb-4 px-2 bg-background">
-      <div className="max-w-[98%] mx-auto">
+    <section className="pt-16 bg-background">
+      <div className="px-1">
         {/* Carousel card with rounded corners */}
-        <div className="relative rounded-2xl overflow-hidden min-h-[480px] sm:min-h-[550px] flex items-center">
+        <div className="relative rounded-2xl overflow-hidden h-[calc(100vh-120px)] min-h-[400px] max-h-[700px] flex items-center">
           {/* Background image */}
           <img
             src={slides[currentSlide].image}
             alt={slides[currentSlide].title}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
           />
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
@@ -205,7 +213,7 @@ function HeroSection() {
         </div>
 
         {/* Carousel navigation dots */}
-        <div className="flex items-center justify-center gap-4 mt-4">
+        <div className="flex items-center justify-center gap-4 py-3">
           <Button size="icon" variant="ghost" className="rounded-full" onClick={prevSlide} data-testid="button-carousel-prev">
             <ChevronRight className="w-5 h-5 rotate-180" />
           </Button>
