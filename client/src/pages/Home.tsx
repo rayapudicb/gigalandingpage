@@ -59,7 +59,7 @@ function HeroSlider() {
   return (
     <section className="pt-4 bg-background">
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-br ${slides[currentSlide].gradient} min-h-[500px] md:min-h-[600px] flex items-center transition-all duration-700`}>
+        <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-br ${slides[currentSlide].gradient} min-h-[400px] md:min-h-[480px] flex items-center transition-all duration-700`}>
           <div className="absolute inset-0 bg-black/20" />
           <div className="relative z-10 p-8 sm:p-12 lg:p-20 max-w-3xl">
             <p className="text-xs sm:text-sm font-medium text-white/70 tracking-widest mb-4 uppercase">
