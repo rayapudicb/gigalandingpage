@@ -44,7 +44,7 @@ const stats = [
 ];
 
 const timeline = [
-  { year: "2019", title: "Founded", description: "GigaSys was founded with a vision to democratize enterprise software." },
+  { year: "2019", title: "Founded", description: "Gigasys was founded with a vision to democratize enterprise software." },
   { year: "2020", title: "First Product", description: "Launched our core infrastructure platform with billing and auth services." },
   { year: "2021", title: "AI Integration", description: "Introduced AI-powered workflow automation and matching systems." },
   { year: "2022", title: "Global Expansion", description: "Expanded to 180+ countries with full localization support." },
@@ -62,7 +62,7 @@ export default function About() {
             Building the Future of Enterprise Software
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            GigaSys provides enterprise-grade SaaS modules that help businesses scale globally. 
+            Gigasys provides enterprise-grade SaaS modules that help businesses scale globally. 
             From authentication to AI automation, we build the infrastructure that powers modern applications.
           </p>
         </div>

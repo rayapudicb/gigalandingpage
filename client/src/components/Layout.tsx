@@ -73,7 +73,7 @@ function Navigation() {
             className="text-2xl sm:text-3xl font-bold tracking-tight"
             data-testid="link-home"
           >
-            GigaSys
+            Gigasys
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
@@ -229,9 +229,9 @@ function Footer() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
-          <span className="text-xl font-bold">GigaSys</span>
+          <span className="text-xl font-bold">Gigasys</span>
           <p className="text-sm text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} GigaSys Technologies Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Gigasys Technologies Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a

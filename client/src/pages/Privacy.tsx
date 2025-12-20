@@ -22,7 +22,7 @@ export default function Privacy() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
               <p className="text-muted-foreground mb-4">
-                GigaSys Technologies Inc. ("GigaSys", "we", "us", or "our") is committed to protecting your privacy. 
+                Gigasys Technologies Inc. ("Gigasys", "we", "us", or "our") is committed to protecting your privacy. 
                 This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you 
                 use our services, websites, and applications.
               </p>

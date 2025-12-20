@@ -22,7 +22,7 @@ export default function Terms() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">1. Agreement to Terms</h2>
               <p className="text-muted-foreground mb-4">
-                By accessing or using GigaSys Technologies Inc.'s services, you agree to be bound by these Terms of Service. 
+                By accessing or using Gigasys Technologies Inc.'s services, you agree to be bound by these Terms of Service. 
                 If you do not agree to these terms, please do not use our services.
               </p>
             </section>
@@ -30,7 +30,7 @@ export default function Terms() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">2. Description of Services</h2>
               <p className="text-muted-foreground mb-4">
-                GigaSys provides enterprise software-as-a-service (SaaS) solutions including but not limited to:
+                Gigasys provides enterprise software-as-a-service (SaaS) solutions including but not limited to:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 mb-4">
                 <li>Authentication and authorization services</li>
@@ -82,7 +82,7 @@ export default function Terms() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">6. Intellectual Property</h2>
               <p className="text-muted-foreground mb-4">
-                Our services, including all content, features, and functionality, are owned by GigaSys and are 
+                Our services, including all content, features, and functionality, are owned by Gigasys and are 
                 protected by copyright, trademark, and other intellectual property laws. You are granted a limited, 
                 non-exclusive license to use our services in accordance with these terms.
               </p>
@@ -100,7 +100,7 @@ export default function Terms() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">8. Limitation of Liability</h2>
               <p className="text-muted-foreground mb-4">
-                To the maximum extent permitted by law, GigaSys shall not be liable for any indirect, incidental, 
+                To the maximum extent permitted by law, Gigasys shall not be liable for any indirect, incidental, 
                 special, consequential, or punitive damages resulting from your use of our services. Our total 
                 liability shall not exceed the amount paid by you in the twelve months preceding the claim.
               </p>

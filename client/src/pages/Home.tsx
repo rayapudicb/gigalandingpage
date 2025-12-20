@@ -23,7 +23,7 @@ function HeroSlider() {
     {
       label: "GIGASYS TECHNOLOGIES",
       title: "Put your skills to work as we build for the future of AI — today",
-      description: "At GigaSys, we believe in impact and building a career where you're challenged and valued in teams that are the best at what they do. Join us as we create and innovate the technologies of the future.",
+      description: "At Gigasys, we believe in impact and building a career where you're challenged and valued in teams that are the best at what they do. Join us as we create and innovate the technologies of the future.",
       cta: "View jobs",
       ctaLink: "/jobs",
       gradient: "from-blue-900 via-purple-900 to-indigo-900",
@@ -116,7 +116,7 @@ function FeaturedTeamsSection() {
       id: "ai",
       category: "ARTIFICIAL INTELLIGENCE",
       title: "Build the next generation of AI openly and responsibly",
-      description: "GigaSys is all in on building the future of AI with our open-source collection of models. Our AI platforms turn inspiration into reality by translating and generating dialogue, code, solving complex problems, and more.",
+      description: "Gigasys is all in on building the future of AI with our open-source collection of models. Our AI platforms turn inspiration into reality by translating and generating dialogue, code, solving complex problems, and more.",
       icon: Bot,
       gradient: "from-violet-600 to-indigo-600",
       link: "/teams",
@@ -216,7 +216,7 @@ function InnovationSection() {
           At the forefront of innovation, the possibilities are endless
         </h2>
         <p className="text-lg text-muted-foreground max-w-4xl mb-12">
-          At GigaSys, we are pushing the limits of enterprise software. From developing category-defining products to testing and launching platforms at global scale, there are many ways you can help us build the future.
+          At Gigasys, we are pushing the limits of enterprise software. From developing category-defining products to testing and launching platforms at global scale, there are many ways you can help us build the future.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -243,8 +243,8 @@ function EventsSection() {
   const events = [
     {
       date: "COMING SOON",
-      title: "GigaSys Developer Summit 2025",
-      description: "Join us to hear from GigaSys leaders about the latest in AI, infrastructure, and enterprise technologies.",
+      title: "Gigasys Developer Summit 2025",
+      description: "Join us to hear from Gigasys leaders about the latest in AI, infrastructure, and enterprise technologies.",
       link: "/about",
     },
     {
@@ -265,7 +265,7 @@ function EventsSection() {
           Engage with big ideas and brilliant people
         </h2>
         <p className="text-lg text-muted-foreground max-w-3xl mb-12">
-          We're building more than future technology — we're building a community of creators and developers. Our signature events connect us with the wider GigaSys community.
+          We're building more than future technology — we're building a community of creators and developers. Our signature events connect us with the wider Gigasys community.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
