@@ -361,10 +361,9 @@ function CultureSection() {
 // Footer
 function Footer() {
   const footerLinks = {
-    Careers: ["All Jobs", "Teams", "Locations", "Students", "Life at Gigasys"],
-    Company: ["About Us", "News", "Investors", "Sustainability", "Contact"],
-    Products: ["Nova AI", "Vision VR", "Smart Glasses", "AI Studio", "Developer Tools"],
-    Resources: ["Help Center", "Blog", "Accessibility", "Privacy", "Terms"],
+    Careers: ["All Jobs", "Teams"],
+    Company: ["About Us", "Contact"],
+    Resources: ["Privacy", "Terms"],
   };
 
   return (
@@ -398,7 +397,7 @@ function Footer() {
         </div>
 
         {/* Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-3 gap-8 mb-12">
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h4 className="font-semibold mb-4">{category}</h4>
