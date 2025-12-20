@@ -22,6 +22,9 @@ import {
 import { SiFacebook, SiInstagram } from "react-icons/si";
 
 import cultureImage from "@assets/generated_images/office_culture_lifestyle.png";
+import carouselImage1 from "@assets/generated_images/team_collaboration_office_scene.png";
+import carouselImage2 from "@assets/generated_images/tech_innovation_lab_workspace.png";
+import carouselImage3 from "@assets/generated_images/creative_brainstorming_meeting.png";
 
 // Theme toggle hook
 function useTheme() {
@@ -138,51 +141,74 @@ function Navigation() {
 
 // Hero section with carousel-style rounded corners
 function HeroSection() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const slides = [
+    {
+      image: carouselImage1,
+      title: "Build the future with Gigasys",
+      description: "Join our team of innovators, dreamers, and builders. We're creating technologies that connect the world and shape tomorrow."
+    },
+    {
+      image: carouselImage2,
+      title: "Innovation at scale",
+      description: "Work on cutting-edge technology that impacts billions of people worldwide. Push the boundaries of what's possible."
+    },
+    {
+      image: carouselImage3,
+      title: "Where ideas come to life",
+      description: "Collaborate with brilliant minds in an environment that values creativity, diversity, and bold thinking."
+    }
+  ];
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+
   return (
-    <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-6xl mx-auto">
+    <section className="pt-16 pb-4 px-2 bg-background">
+      <div className="max-w-[98%] mx-auto">
         {/* Carousel card with rounded corners */}
-        <div className="relative rounded-2xl overflow-hidden min-h-[500px] sm:min-h-[600px] flex items-center">
-          {/* Background gradient like Meta */}
-          <div 
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(135deg, #e0f2fe 0%, #dbeafe 25%, #fce7f3 50%, #fef3c7 75%, #d1fae5 100%)"
-            }}
+        <div className="relative rounded-2xl overflow-hidden min-h-[480px] sm:min-h-[550px] flex items-center">
+          {/* Background image */}
+          <img
+            src={slides[currentSlide].image}
+            alt={slides[currentSlide].title}
+            className="absolute inset-0 w-full h-full object-cover"
           />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
 
           {/* Content */}
           <div className="relative z-10 p-8 sm:p-12 lg:p-16 max-w-2xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-6">
-              Build the future with Gigasys
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
+              {slides[currentSlide].title}
             </h1>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Join our team of innovators, dreamers, and builders. We're creating
-              technologies that connect the world and shape tomorrow.
+            <p className="text-lg text-white/90 mb-8 leading-relaxed">
+              {slides[currentSlide].description}
             </p>
 
-            <Button variant="outline" size="lg" className="bg-white/80 backdrop-blur-sm border-gray-300 text-gray-900 hover:bg-white" data-testid="button-learn-more">
+            <Button variant="outline" size="lg" className="bg-white/20 backdrop-blur-sm border-white/40 text-white hover:bg-white/30" data-testid="button-learn-more">
               Learn more
             </Button>
-          </div>
-
-          {/* Gigasys logo watermark */}
-          <div className="absolute bottom-6 right-6 text-gray-400 text-lg font-semibold">
-            Gigasys
           </div>
         </div>
 
         {/* Carousel navigation dots */}
-        <div className="flex items-center justify-center gap-4 mt-6">
-          <Button size="icon" variant="ghost" className="rounded-full" data-testid="button-carousel-prev">
+        <div className="flex items-center justify-center gap-4 mt-4">
+          <Button size="icon" variant="ghost" className="rounded-full" onClick={prevSlide} data-testid="button-carousel-prev">
             <ChevronRight className="w-5 h-5 rotate-180" />
           </Button>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-1 rounded-full bg-primary" />
-            <div className="w-8 h-1 rounded-full bg-muted" />
-            <div className="w-8 h-1 rounded-full bg-muted" />
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-8 h-1 rounded-full transition-colors ${index === currentSlide ? 'bg-primary' : 'bg-muted'}`}
+                data-testid={`button-carousel-dot-${index}`}
+              />
+            ))}
           </div>
-          <Button size="icon" variant="ghost" className="rounded-full" data-testid="button-carousel-next">
+          <Button size="icon" variant="ghost" className="rounded-full" onClick={nextSlide} data-testid="button-carousel-next">
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
@@ -422,7 +448,7 @@ function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
           <span className="text-xl font-bold">Gigasys</span>
           <p className="text-sm text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} Gigasys Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Gigasys Technologies Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a
