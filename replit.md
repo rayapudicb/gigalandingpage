@@ -1,8 +1,8 @@
-# TechVision Careers Website
+# Gigays Careers Website
 
 ## Overview
 
-A corporate careers/job listing website inspired by Meta Careers, built with React frontend and Express backend. The application showcases job opportunities, company culture, team information, and events for a fictional tech company called "TechVision." The design follows Meta Careers-style guidelines with professional corporate aesthetics and human-centered design patterns.
+A corporate careers/job listing website inspired by Meta Careers, built with React frontend and Express backend. The application showcases job opportunities, company culture, team information, and events for a fictional tech company called "Gigays." The design follows Meta Careers-style guidelines with professional corporate aesthetics and human-centered design patterns.
 
 ## User Preferences
 

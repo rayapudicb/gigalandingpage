@@ -75,7 +75,7 @@ function Navigation() {
     { label: "Innovation", href: "#innovation" },
     { label: "Events", href: "#events" },
     { label: "Products", href: "#products" },
-    { label: "Life at TechVision", href: "#culture" },
+    { label: "Life at Gigays", href: "#culture" },
   ];
 
   return (
@@ -90,7 +90,7 @@ function Navigation() {
             <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
               <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span>TechVision</span>
+            <span>Gigays</span>
           </a>
 
           {/* Desktop nav */}
@@ -395,7 +395,7 @@ function InnovationSection() {
             At the forefront of innovation
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            At TechVision, we are pushing the limits of AI. From developing
+            At Gigays, we are pushing the limits of AI. From developing
             category-defining products to testing and launching wearables at
             global scale.
           </p>
@@ -441,7 +441,7 @@ function EventsSection() {
   const events = [
     {
       id: "1",
-      title: "TechVision Connect 2025",
+      title: "Gigays Connect 2025",
       date: "September 17-18, 2025",
       description:
         "Join us for our annual developer conference featuring the latest in AI and immersive technologies.",
@@ -697,7 +697,7 @@ function CultureSection() {
 // Footer
 function Footer() {
   const footerLinks = {
-    Careers: ["All Jobs", "Teams", "Locations", "Students", "Life at TechVision"],
+    Careers: ["All Jobs", "Teams", "Locations", "Students", "Life at Gigays"],
     Company: ["About Us", "News", "Investors", "Sustainability", "Contact"],
     Products: ["Nova AI", "Vision VR", "Smart Glasses", "AI Studio", "Developer Tools"],
     Resources: ["Help Center", "Blog", "Accessibility", "Privacy", "Terms"],
@@ -761,10 +761,10 @@ function Footer() {
             <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
               <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-bold">TechVision</span>
+            <span className="font-bold">Gigays</span>
           </div>
           <p className="text-sm text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} TechVision Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Gigays Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a
