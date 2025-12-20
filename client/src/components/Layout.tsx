@@ -44,12 +44,25 @@ function Navigation() {
   const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
-    { label: "AI & Automation", href: "/#innovation" },
-    { label: "Infrastructure", href: "/#products" },
-    { label: "Security", href: "/#teams" },
-    { label: "Analytics", href: "/#events" },
-    { label: "About", href: "/about" },
+    { label: "AI & Automation", href: "/#innovation", isHash: true },
+    { label: "Infrastructure", href: "/#products", isHash: true },
+    { label: "Security", href: "/#teams", isHash: true },
+    { label: "Analytics", href: "/#events", isHash: true },
+    { label: "About", href: "/about", isHash: false },
   ];
+
+  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const hash = href.split('#')[1];
+    if (window.location.pathname !== '/') {
+      window.location.href = href;
+    } else {
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
@@ -65,14 +78,26 @@ function Navigation() {
 
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                data-testid={`link-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                {link.label}
-              </Link>
+              link.isHash ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => handleHashClick(e, link.href)}
+                  className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  data-testid={`link-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  data-testid={`link-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </div>
 
@@ -106,15 +131,30 @@ function Navigation() {
         <div className="md:hidden bg-background border-b border-border">
           <div className="px-4 py-4 space-y-2">
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
-                onClick={() => setIsOpen(false)}
-                data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                {link.label}
-              </Link>
+              link.isHash ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                  onClick={(e) => {
+                    setIsOpen(false);
+                    handleHashClick(e, link.href);
+                  }}
+                  data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                  onClick={() => setIsOpen(false)}
+                  data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </div>
         </div>
