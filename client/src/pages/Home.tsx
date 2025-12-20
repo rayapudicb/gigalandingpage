@@ -82,7 +82,7 @@ function Navigation() {
         <div className="flex items-center justify-between gap-4 h-16">
           <a
             href="/"
-            className="text-xl font-bold tracking-tight"
+            className="text-2xl sm:text-3xl font-bold tracking-tight"
             data-testid="link-home"
           >
             Gigasys
