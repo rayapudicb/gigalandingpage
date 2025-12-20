@@ -64,9 +64,9 @@ function HeroSection() {
 
   return (
     <section className="pt-4 bg-background">
-      <div className="mx-4 sm:mx-6 lg:mx-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         {/* Carousel card with rounded corners */}
-        <div className="relative rounded-2xl overflow-hidden aspect-[16/9] max-h-[600px]">
+        <div className="relative rounded-2xl overflow-hidden aspect-[16/9] max-h-[600px] w-full">
           {/* Background image */}
           <img
             src={slides[currentSlide].image}
