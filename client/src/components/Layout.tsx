@@ -207,7 +207,7 @@ function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h4 className="font-semibold mb-4">{category}</h4>
@@ -226,6 +226,25 @@ function Footer() {
               </ul>
             </div>
           ))}
+          <div>
+            <h4 className="font-semibold mb-4">Locations</h4>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium mb-1">Headquarters</p>
+                <p className="text-sm text-muted-foreground">
+                  Gigasys Technologies Inc<br />
+                  8 The Green Suite B<br />
+                  Dover, DE 19901
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium mb-1">India - Development Center</p>
+                <p className="text-sm text-muted-foreground">
+                  Hitech City, Hyderabad
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">

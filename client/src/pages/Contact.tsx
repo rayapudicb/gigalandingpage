@@ -10,7 +10,6 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Mail,
   MapPin,
-  Phone,
   Send,
   Linkedin,
   Twitter,
@@ -18,22 +17,18 @@ import {
 
 const offices = [
   {
-    city: "San Francisco",
-    address: "123 Innovation Way, Suite 400",
-    country: "United States",
-    phone: "+1 (415) 555-0100"
+    city: "Dover, Delaware",
+    type: "Headquarters",
+    address: "8 The Green Suite B",
+    country: "Dover, DE 19901, USA",
+    phone: ""
   },
   {
-    city: "New York",
-    address: "456 Tech Avenue, Floor 20",
-    country: "United States",
-    phone: "+1 (212) 555-0200"
-  },
-  {
-    city: "London",
-    address: "78 Digital Street, EC2A",
-    country: "United Kingdom",
-    phone: "+44 20 7946 0300"
+    city: "Hyderabad, India",
+    type: "Development Center",
+    address: "Hitech City",
+    country: "Hyderabad, India",
+    phone: ""
   }
 ];
 
@@ -144,15 +139,12 @@ export default function Contact() {
                 <div className="space-y-4">
                   {offices.map((office) => (
                     <Card key={office.city} className="p-4">
+                      <p className="text-xs font-medium text-primary tracking-wide mb-1 uppercase">{office.type}</p>
                       <h3 className="font-semibold mb-2">{office.city}</h3>
                       <div className="space-y-1 text-sm text-muted-foreground">
                         <p className="flex items-center gap-2">
                           <MapPin className="w-4 h-4" />
                           {office.address}, {office.country}
-                        </p>
-                        <p className="flex items-center gap-2">
-                          <Phone className="w-4 h-4" />
-                          {office.phone}
                         </p>
                       </div>
                     </Card>
