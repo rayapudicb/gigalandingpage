@@ -45,11 +45,11 @@ function Navigation() {
   const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
-    { label: "Mobile", href: "/#mobile", isHash: true },
     { label: "AI & Automation", href: "/#innovation", isHash: true },
     { label: "Infrastructure", href: "/#products", isHash: true },
     { label: "Security", href: "/#teams", isHash: true },
     { label: "Analytics", href: "/#events", isHash: true },
+    { label: "Mobile", href: "/#mobile", isHash: true },
     { label: "About", href: "/about", isHash: false },
   ];
 
