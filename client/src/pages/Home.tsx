@@ -508,10 +508,10 @@ export default function Home() {
   return (
     <Layout>
       <HeroSlider />
-      <MobileSection />
       <FeaturedTeamsSection />
       <InnovationSection />
       <EventsSection />
+      <MobileSection />
       <ProductsSection />
     </Layout>
   );
