@@ -10,10 +10,17 @@ import {
   Bot,
   Database,
   Shield,
+  Users,
   BarChart3,
   MessageSquare,
   Globe,
   Play,
+  Smartphone,
+  Layers,
+  AppWindow,
+  Gauge,
+  Rocket,
+  Cpu,
 } from "lucide-react";
 
 function HeroSlider() {
@@ -26,7 +33,7 @@ function HeroSlider() {
       description: "At Gigasys, we believe in impact and building a career where you're challenged and valued in teams that are the best at what they do. Join us as we create and innovate the technologies of the future.",
       cta: "View jobs",
       ctaLink: "/jobs",
-      gradient: "from-blue-900 via-purple-900 to-indigo-900",
+      gradient: "from-[#0a1c3f] via-[#0f2f5f] to-[#1a4173]",
     },
     {
       label: "GIGASYS TECHNOLOGIES",
@@ -34,7 +41,7 @@ function HeroSlider() {
       description: "Our infrastructure powers millions of API calls daily. From caching services to billing engines, we build the systems that keep modern applications running.",
       cta: "Learn more",
       ctaLink: "/about",
-      gradient: "from-purple-900 via-pink-900 to-rose-900",
+      gradient: "from-[#0f1f1a] via-[#1b4332] to-[#0b2d24]",
     },
     {
       label: "GIGASYS TECHNOLOGIES",
@@ -42,7 +49,7 @@ function HeroSlider() {
       description: "JWT authentication, RBAC systems, and OTP verification. We provide enterprise-grade security modules that protect your users and data.",
       cta: "Learn more",
       ctaLink: "/teams",
-      gradient: "from-emerald-900 via-teal-900 to-cyan-900",
+      gradient: "from-[#0f1b2f] via-[#1f3b63] to-[#0b152b]",
     },
   ];
 
@@ -58,7 +65,7 @@ function HeroSlider() {
 
   return (
     <section className="bg-background">
-      <div className="px-4 sm:px-6 lg:px-8 pt-4">
+      <div className="px-6 sm:px-8 lg:px-12 pt-6">
         <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-br ${slides[currentSlide].gradient} h-[calc(100vh-6rem)] flex items-center transition-all duration-700`}>
           <div className="absolute inset-0 bg-black/20" />
           <div className="relative z-10 p-8 sm:p-12 lg:p-20 max-w-3xl">
@@ -92,7 +99,7 @@ function HeroSlider() {
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`h-1 rounded-full transition-all duration-300 ${index === currentSlide ? 'w-10 bg-primary' : 'w-6 bg-muted-foreground/30'}`}
+                className={`h-1 rounded-full transition-all duration-300 ${index === currentSlide ? 'w-10 bg-white' : 'w-6 bg-white/40'}`}
                 data-testid={`button-carousel-dot-${index}`}
               />
             ))}
@@ -110,6 +117,119 @@ function HeroSlider() {
   );
 }
 
+function MobileSection() {
+  const pillars = [
+    {
+      title: "Native iOS & Android",
+      description: "Platform-first experiences built in SwiftUI/Swift and Kotlin with secure auth, offline-first data layers, and push notifications.",
+      icon: Smartphone,
+      points: [
+        "Biometrics, in-app purchases, deep links, and OS widgets",
+        "Offline sync patterns with background refresh and conflict handling",
+        "App Store / Play Store release management with phased rollouts",
+      ],
+    },
+    {
+      title: "Flutter product systems",
+      description: "Single codebase with Flutter that ships pixel-perfect UI across iOS, Android, and web where it fits the roadmap.",
+      icon: Layers,
+      points: [
+        "Widget libraries, theming tokens, and localization baked in",
+        "BLoC/state management, snapshot tests, and golden image QA",
+        "Fastlane + Firebase App Distribution for rapid stakeholder reviews",
+      ],
+    },
+    {
+      title: "React Native & hybrid",
+      description: "React Native with TypeScript and Expo/React Navigation for teams that need web + mobile parity and custom native bridges.",
+      icon: AppWindow,
+      points: [
+        "Shared UI kits, accessibility, and performance budgets",
+        "Custom native modules for payments, media, sensors, and maps",
+        "Feature flags, OTA updates, and CI/CD with EAS/Fastlane",
+      ],
+    },
+    {
+      title: "Performance & reliability",
+      description: "Production observability and tuning so apps stay fast under load and resilient on flaky networks.",
+      icon: Gauge,
+      points: [
+        "Profiling (Instruments/Perfetto/Flipper) and cold-start optimizations",
+        "Crashlytics, Sentry, and structured logging wired into releases",
+        "Synthetic monitoring, feature-level SLIs, and rollbacks in minutes",
+      ],
+    },
+    {
+      title: "Security & compliance",
+      description: "Enterprise-grade controls and data protections for regulated workloads.",
+      icon: Shield,
+      points: [
+        "Device attestation, jailbreak/root detection, and secure storage",
+        "PII/PHI handling, consent flows, and data minimization",
+        "SOC2-ready audit trails, privacy modes, and key rotation",
+      ],
+    },
+    {
+      title: "Launch & growth",
+      description: "Full go-to-market support to keep releases predictable and measurable.",
+      icon: Rocket,
+      points: [
+        "Experiment frameworks (A/B, feature flags) with analytics wiring",
+        "In-product messaging, referrals, and engagement journeys",
+        "Release calendars with canaries, holdbacks, and success criteria",
+      ],
+    },
+  ];
+
+  return (
+    <section id="mobile" className="py-20 md:py-28 bg-muted/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p className="text-xs font-medium text-primary tracking-widest mb-3 uppercase">
+          Mobile Delivery
+        </p>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
+              Mobile apps built to feel native everywhere
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              We design, build, and operate mobile products across native iOS/Android, Flutter, and React Native—keeping UX consistent while choosing the right stack for your roadmap.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <Cpu className="w-4 h-4 text-primary" />
+            <span>Native • Flutter • React Native • Hybrid</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {pillars.map((pillar) => (
+            <Card key={pillar.title} className="p-6 h-full flex flex-col gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                  <pillar.icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-1">{pillar.title}</h3>
+                  <p className="text-sm text-muted-foreground">{pillar.description}</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {pillar.points.map((point) => (
+                  <div key={point} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary mt-1" />
+                    <span>{point}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FeaturedTeamsSection() {
   const teams = [
     {
@@ -118,7 +238,7 @@ function FeaturedTeamsSection() {
       title: "Build the next generation of AI openly and responsibly",
       description: "Gigasys is all in on building the future of AI with our open-source collection of models. Our AI platforms turn inspiration into reality by translating and generating dialogue, code, solving complex problems, and more.",
       icon: Bot,
-      gradient: "from-violet-600 to-indigo-600",
+      gradient: "from-[#ff7a1a] to-[#ff9e3d]",
       link: "/teams",
     },
     {
@@ -127,7 +247,7 @@ function FeaturedTeamsSection() {
       title: "Ensure the efficiency, safety and security of our technologies",
       description: "Maintaining a secure and reliable global infrastructure is essential to peoples' safety and privacy. As a member of the infrastructure team, you'll help build scalable systems and optimize their performance.",
       icon: Database,
-      gradient: "from-cyan-600 to-blue-600",
+      gradient: "from-[#f25c05] to-[#ff7a1a]",
       link: "/teams",
     },
     {
@@ -136,7 +256,7 @@ function FeaturedTeamsSection() {
       title: "Protect users with enterprise-grade security systems",
       description: "From JWT authentication to RBAC systems and OTP verification, our security teams build the modules that keep applications and users safe at scale.",
       icon: Shield,
-      gradient: "from-emerald-600 to-teal-600",
+      gradient: "from-[#d9480f] to-[#f25c05]",
       link: "/teams",
     },
   ];
@@ -222,7 +342,7 @@ function InnovationSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {innovations.map((item, index) => (
             <Card key={index} className="overflow-hidden group cursor-pointer hover-elevate">
-              <div className="bg-gradient-to-br from-slate-800 to-slate-900 aspect-video flex items-center justify-center">
+              <div className="bg-gradient-to-br from-[#2d1200] to-[#0f0600] aspect-video flex items-center justify-center">
                 <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
                   <item.icon className="w-8 h-8 text-white" />
                 </div>
@@ -271,7 +391,7 @@ function EventsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {events.map((event, index) => (
             <Card key={index} className="overflow-hidden">
-              <div className="bg-gradient-to-br from-indigo-600 to-purple-700 h-48 flex items-center justify-center">
+              <div className="bg-gradient-to-br from-[#ff7a1a] to-[#d9480f] h-48 flex items-center justify-center">
                 <Globe className="w-20 h-20 text-white/60" />
               </div>
               <div className="p-6">
@@ -303,31 +423,37 @@ function ProductsSection() {
       name: "Workflow Engine",
       description: "State machine management with conditional branching, workflow templates, and instance tracking for complex business processes.",
       icon: Bot,
-      gradient: "from-violet-600 to-indigo-700",
+      gradient: "from-[#ff7a1a] to-[#f25c05]",
     },
     {
       name: "CacheService",
       description: "Namespace-based caching with TTL management, hit/miss rate tracking, and cache invalidation patterns for high-performance applications.",
       icon: Database,
-      gradient: "from-cyan-600 to-blue-700",
+      gradient: "from-[#f25c05] to-[#d9480f]",
     },
     {
       name: "Auth Service",
       description: "JWT token management, password hashing with bcrypt, and session management for secure web applications.",
       icon: Shield,
-      gradient: "from-emerald-600 to-teal-700",
+      gradient: "from-[#d9480f] to-[#a23f00]",
     },
     {
       name: "Analytics Dashboard",
       description: "Real-time metrics, campaign tracking, and performance monitoring with custom dashboards and reporting.",
       icon: BarChart3,
-      gradient: "from-orange-600 to-red-700",
+      gradient: "from-[#ff9e3d] to-[#ff7a1a]",
     },
     {
       name: "Communication Hub",
       description: "Multi-channel messaging including email, SMS, and push notifications with templating and delivery tracking.",
       icon: MessageSquare,
-      gradient: "from-pink-600 to-rose-700",
+      gradient: "from-[#ffb769] to-[#ff9e3d]",
+    },
+    {
+      name: "Friend-u-me",
+      description: "A social layer for product teams with shared spaces, real-time presence, and collaboration nudges that keep everyone connected.",
+      icon: Users,
+      gradient: "from-[#b14800] to-[#ff7a1a]",
     },
   ];
 
@@ -382,6 +508,7 @@ export default function Home() {
   return (
     <Layout>
       <HeroSlider />
+      <MobileSection />
       <FeaturedTeamsSection />
       <InnovationSection />
       <EventsSection />

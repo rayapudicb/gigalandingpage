@@ -13,6 +13,7 @@ import {
   Moon,
 } from "lucide-react";
 import { SiFacebook, SiInstagram } from "react-icons/si";
+import Logo from "@/assets/logo.svg";
 
 function useTheme() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -44,6 +45,7 @@ function Navigation() {
   const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
+    { label: "Mobile", href: "/#mobile", isHash: true },
     { label: "AI & Automation", href: "/#innovation", isHash: true },
     { label: "Infrastructure", href: "/#products", isHash: true },
     { label: "Security", href: "/#teams", isHash: true },
@@ -66,14 +68,19 @@ function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between gap-4 h-16">
           <Link
             href="/"
-            className="text-2xl sm:text-3xl font-bold tracking-tight"
+            className="flex items-center gap-2 text-2xl sm:text-3xl font-bold tracking-tight"
             data-testid="link-home"
           >
-            Gigasys
+            <img
+              src={Logo}
+              alt="Gigasys logo"
+              className="h-8 w-8 sm:h-9 sm:w-9"
+            />
+            <span>Gigasys</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
