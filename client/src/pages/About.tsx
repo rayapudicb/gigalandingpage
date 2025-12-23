@@ -37,18 +37,18 @@ const values = [
 ];
 
 const stats = [
-  { value: "500+", label: "Enterprise Clients" },
-  { value: "50M+", label: "API Calls Daily" },
-  { value: "99.99%", label: "Uptime SLA" },
-  { value: "180+", label: "Countries Supported" },
+  { value: "8", label: "Enterprise Clients" },
+  { value: "7M", label: "API Calls Daily" },
+  { value: "9.8/10", label: "Uptime SLA" },
+  { value: "9", label: "Countries Supported" },
 ];
 
 const timeline = [
   { year: "2019", title: "Founded", description: "Gigasys was founded with a vision to democratize enterprise software." },
   { year: "2020", title: "First Product", description: "Launched our core infrastructure platform with billing and auth services." },
   { year: "2021", title: "AI Integration", description: "Introduced AI-powered workflow automation and matching systems." },
-  { year: "2022", title: "Global Expansion", description: "Expanded to 180+ countries with full localization support." },
-  { year: "2023", title: "Enterprise Scale", description: "Reached 500+ enterprise clients and 50M daily API calls." },
+  { year: "2022", title: "Global Expansion", description: "Expanded to 9 countries with full localization support." },
+  { year: "2023", title: "Enterprise Scale", description: "Reached 8 enterprise clients and 7M daily API calls." },
   { year: "2024", title: "Next Chapter", description: "Continuing to innovate with new security and analytics platforms." },
 ];
 

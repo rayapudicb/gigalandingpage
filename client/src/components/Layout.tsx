@@ -13,7 +13,7 @@ import {
   Moon,
 } from "lucide-react";
 import { SiFacebook, SiInstagram } from "react-icons/si";
-import Logo from "@/assets/logo.svg";
+import Logo from "@/assets/logo.png";
 
 function useTheme() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
@@ -78,7 +78,7 @@ function Navigation() {
             <img
               src={Logo}
               alt="Gigasys logo"
-              className="h-8 w-8 sm:h-9 sm:w-9"
+              className="h-8 w-8 sm:h-9 sm:w-9 object-contain"
             />
             <span>Gigasys</span>
           </Link>
@@ -255,7 +255,14 @@ function Footer() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
-          <span className="text-xl font-bold">Gigasys</span>
+          <div className="flex items-center gap-2">
+            <img
+              src={Logo}
+              alt="Gigasys logo"
+              className="h-7 w-7 object-contain"
+            />
+            <span className="text-xl font-bold">Gigasys</span>
+          </div>
           <p className="text-sm text-muted-foreground text-center">
             &copy; {new Date().getFullYear()} Gigasys Technologies Inc. All rights reserved.
           </p>
