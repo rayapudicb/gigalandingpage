@@ -1,0 +1,16 @@
+<svg width="360" height="220" viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="network-bg" x1="40" y1="20" x2="320" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0d2138" />
+      <stop offset="1" stop-color="#0a1426" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="340" height="200" rx="26" fill="url(#network-bg)" stroke="#38bdf8" stroke-width="6" />
+  <text x="28" y="48" fill="#e0f2fe" font-family="Arial, sans-serif" font-size="20" font-weight="700">Trusted Circle</text>
+  <circle cx="180" cy="130" r="46" fill="#0f172a" stroke="#38bdf8" stroke-width="10" />
+  <circle cx="110" cy="110" r="32" fill="#0f172a" stroke="#38bdf8" stroke-width="8" opacity="0.8" />
+  <circle cx="250" cy="110" r="32" fill="#0f172a" stroke="#38bdf8" stroke-width="8" opacity="0.8" />
+  <circle cx="140" cy="168" r="26" fill="#0f172a" stroke="#38bdf8" stroke-width="7" opacity="0.7" />
+  <circle cx="220" cy="168" r="26" fill="#0f172a" stroke="#38bdf8" stroke-width="7" opacity="0.7" />
+  <path d="M180 84v28M134 114l22 16M226 114l-22 16M160 170h40" stroke="#38bdf8" stroke-width="6" stroke-linecap="round" opacity="0.8" />
+</svg>

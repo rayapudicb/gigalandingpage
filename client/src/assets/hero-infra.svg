@@ -1,0 +1,27 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="infra-bg" x1="100" y1="80" x2="700" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0a1a2f" />
+      <stop offset="1" stop-color="#08101f" />
+    </linearGradient>
+    <linearGradient id="infra-stroke" x1="200" y1="160" x2="620" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f97316" />
+      <stop offset="1" stop-color="#fb923c" />
+    </linearGradient>
+  </defs>
+  <rect x="60" y="60" width="680" height="680" rx="90" fill="url(#infra-bg)" />
+  <rect x="110" y="130" width="580" height="540" rx="50" stroke="#0f172a" stroke-width="6" />
+  <rect x="150" y="180" width="500" height="120" rx="24" fill="#0f172a" stroke="url(#infra-stroke)" stroke-width="10" />
+  <rect x="150" y="340" width="500" height="120" rx="24" fill="#0f172a" stroke="url(#infra-stroke)" stroke-width="10" />
+  <rect x="150" y="500" width="500" height="120" rx="24" fill="#0f172a" stroke="url(#infra-stroke)" stroke-width="10" />
+  <circle cx="220" cy="240" r="16" fill="#22c55e" />
+  <circle cx="260" cy="240" r="16" fill="#eab308" />
+  <circle cx="300" cy="240" r="16" fill="#ef4444" />
+  <rect x="350" y="225" width="260" height="30" rx="10" fill="#111827" stroke="#f8fafc" stroke-width="6" />
+  <rect x="350" y="385" width="260" height="30" rx="10" fill="#111827" stroke="#f8fafc" stroke-width="6" />
+  <rect x="350" y="545" width="260" height="30" rx="10" fill="#111827" stroke="#f8fafc" stroke-width="6" />
+  <rect x="190" y="210" width="440" height="60" rx="20" stroke="#0b1220" stroke-width="6" opacity="0.4" />
+  <rect x="190" y="370" width="440" height="60" rx="20" stroke="#0b1220" stroke-width="6" opacity="0.4" />
+  <rect x="190" y="530" width="440" height="60" rx="20" stroke="#0b1220" stroke-width="6" opacity="0.4" />
+  <path d="M220 300v60m0 60v60m0 60v60" stroke="url(#infra-stroke)" stroke-width="12" stroke-linecap="round" />
+</svg>

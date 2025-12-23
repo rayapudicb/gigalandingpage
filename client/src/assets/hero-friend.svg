@@ -1,0 +1,45 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="friend-bg" x1="120" y1="80" x2="680" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0b1f34" />
+      <stop offset="1" stop-color="#07111f" />
+    </linearGradient>
+    <linearGradient id="friend-accent" x1="200" y1="160" x2="620" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f97316" />
+      <stop offset="1" stop-color="#fb923c" />
+    </linearGradient>
+  </defs>
+  <rect x="60" y="60" width="680" height="680" rx="120" fill="url(#friend-bg)" />
+  <text x="140" y="170" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="32" font-weight="700">Flagship Product • Friend-u-me (Coming soon)</text>
+  <rect x="140" y="210" width="520" height="420" rx="32" fill="#0f172a" stroke="url(#friend-accent)" stroke-width="12" />
+  <g transform="translate(170 240)">
+    <rect x="0" y="0" width="220" height="180" rx="18" fill="#0c1426" stroke="#16a34a" stroke-width="10" />
+    <text x="20" y="36" fill="#dcfce7" font-family="Arial, sans-serif" font-size="18" font-weight="700">Verify & Tag</text>
+    <circle cx="52" cy="96" r="26" fill="#22c55e" opacity="0.8" />
+    <rect x="96" y="74" width="100" height="28" rx="10" fill="#0f172a" stroke="#22c55e" stroke-width="4" />
+    <rect x="96" y="112" width="88" height="22" rx="10" fill="#0f172a" stroke="#22c55e" stroke-width="3" opacity="0.8" />
+  </g>
+  <g transform="translate(410 240)">
+    <rect x="0" y="0" width="220" height="180" rx="18" fill="#0c1426" stroke="#fb923c" stroke-width="10" />
+    <text x="20" y="36" fill="#fff7ed" font-family="Arial, sans-serif" font-size="18" font-weight="700">Trusted Circle</text>
+    <circle cx="62" cy="104" r="30" fill="#f97316" opacity="0.9" />
+    <circle cx="120" cy="94" r="26" fill="#fb923c" opacity="0.7" />
+    <circle cx="160" cy="120" r="22" fill="#fed7aa" opacity="0.9" />
+  </g>
+  <g transform="translate(170 450)">
+    <rect x="0" y="0" width="220" height="180" rx="18" fill="#0c1426" stroke="#38bdf8" stroke-width="10" />
+    <text x="20" y="36" fill="#e0f2fe" font-family="Arial, sans-serif" font-size="18" font-weight="700">Smart Cards</text>
+    <rect x="26" y="70" width="64" height="44" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="5" />
+    <rect x="104" y="70" width="74" height="44" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="5" />
+    <rect x="60" y="126" width="110" height="34" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="5" />
+  </g>
+  <g transform="translate(410 450)">
+    <rect x="0" y="0" width="220" height="180" rx="18" fill="#0c1426" stroke="#22c55e" stroke-width="10" />
+    <text x="20" y="36" fill="#dcfce7" font-family="Arial, sans-serif" font-size="18" font-weight="700">Trust Score</text>
+    <circle cx="110" cy="110" r="54" fill="#0f172a" stroke="#22c55e" stroke-width="10" />
+    <text x="80" y="118" fill="#dcfce7" font-family="Arial, sans-serif" font-size="28" font-weight="700">8.9</text>
+    <text x="88" y="144" fill="#22c55e" font-family="Arial, sans-serif" font-size="16" font-weight="600">rating</text>
+  </g>
+  <rect x="170" y="650" width="460" height="40" rx="16" fill="#0f172a" stroke="#e5e7eb" stroke-width="6" />
+  <text x="200" y="678" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="18" font-weight="700">A trusted, social-first identity layer for real friends and close circles</text>
+</svg>

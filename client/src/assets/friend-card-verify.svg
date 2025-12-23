@@ -1,0 +1,14 @@
+<svg width="360" height="220" viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="verify-bg" x1="40" y1="20" x2="320" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f1f34" />
+      <stop offset="1" stop-color="#0a1425" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="340" height="200" rx="26" fill="url(#verify-bg)" stroke="#22c55e" stroke-width="6" />
+  <text x="28" y="48" fill="#dcfce7" font-family="Arial, sans-serif" font-size="20" font-weight="700">Verify &amp; Tag</text>
+  <circle cx="72" cy="120" r="34" fill="#22c55e" opacity="0.9" />
+  <rect x="120" y="90" width="180" height="26" rx="12" fill="#0b1220" stroke="#22c55e" stroke-width="4" />
+  <rect x="120" y="124" width="150" height="22" rx="10" fill="#0b1220" stroke="#22c55e" stroke-width="3" opacity="0.9" />
+  <path d="M280 102l10 10 18-22" stroke="#22c55e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

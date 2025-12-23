@@ -1,0 +1,17 @@
+<svg width="360" height="220" viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cards-bg" x1="40" y1="20" x2="320" y2="200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0c2038" />
+      <stop offset="1" stop-color="#0a1528" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="340" height="200" rx="26" fill="url(#cards-bg)" stroke="#fb923c" stroke-width="6" />
+  <text x="28" y="48" fill="#fff7ed" font-family="Arial, sans-serif" font-size="20" font-weight="700">Smart Cards</text>
+  <rect x="60" y="84" width="72" height="56" rx="12" fill="#0f172a" stroke="#fb923c" stroke-width="6" />
+  <rect x="144" y="84" width="72" height="56" rx="12" fill="#0f172a" stroke="#fb923c" stroke-width="6" opacity="0.85" />
+  <rect x="228" y="84" width="72" height="56" rx="12" fill="#0f172a" stroke="#fb923c" stroke-width="6" opacity="0.7" />
+  <rect x="96" y="148" width="168" height="34" rx="12" fill="#0f172a" stroke="#fb923c" stroke-width="5" />
+  <path d="M84 90h24M84 104h18" stroke="#fb923c" stroke-width="4" stroke-linecap="round" />
+  <path d="M168 90h28" stroke="#fb923c" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+  <path d="M252 90h32" stroke="#fb923c" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+</svg>

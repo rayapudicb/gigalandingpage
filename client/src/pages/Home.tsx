@@ -22,6 +22,20 @@ import {
   Rocket,
   Cpu,
 } from "lucide-react";
+import HeroAI from "@/assets/hero-ai.svg";
+import HeroInfra from "@/assets/hero-infra.svg";
+import HeroSecurity from "@/assets/hero-security.svg";
+import HeroMobile from "@/assets/hero-mobile.svg";
+import FriendCardVerify from "@/assets/friend-card-verify.svg";
+import FriendCardNetwork from "@/assets/friend-card-network.svg";
+import FriendCardCards from "@/assets/friend-card-cards.svg";
+import FriendCardTrust from "@/assets/friend-card-trust.svg";
+import IconAndroid from "@/assets/icons/android.svg";
+import IconApple from "@/assets/icons/apple.svg";
+import IconSwift from "@/assets/icons/swift.svg";
+import IconKotlin from "@/assets/icons/kotlin.svg";
+import IconFlutter from "@/assets/icons/flutter.svg";
+import IconReactNative from "@/assets/icons/react-native.svg";
 
 function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -34,6 +48,8 @@ function HeroSlider() {
       cta: "View jobs",
       ctaLink: "/jobs",
       gradient: "from-[#0a1c3f] via-[#0f2f5f] to-[#1a4173]",
+      image: HeroAI,
+      imageAlt: "AI brain network illustration",
     },
     {
       label: "GIGASYS TECHNOLOGIES",
@@ -42,6 +58,8 @@ function HeroSlider() {
       cta: "Learn more",
       ctaLink: "/about",
       gradient: "from-[#0f1f1a] via-[#1b4332] to-[#0b2d24]",
+      image: HeroInfra,
+      imageAlt: "Infrastructure server racks illustration",
     },
     {
       label: "GIGASYS TECHNOLOGIES",
@@ -50,6 +68,32 @@ function HeroSlider() {
       cta: "Learn more",
       ctaLink: "/teams",
       gradient: "from-[#0f1b2f] via-[#1f3b63] to-[#0b152b]",
+      image: HeroSecurity,
+      imageAlt: "Security shield illustration",
+    },
+    {
+      label: "GIGASYS MOBILE",
+      title: "Mobile apps built native-first across iOS and Android",
+      description: "Swift, Kotlin, Flutter, and React Native—designed with platform-native polish, modern auth, and store readiness from day one.",
+      cta: "Explore mobile",
+      ctaLink: "/#mobile",
+      gradient: "from-[#0b1a33] via-[#0c2646] to-[#0a1233]",
+      image: HeroMobile,
+      imageAlt: "Mobile platform icons with app store badges",
+    },
+    {
+      label: "FLAGSHIP • COMING SOON",
+      title: "Friend-u-me: trusted social identity for real circles",
+      description: "Verify real friends, form trusted circles, and interact through smart cards with a live trust score.",
+      cta: "Join the waitlist",
+      ctaLink: "/contact",
+      gradient: "from-[#0c1e35] via-[#0f2b44] to-[#0a1227]",
+      thumbnails: [
+        { src: FriendCardVerify, alt: "Verify and tag contacts" },
+        { src: FriendCardNetwork, alt: "Trusted circle network" },
+        { src: FriendCardCards, alt: "Smart cards interactions" },
+        { src: FriendCardTrust, alt: "Trust score overview" },
+      ],
     },
   ];
 
@@ -84,6 +128,49 @@ function HeroSlider() {
               </Button>
             </Link>
           </div>
+          <div className="absolute inset-0 flex items-center justify-end pr-4 sm:pr-10 pointer-events-none">
+            {slides[currentSlide].image ? (
+              <img
+                src={slides[currentSlide].image}
+                alt={slides[currentSlide].imageAlt}
+                className="w-[340px] sm:w-[420px] md:w-[520px] lg:w-[600px] max-h-[70vh] object-contain drop-shadow-2xl opacity-90"
+                loading="lazy"
+              />
+            ) : slides[currentSlide].thumbnails ? (
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 bg-black/10 p-3 rounded-2xl backdrop-blur-sm">
+                {slides[currentSlide].thumbnails!.map((thumb) => (
+                  <div
+                    key={thumb.alt}
+                    className="bg-white/90 rounded-xl overflow-hidden shadow-lg border border-white/70"
+                  >
+                    <img
+                      src={thumb.src}
+                      alt={thumb.alt}
+                      className="h-28 w-44 object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          {slides[currentSlide].thumbnails && slides[currentSlide].image && (
+            <div className="absolute right-6 sm:right-10 bottom-6 sm:bottom-10 grid grid-cols-2 gap-3 sm:gap-4 pointer-events-none">
+              {slides[currentSlide].thumbnails!.map((thumb) => (
+                <div
+                  key={thumb.alt}
+                  className="bg-white/90 rounded-xl overflow-hidden shadow-lg border border-white/70"
+                >
+                  <img
+                    src={thumb.src}
+                    alt={thumb.alt}
+                    className="h-20 sm:h-24 w-36 sm:w-44 object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-center gap-6 py-3">
@@ -180,6 +267,14 @@ function MobileSection() {
       ],
     },
   ];
+  const iconTiles = [
+    { label: "Android", src: IconAndroid },
+    { label: "iOS", src: IconApple },
+    { label: "Swift", src: IconSwift },
+    { label: "Kotlin", src: IconKotlin },
+    { label: "Flutter", src: IconFlutter },
+    { label: "React Native", src: IconReactNative },
+  ];
 
   return (
     <section id="mobile" className="py-20 md:py-28 bg-muted/30">
@@ -200,6 +295,23 @@ function MobileSection() {
             <Cpu className="w-4 h-4 text-primary" />
             <span>Native • Flutter • React Native • Hybrid</span>
           </div>
+        </div>
+
+        <div className="mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 max-w-4xl mx-auto justify-items-center items-center">
+          {iconTiles.map((tile) => (
+            <div
+              key={tile.label}
+              className="bg-card border border-border rounded-lg px-3 py-2 flex flex-col items-center gap-2 shadow-sm"
+            >
+              <img
+                src={tile.src}
+                alt={`${tile.label} icon`}
+                className="h-10 w-10 object-contain"
+                loading="lazy"
+              />
+              <span className="text-xs text-muted-foreground text-center">{tile.label}</span>
+            </div>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
