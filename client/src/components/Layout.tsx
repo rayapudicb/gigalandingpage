@@ -183,7 +183,11 @@ function Footer() {
               </div>
               <div className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />
-                <p>Hitech City<br />Hyderabad, India</p>
+                <p>103, New Mark House, Patrika Nagar<br />HITEC City, Hyderabad, Telangana 500081, India</p>
+              </div>
+              <div className="flex gap-3">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />
+                <p>05-E-Zone, Maruthi Nagar, Kurnool Road (O)<br />Prakasam District, Ongole, Andhra Pradesh 523002, India</p>
               </div>
             </div>
           </div>

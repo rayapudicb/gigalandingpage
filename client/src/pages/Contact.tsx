@@ -18,15 +18,24 @@ const offices = [
   {
     city: "Dover, Delaware",
     type: "Headquarters",
-    address: "8 The Green Suite B",
-    country: "Dover, DE 19901, USA",
+    address: ["8 The Green, Suite B", "Dover, DE 19901, USA"],
   },
   {
     city: "Hyderabad, India",
     type: "Development Center",
-    address: "Hitech City",
-    country: "Hyderabad, India",
-  }
+    address: [
+      "103, New Mark House, Patrika Nagar",
+      "HITEC City, Hyderabad, Telangana 500081, India",
+    ],
+  },
+  {
+    city: "Ongole, India",
+    type: "Development Center",
+    address: [
+      "05-E-Zone, Maruthi Nagar, Kurnool Road (O)",
+      "Prakasam District, Ongole, Andhra Pradesh 523002, India",
+    ],
+  },
 ];
 
 export default function Contact() {
@@ -139,9 +148,9 @@ export default function Contact() {
                       <p className="text-xs font-medium text-primary tracking-wide mb-1 uppercase">{office.type}</p>
                       <h3 className="font-semibold mb-2">{office.city}</h3>
                       <div className="space-y-1 text-sm text-muted-foreground">
-                        <p className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4" />
-                          {office.address}, {office.country}
+                        <p className="flex items-start gap-2 leading-6">
+                          <MapPin className="mt-1 w-4 h-4 shrink-0" />
+                          <span>{office.address.map((line) => <span key={line} className="block">{line}</span>)}</span>
                         </p>
                       </div>
                     </Card>

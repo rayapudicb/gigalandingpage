@@ -6,8 +6,10 @@ import {
   Activity,
   ArrowLeft,
   ArrowRight,
+  BarChart3,
   Blocks,
   Bot,
+  Boxes,
   BriefcaseBusiness,
   Building2,
   Check,
@@ -18,6 +20,7 @@ import {
   Database,
   Factory,
   Film,
+  FileSignature,
   FlaskConical,
   Gauge,
   Globe2,
@@ -28,11 +31,11 @@ import {
   MessageSquareMore,
   Network,
   Pause,
+  PackageCheck,
   Play,
   RefreshCw,
   ScanLine,
   ShieldCheck,
-  ShoppingBag,
   Smartphone,
   Sparkles,
   Sprout,
@@ -42,6 +45,7 @@ import {
   Trophy,
   Users2,
   WalletCards,
+  Workflow,
   Wrench,
   type LucideIcon,
 } from "lucide-react";
@@ -54,10 +58,15 @@ import engineeringTeamImg from "@/assets/industry/engineering-team.jpg";
 type SuiteId =
   | "maintenance"
   | "workforce"
-  | "commerce"
+  | "products"
+  | "procurement"
   | "finance"
-  | "intelligence"
-  | "experience";
+  | "automation"
+  | "analytics"
+  | "documents"
+  | "geospatial"
+  | "communications"
+  | "data";
 
 type Suite = {
   id: SuiteId;
@@ -67,6 +76,8 @@ type Suite = {
   title: string;
   description: string;
   outcome: string;
+  outcomes: string[];
+  measure: string;
   icon: LucideIcon;
   modules: string[];
 };
@@ -117,6 +128,12 @@ const suites: Suite[] = [
       "A multi-tenant maintenance system for physical operations, connecting equipment, work execution, preventive plans, materials and reliability insight.",
     outcome:
       "Reduce reactive coordination, make maintenance history trustworthy and give planners and technicians the same operating context.",
+    outcomes: [
+      "Less reactive work and avoidable downtime",
+      "Faster plan-to-completion maintenance cycles",
+      "Complete, auditable asset and work history",
+    ],
+    measure: "Planned vs reactive work · cycle time · downtime",
     icon: Wrench,
     modules: [
       "Work orders & execution history",
@@ -139,6 +156,12 @@ const suites: Suite[] = [
       "Workforce planning and execution for distributed operations, from the resource directory and qualifications to dispatch, time, compliance and pay-ready outputs.",
     outcome:
       "Shorten assignment handling, expose coverage gaps earlier and reduce qualification, attendance and payroll exceptions.",
+    outcomes: [
+      "Faster qualified staffing and dispatch",
+      "Fewer scheduling, attendance and compliance exceptions",
+      "Clearer workforce capacity and utilization",
+    ],
+    measure: "Fill time · coverage gaps · exception rate",
     icon: Users2,
     modules: [
       "Resource, team & pool directory",
@@ -154,30 +177,61 @@ const suites: Suite[] = [
     ],
   },
   {
-    id: "commerce",
+    id: "products",
     number: "03",
-    label: "Commerce & Supply Chain",
-    kicker: "Connected commercial operations",
-    title: "Carry demand from product and quote through stock, fulfillment and invoice.",
+    label: "Products & Inventory",
+    kicker: "Catalogue and warehouse operations",
+    title: "Create one governed product and stock foundation for every commercial flow.",
     description:
-      "Composable commercial modules link the product catalogue, warehouses, purchasing, customer orders and accounts receivable without collapsing them into one rigid application.",
+      "Product definitions, units, price lists, warehouses, balances and material movements stay consistent from commercial planning through physical execution.",
     outcome:
-      "Improve stock visibility, preserve approval controls and reduce handoff gaps across buying, selling, fulfillment and billing.",
-    icon: ShoppingBag,
+      "Improve product-data quality and stock visibility while reducing shortages, count variance and material search time.",
+    outcomes: [
+      "Consistent products, units and governed pricing",
+      "Real-time visibility across warehouses and locations",
+      "Fewer shortages, count variances and stock disputes",
+    ],
+    measure: "Stock accuracy · fulfillment readiness · count variance",
+    icon: Boxes,
     modules: [
       "Product catalogue, units & price lists",
+      "Product categories, attributes & reference mapping",
       "Warehouses, locations, lots & balances",
-      "Receiving, transfers, reservations & counts",
-      "Requisitions, purchase orders & vendors",
-      "Three-way matching & payables controls",
-      "Quotes, sales orders & allocation",
-      "Fulfillment, returns & credit memos",
-      "Customer invoicing & receivables",
+      "Receiving, putaway, transfers & issues",
+      "Reservations, maintenance kits & staging",
+      "Cycle counts, adjustments & approvals",
+      "Lot, serial and barcode traceability",
+    ],
+  },
+  {
+    id: "procurement",
+    number: "04",
+    label: "Procurement & Orders",
+    kicker: "Source-to-pay and order-to-cash",
+    title: "Connect purchasing, selling and fulfillment without losing control at the handoffs.",
+    description:
+      "Governed requisitions and purchase orders work alongside quotations, customer orders, inventory allocation, fulfillment, returns and invoicing.",
+    outcome:
+      "Shorten commercial cycle times, preserve approval policy and reduce errors between demand, supply, delivery and billing.",
+    outcomes: [
+      "Faster requisition, approval and purchasing cycles",
+      "Fewer receiving, invoice and price-variance exceptions",
+      "More predictable allocation, fulfillment and billing",
+    ],
+    measure: "Approval time · match exceptions · order cycle",
+    icon: PackageCheck,
+    modules: [
+      "Purchase requisitions & delegation of authority",
+      "Purchase orders, vendors & acknowledgements",
+      "Goods receipts, three-way match & vendor bills",
+      "Sales quotes, orders & available-to-promise",
+      "Inventory allocation & fulfillment orchestration",
+      "Customer invoices, returns & credit memos",
     ],
   },
   {
     id: "finance",
-    number: "04",
+    number: "05",
     label: "Finance & Spend",
     kicker: "Governed financial operations",
     title: "Connect operational transactions to auditable financial outcomes.",
@@ -185,6 +239,12 @@ const suites: Suite[] = [
       "Finance capabilities cover books, journals, subledgers, spend, currency, tax, reconciliation and close workflows with governed roles and durable records.",
     outcome:
       "Create a clearer path from operating event to financial review, reporting and reconciliation across business units.",
+    outcomes: [
+      "Faster reconciliation and period close",
+      "Trusted financial statements with drill-through",
+      "Improved spend, budget and treasury control",
+    ],
+    measure: "Close time · reconciliation backlog · budget variance",
     icon: WalletCards,
     modules: [
       "Books, chart of accounts & fiscal periods",
@@ -198,47 +258,160 @@ const suites: Suite[] = [
     ],
   },
   {
-    id: "intelligence",
-    number: "05",
-    label: "Automation & Intelligence",
-    kicker: "Build, automate and understand",
-    title: "Turn repeatable business logic into governed workflows, decisions and insight.",
+    id: "automation",
+    number: "06",
+    label: "Workflow, Rules & Forms",
+    kicker: "Governed business automation",
+    title: "Turn repeatable operating logic into durable workflows and controlled decisions.",
     description:
-      "Studios for workflows, rules, forms, analytics, data and connectors help teams adapt the platform without losing control of permissions, lineage or execution state.",
+      "Workflow orchestration, policy rules and dynamic forms let teams adapt processes while preserving execution state, approvals and an evaluation trail.",
     outcome:
-      "Replace disconnected manual steps with visible workflows and move from static reporting toward actionable operational intelligence.",
-    icon: Sparkles,
+      "Replace fragmented manual steps with consistent, visible processes and faster exception handling.",
+    outcomes: [
+      "Shorter process and approval cycle times",
+      "Consistent policy application across teams",
+      "Fewer manual handoffs and unmanaged exceptions",
+    ],
+    measure: "Process cycle · touchpoints · exception resolution",
+    icon: Workflow,
     modules: [
       "Workflow Studio & durable orchestration",
-      "Business rules and decision tables",
+      "Visual DAG canvas & state machines",
+      "Business rules, policies & decision tables",
+      "Checkpointing, replay & compensation",
       "Dynamic forms and configuration studio",
-      "Analytics explore, dashboards & reports",
-      "Data sources, metrics & lineage",
-      "Connector hub and integration catalogue",
-      "Document scanning and extraction",
-      "AI-assisted product and service experiences",
+      "Cross-module actions and approvals",
+      "Evaluation and execution audit trails",
     ],
   },
   {
-    id: "experience",
-    number: "06",
-    label: "Experience & Trust",
-    kicker: "One governed experience layer",
-    title: "Give every role the right surface, scope and communication channel.",
+    id: "analytics",
+    number: "07",
+    label: "Analytics & Reporting",
+    kicker: "Operational intelligence",
+    title: "Move from trusted operational facts to decisions, dashboards and durable reports.",
     description:
-      "Tenant-aware access, place context, documents, signatures and omnichannel communication extend core workflows to employees, field teams, customers and partners.",
+      "Analytics Studio brings metrics, datasets, place rollups, governed measures, exploration, dashboards and generated reporting into one intelligence workspace.",
     outcome:
-      "Reduce context switching while keeping tenant, organization, place and role boundaries explicit across every channel.",
-    icon: ShieldCheck,
+      "Reduce report preparation time and help leaders move from symptoms to accountable operational action.",
+    outcomes: [
+      "Faster recurring reporting and executive review",
+      "One governed definition for critical measures",
+      "Quicker drill-down from KPI to place and source",
+    ],
+    measure: "Report preparation · insight-to-action · metric reuse",
+    icon: BarChart3,
     modules: [
-      "Tenant access and role-based permissions",
-      "Organization hierarchy and spatial scope",
-      "Places, maps and geospatial context",
-      "Documents, evidence and scanner flows",
-      "Cryptographic e-signature journeys",
-      "TextFly unified inbox",
+      "Executive overview & KPI snapshots",
+      "Metrics, datasets & governed measures",
+      "Explore, filters, formulas & saved charts",
+      "Dashboards and place-level rollups",
+      "Scheduled and generated reports",
+      "CSV outputs, sources & lineage",
+    ],
+  },
+  {
+    id: "documents",
+    number: "08",
+    label: "Documents & E-Signature",
+    kicker: "Evidence and agreement workflows",
+    title: "Capture, approve and sign the evidence that completes the business process.",
+    description:
+      "Document scanning, structured evidence, envelope journeys and signatures stay connected to the records, people and decisions that require them.",
+    outcome:
+      "Shorten document and signature turnaround while reducing missing evidence and manual follow-up.",
+    outcomes: [
+      "Faster evidence capture and signature completion",
+      "Fewer missing documents and approval chasers",
+      "Clear envelope, signer and record traceability",
+    ],
+    measure: "Turnaround time · completion rate · missing evidence",
+    icon: FileSignature,
+    modules: [
+      "Document capture, upload & scanner workflows",
+      "Structured extraction and review",
+      "Record-linked evidence and status",
+      "E-signature envelopes & signer journeys",
+      "Signature progress and completion records",
+      "Mobile document and signature actions",
+    ],
+  },
+  {
+    id: "geospatial",
+    number: "09",
+    label: "Places & Geospatial",
+    kicker: "Location-aware operations",
+    title: "Make place, boundary and location context part of every operational decision.",
+    description:
+      "Geospatial Studio manages place hierarchies, boundaries, scope, imports and geofence evaluation for field, asset and workforce workflows.",
+    outcome:
+      "Improve routing and accountability by connecting every relevant action to an authorized operational place.",
+    outcomes: [
+      "Consistent site and place context across modules",
+      "Faster location-aware assignment and navigation",
+      "Stronger spatial scope and geofence compliance",
+    ],
+    measure: "Travel/search time · place accuracy · scope exceptions",
+    icon: MapPin,
+    modules: [
+      "Places, sites, zones & hierarchical context",
+      "Maps, boundaries & spatial selection",
+      "Organization-to-place relationships",
+      "Spatial access and work scope",
+      "Geofence evaluation and punch policy",
+      "Place import and operational drill-down",
+    ],
+  },
+  {
+    id: "communications",
+    number: "10",
+    label: "Communications",
+    kicker: "TextFly omnichannel engagement",
+    title: "Coordinate customer and workforce conversations across every approved channel.",
+    description:
+      "A unified inbox, contact context, templates, campaigns, event triggers and durable delivery connect enterprise workflows to email, SMS, WhatsApp, voice and webhooks.",
+    outcome:
+      "Reduce response delay and fragmented conversations while improving delivery visibility and service follow-through.",
+    outcomes: [
+      "Faster response and case progression",
+      "Consistent communication across approved channels",
+      "Visible delivery, retry and escalation status",
+    ],
+    measure: "Response time · delivery success · SLA exceptions",
+    icon: MessageSquareMore,
+    modules: [
+      "Unified inbox and conversation threads",
+      "Customer and workforce contact profiles",
       "Email, SMS, WhatsApp, voice & webhooks",
-      "Templates, campaigns and event triggers",
+      "Templates, audiences & reach campaigns",
+      "Cross-module event triggers",
+      "Delivery queues, retries & SLA escalation",
+    ],
+  },
+  {
+    id: "data",
+    number: "11",
+    label: "Data & Integration",
+    kicker: "Enterprise data and connector layer",
+    title: "Connect enterprise systems through governed contracts instead of brittle point integrations.",
+    description:
+      "Data contracts, schema mapping, quality controls, lineage and a reusable connector hub support secure inbound events, polling and cross-module dispatch.",
+    outcome:
+      "Speed integration onboarding and reduce failures caused by schema drift, duplicate events and unclear data ownership.",
+    outcomes: [
+      "Faster source-system and partner onboarding",
+      "Fewer mapping, duplication and schema-drift failures",
+      "Traceable data quality, lineage and ingestion history",
+    ],
+    measure: "Onboarding lead time · failed events · data quality",
+    icon: Database,
+    modules: [
+      "Data contracts and schema discovery",
+      "Field mapping and normalization",
+      "Quality assertions and drift detection",
+      "Connector catalogue and tenant connections",
+      "Webhook ingestion, HMAC verification & journaling",
+      "Idempotency, delta sync & workflow dispatch",
     ],
   },
 ];
@@ -288,7 +461,7 @@ const portfolioProducts = [
   { name: "GigaLibs", category: "Enterprise operations SaaS", copy: "A modular product suite for assets, workforce, commerce, finance, automation, data and governed business operations.", icon: Blocks },
   { name: "GigaCRM", category: "Customer relationships", copy: "Lead and deal workspaces, sales activity, communication context and adaptable pipelines for modern teams.", icon: BriefcaseBusiness },
   { name: "TextFly", category: "Omnichannel communications", copy: "A multi-tenant communication platform spanning email, SMS, WhatsApp, Slack, voice, webhooks and a unified inbox.", icon: MessageSquareMore },
-  { name: "WhooCrew AI", category: "Voice & conversational AI", copy: "Voice-agent and chatbot experiences with live call visibility, product APIs and enterprise communication services.", icon: Bot },
+  { name: "Giga AI", category: "Voice & conversational AI", copy: "Voice-agent and chatbot experiences with live call visibility, product APIs and enterprise communication services.", icon: Bot },
   { name: "nyr", category: "Local social platform", copy: "Privacy-aware local discovery, trusted circles, requests, rides, events, recommendations and business offers.", icon: MapPin },
   { name: "OpenGrads", category: "Talent & opportunity network", copy: "A social-first network for students, institutions, employers and recruiters with ONEST and Beckn interoperability.", icon: GraduationCap },
   { name: "GigaHR / MyNextCV", category: "HR & recruitment intelligence", copy: "Permission-aware HR journeys and recruitment intelligence built for governed, configurable SaaS delivery.", icon: Building2 },
@@ -322,7 +495,7 @@ const portfolioLayers = [
     number: "04",
     label: "Named products",
     title: "What customers adopt",
-    copy: "GigaLibs, TextFly, Swappy, GigaCRM, WhooCrew AI and the wider Gigasys product portfolio.",
+    copy: "GigaLibs, TextFly, Swappy, GigaCRM, Giga AI and the wider Gigasys product portfolio.",
     icon: Sparkles,
   },
 ];
@@ -573,21 +746,21 @@ export default function Home() {
           <Reveal className="grid gap-8 border-b border-black/10 pb-10 lg:grid-cols-[1fr_0.62fr] lg:items-end">
             <div>
               <div className="section-label">GigaLibs business modules</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-7xl">Reusable business capabilities for every critical operating loop.</h2>
+              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-7xl">Eleven capability families. One connected operating platform.</h2>
             </div>
-            <p className="max-w-xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">Explore the modules already represented across the GigaLibs web, service and mobile codebases. Each family can stand alone or work as part of a connected operating platform.</p>
+            <p className="max-w-xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">Explore the business capabilities already represented across the GigaLibs web, service and mobile codebases. Every family includes its operating modules, intended outcomes and measures.</p>
           </Reveal>
 
-          <div className="mt-10 grid gap-8 xl:grid-cols-[390px_minmax(0,1fr)]">
+          <div className="mt-10 grid gap-8 xl:grid-cols-[410px_minmax(0,1fr)]">
             <Reveal className="border-y border-black/10">
               {suites.map((suite) => {
                 const Icon = suite.icon;
                 const isActive = activeSuite === suite.id;
                 return (
-                  <button key={suite.id} type="button" onClick={() => setActiveSuite(suite.id)} className={`group flex w-full items-center gap-4 border-b border-black/10 px-1 py-5 text-left transition last:border-b-0 ${isActive ? "text-[#e76500]" : "text-black/55 hover:text-black"}`} aria-pressed={isActive}>
+                  <button key={suite.id} type="button" onClick={() => setActiveSuite(suite.id)} className={`group flex w-full items-center gap-3 border-b border-black/10 px-1 py-3.5 text-left transition last:border-b-0 ${isActive ? "text-[#e76500]" : "text-black/55 hover:text-black"}`} aria-pressed={isActive}>
                     <span className="w-7 font-mono text-[10px]">{suite.number}</span>
-                    <span className={`grid h-10 w-10 place-items-center border transition ${isActive ? "border-[#ff7200] bg-[#ff7200] text-white" : "border-black/10 bg-white text-black/65 group-hover:border-black/35"}`}><Icon className="h-4 w-4" /></span>
-                    <span className="flex-1 text-sm font-semibold tracking-[-0.01em]">{suite.label}</span>
+                    <span className={`grid h-9 w-9 place-items-center border transition ${isActive ? "border-[#ff7200] bg-[#ff7200] text-white" : "border-black/10 bg-white text-black/65 group-hover:border-black/35"}`}><Icon className="h-4 w-4" /></span>
+                    <span className="flex-1 text-[13px] font-semibold tracking-[-0.01em] sm:text-sm">{suite.label}</span>
                     <ChevronRight className={`h-4 w-4 transition ${isActive ? "translate-x-1" : ""}`} />
                   </button>
                 );
@@ -617,7 +790,17 @@ export default function Home() {
                   <div className="border-t border-black/10 bg-[#f7f6f2] p-6 sm:p-9 lg:border-l lg:border-t-0 lg:p-10">
                     <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e76500]">Business outcome</div>
                     <p className="mt-5 text-xl font-medium leading-8 tracking-[-0.02em] text-[#242421]">{selectedSuite.outcome}</p>
-                    <Link href="/contact" className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-[#d95f00] hover:text-black">Discuss this suite <ArrowRight className="h-4 w-4" /></Link>
+                    <div className="mt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">What improves</div>
+                    <div className="mt-3 border-t border-black/10">
+                      {selectedSuite.outcomes.map((item) => (
+                        <div key={item} className="flex gap-3 border-b border-black/10 py-3 text-sm leading-5 text-black/65"><CircleDot className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />{item}</div>
+                      ))}
+                    </div>
+                    <div className="mt-6 border-l-2 border-[#ff7200] bg-white px-4 py-3">
+                      <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.18em] text-black/40"><Gauge className="h-3.5 w-3.5 text-[#e76500]" />Measure</div>
+                      <div className="mt-2 text-xs font-semibold leading-5 text-black/70">{selectedSuite.measure}</div>
+                    </div>
+                    <Link href="/contact" className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#d95f00] hover:text-black">Discuss this suite <ArrowRight className="h-4 w-4" /></Link>
                   </div>
                 </div>
               </motion.article>
@@ -800,7 +983,7 @@ export default function Home() {
       <section id="company" className="scroll-mt-20 bg-[#f3f2ee] py-20 md:py-28">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <Reveal className="grid overflow-hidden border border-black/10 bg-white lg:grid-cols-2">
-            <div className="relative min-h-[430px] lg:min-h-[620px]"><img src={engineeringTeamImg} alt="Engineering team collaborating on enterprise software" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-28 text-white sm:p-9"><div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">Engineering presence</div><div className="mt-3 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold"><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Dover, Delaware</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Hyderabad, India</span></div></div></div>
+            <div className="relative min-h-[430px] lg:min-h-[620px]"><img src={engineeringTeamImg} alt="Engineering team collaborating on enterprise software" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-28 text-white sm:p-9"><div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">Engineering presence</div><div className="mt-3 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold"><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Dover, Delaware</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Hyderabad, India</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Ongole, India</span></div></div></div>
             <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-14 xl:p-20"><div className="section-label">How we work</div><h2 className="mt-5 text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl">Product strategy, domain depth and production engineering in one team.</h2><p className="mt-6 text-base leading-7 text-black/60">We translate real operating constraints into focused products, then carry them across web, mobile, services, data and long-term evolution.</p><div className="mt-8 grid gap-px border border-black/10 bg-black/10 sm:grid-cols-2">{[["01", "Understand the operating outcome"], ["02", "Shape the product and module scope"], ["03", "Build across web, mobile and services"], ["04", "Measure, govern and evolve"]].map(([number, text]) => <div key={number} className="bg-[#f8f7f3] p-5"><span className="font-mono text-[10px] text-[#ff7200]">{number}</span><p className="mt-2 text-sm font-semibold text-black/70">{text}</p></div>)}</div><Link href="/about" className="mt-8 inline-flex items-center gap-2 self-start text-sm font-bold text-[#d95f00] hover:text-black">More about Gigasys <ArrowRight className="h-4 w-4" /></Link></div>
           </Reveal>
         </div>
