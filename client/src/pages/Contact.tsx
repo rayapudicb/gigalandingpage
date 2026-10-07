@@ -10,9 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Mail,
   MapPin,
+  Phone,
   Send,
-  Linkedin,
-  Twitter,
 } from "lucide-react";
 
 const offices = [
@@ -21,14 +20,12 @@ const offices = [
     type: "Headquarters",
     address: "8 The Green Suite B",
     country: "Dover, DE 19901, USA",
-    phone: ""
   },
   {
     city: "Hyderabad, India",
     type: "Development Center",
     address: "Hitech City",
     country: "Hyderabad, India",
-    phone: ""
   }
 ];
 
@@ -156,25 +153,18 @@ export default function Contact() {
                 <h3 className="font-semibold mb-4">Other Ways to Reach Us</h3>
                 <div className="space-y-3">
                   <a
-                    href="mailto:hello@gigasys.com"
+                    href="mailto:connect@gigasystech.com"
                     className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Mail className="w-5 h-5" />
-                    hello@gigasys.com
+                    connect@gigasystech.com
                   </a>
                   <a
-                    href="#"
+                    href="tel:+916303162096"
                     className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <Linkedin className="w-5 h-5" />
-                    LinkedIn
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <Twitter className="w-5 h-5" />
-                    Twitter
+                    <Phone className="w-5 h-5" />
+                    +91-6303162096
                   </a>
                 </div>
               </Card>

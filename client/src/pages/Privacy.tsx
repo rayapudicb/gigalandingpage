@@ -108,8 +108,8 @@ export default function Privacy() {
                 If you have questions about this Privacy Policy, please contact us at:
               </p>
               <p className="text-muted-foreground">
-                Email: privacy@gigasys.com<br />
-                Address: 123 Innovation Way, Suite 400, San Francisco, CA 94105
+                Email: connect@gigasystech.com<br />
+                Address: 8 The Green, Suite B, Dover, DE 19901, USA
               </p>
             </section>
           </div>

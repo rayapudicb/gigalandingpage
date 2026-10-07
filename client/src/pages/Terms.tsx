@@ -130,8 +130,8 @@ export default function Terms() {
                 If you have questions about these Terms of Service, please contact us at:
               </p>
               <p className="text-muted-foreground">
-                Email: legal@gigasys.com<br />
-                Address: 123 Innovation Way, Suite 400, San Francisco, CA 94105
+                Email: connect@gigasystech.com<br />
+                Address: 8 The Green, Suite B, Dover, DE 19901, USA
               </p>
             </section>
           </div>

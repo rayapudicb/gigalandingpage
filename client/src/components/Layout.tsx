@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowUpRight, Mail, MapPin, Menu, X } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Menu, Phone, X } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import Logo from "@/assets/logo.svg";
 
 const navLinks = [
-  { label: "Capabilities", href: "/#capabilities", isHash: true },
-  { label: "Solutions", href: "/#solutions", isHash: true },
-  { label: "Architecture", href: "/#architecture", isHash: true },
+  { label: "Products", href: "/#products", isHash: true },
+  { label: "Business Modules", href: "/#modules", isHash: true },
+  { label: "Industries", href: "/#industries", isHash: true },
+  { label: "Technologies", href: "/#technologies", isHash: true },
   { label: "Company", href: "/#company", isHash: true },
-  { label: "Careers", href: "/jobs", isHash: false },
 ];
 
 function Navigation() {
@@ -143,16 +144,17 @@ function Footer() {
               <span className="text-2xl font-semibold tracking-[-0.04em]">Gigasys</span>
             </Link>
             <p className="mt-5 max-w-lg text-sm leading-6 text-white/50">
-              Applied software systems for operations, field teams and connected
-              digital platforms.
+              Enterprise SaaS, native mobile and focused digital products for
+              operations, commerce, communications and connected work.
             </p>
-            <a
-              href="mailto:hello@gigasys.com"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#ff8a2b] hover:text-white"
-            >
-              <Mail className="h-4 w-4" />
-              hello@gigasys.com
-            </a>
+            <div className="mt-6 flex flex-col items-start gap-3">
+              <a href="mailto:connect@gigasystech.com" className="inline-flex items-center gap-2 text-sm font-semibold text-[#ff8a2b] hover:text-white">
+                <Mail className="h-4 w-4" /> connect@gigasystech.com
+              </a>
+              <a href="tel:+916303162096" className="inline-flex items-center gap-2 text-sm font-semibold text-white/60 hover:text-white">
+                <Phone className="h-4 w-4 text-[#ff7200]" /> +91-6303162096
+              </a>
+            </div>
           </div>
 
           <div>
@@ -160,8 +162,10 @@ function Footer() {
               Navigate
             </div>
             <div className="mt-5 grid gap-3 text-sm">
-              <a href="/#capabilities" className="text-white/60 hover:text-white">Capabilities</a>
-              <a href="/#solutions" className="text-white/60 hover:text-white">Solutions</a>
+              <a href="/#products" className="text-white/60 hover:text-white">Products</a>
+              <a href="/#modules" className="text-white/60 hover:text-white">Business modules</a>
+              <a href="/#industries" className="text-white/60 hover:text-white">Industries</a>
+              <a href="/#technologies" className="text-white/60 hover:text-white">Technologies</a>
               <Link href="/about" className="text-white/60 hover:text-white">About</Link>
               <Link href="/jobs" className="text-white/60 hover:text-white">Careers</Link>
               <Link href="/contact" className="text-white/60 hover:text-white">Contact</Link>
@@ -202,10 +206,19 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navigation />
-      <main className="pt-[72px]">{children}</main>
+      <motion.main
+        className="pt-[72px]"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.42, ease: "easeOut" }}
+      >
+        {children}
+      </motion.main>
       <Footer />
     </div>
   );
