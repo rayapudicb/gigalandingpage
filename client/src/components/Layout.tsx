@@ -20,11 +20,9 @@ function useTheme() {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("theme");
       if (stored === "dark" || stored === "light") return stored;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
+      return "dark";
     }
-    return "light";
+    return "dark";
   });
 
   useEffect(() => {
@@ -45,11 +43,11 @@ function Navigation() {
   const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
-    { label: "Mobile", href: "/#mobile", isHash: true },
-    { label: "AI & Automation", href: "/#innovation", isHash: true },
-    { label: "Infrastructure", href: "/#products", isHash: true },
-    { label: "Security", href: "/#teams", isHash: true },
-    { label: "Analytics", href: "/#events", isHash: true },
+    { label: "Platforms", href: "/#platforms", isHash: true },
+    { label: "Mobile Field Apps", href: "/#mobile-apps", isHash: true },
+    { label: "Architecture", href: "/#architecture", isHash: true },
+    { label: "Ledger & FinTech", href: "/#ledger", isHash: true },
+    { label: "Enterprise Security", href: "/#security", isHash: true },
     { label: "About", href: "/about", isHash: false },
   ];
 
@@ -108,7 +106,12 @@ function Navigation() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <Link href="/contact" className="hidden sm:inline-flex">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold text-xs tracking-wider uppercase px-4 shadow-[0_0_20px_rgba(0,240,255,0.3)] border border-cyan-300/40">
+                Talk to Engineering
+              </Button>
+            </Link>
             <Button
               size="icon"
               variant="ghost"

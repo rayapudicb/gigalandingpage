@@ -10,7 +10,7 @@ export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, import.meta.dirname, "");
   const googleSiteVerification = env.VITE_GOOGLE_SITE_VERIFICATION?.trim();
 
-  const plugins: PluginOption[] = [react()];
+  const plugins: any[] = [react()];
 
   if (googleSiteVerification) {
     plugins.push({

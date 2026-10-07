@@ -121,13 +121,13 @@ export default function About() {
           </div>
 
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4">Join Our Team</h2>
+            <h2 className="text-2xl font-bold mb-4">Partner with Gigasys</h2>
             <p className="text-muted-foreground mb-6">
-              We're always looking for talented people to join our mission.
+              Deploy industrial-grade asset management, mobile operations, and core infrastructure.
             </p>
-            <Link href="/jobs">
-              <Button size="lg" data-testid="button-view-jobs">
-                View Open Positions
+            <Link href="/contact">
+              <Button size="lg" className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold" data-testid="button-consult-engineering">
+                Consult With System Engineers
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
