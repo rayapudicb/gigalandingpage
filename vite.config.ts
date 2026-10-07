@@ -15,7 +15,7 @@ export default defineConfig(async ({ mode }) => {
   if (googleSiteVerification) {
     plugins.push({
       name: "inject-google-site-verification",
-      transformIndexHtml(html) {
+      transformIndexHtml(html: string) {
         const verificationMetaTag = `    <meta name="google-site-verification" content="${escapeHtmlAttribute(googleSiteVerification)}" />`;
         return html.replace("</head>", `${verificationMetaTag}\n  </head>`);
       },
