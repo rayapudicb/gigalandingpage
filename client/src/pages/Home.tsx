@@ -23,6 +23,10 @@ import {
   Cpu,
 } from "lucide-react";
 
+import carouselImage1 from "@assets/generated_images/ai_neural_network_visualization.png";
+import carouselImage2 from "@assets/generated_images/cloud_infrastructure_concept.png";
+import carouselImage3 from "@assets/generated_images/security_authentication_concept.png";
+
 function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   
@@ -33,6 +37,7 @@ function HeroSlider() {
       description: "At Gigasys, we believe in impact and building a career where you're challenged and valued in teams that are the best at what they do. Join us as we create and innovate the technologies of the future.",
       cta: "View jobs",
       ctaLink: "/jobs",
+      image: carouselImage1,
       gradient: "from-[#0a1c3f] via-[#0f2f5f] to-[#1a4173]",
     },
     {
@@ -41,6 +46,7 @@ function HeroSlider() {
       description: "Our infrastructure powers millions of API calls daily. From caching services to billing engines, we build the systems that keep modern applications running.",
       cta: "Learn more",
       ctaLink: "/about",
+      image: carouselImage2,
       gradient: "from-[#0f1f1a] via-[#1b4332] to-[#0b2d24]",
     },
     {
@@ -49,6 +55,7 @@ function HeroSlider() {
       description: "JWT authentication, RBAC systems, and OTP verification. We provide enterprise-grade security modules that protect your users and data.",
       cta: "Learn more",
       ctaLink: "/teams",
+      image: carouselImage3,
       gradient: "from-[#0f1b2f] via-[#1f3b63] to-[#0b152b]",
     },
   ];
@@ -66,8 +73,13 @@ function HeroSlider() {
   return (
     <section className="bg-background">
       <div className="px-6 sm:px-8 lg:px-12 pt-6">
-        <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-br ${slides[currentSlide].gradient} h-[calc(100vh-6rem)] flex items-center transition-all duration-700`}>
-          <div className="absolute inset-0 bg-black/20" />
+        <div className="relative rounded-2xl overflow-hidden h-[calc(100vh-6rem)] flex items-center transition-all duration-700">
+          <img
+            src={slides[currentSlide].image}
+            alt={slides[currentSlide].title}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/40" />
           <div className="relative z-10 p-8 sm:p-12 lg:p-20 max-w-3xl">
             <p className="text-xs sm:text-sm font-medium text-white/70 tracking-widest mb-4 uppercase">
               {slides[currentSlide].label}
