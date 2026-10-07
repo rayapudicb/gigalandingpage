@@ -752,7 +752,7 @@ export default function Home() {
           </Reveal>
 
           <div className="mt-10 grid gap-8 xl:grid-cols-[410px_minmax(0,1fr)]">
-            <Reveal className="border-y border-black/10">
+            <Reveal className="self-start border-y border-black/10">
               {suites.map((suite) => {
                 const Icon = suite.icon;
                 const isActive = activeSuite === suite.id;
@@ -768,7 +768,7 @@ export default function Home() {
             </Reveal>
 
             <AnimatePresence mode="wait">
-              <motion.article key={selectedSuite.id} initial={reduceMotion ? false : { opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden border border-black/10 bg-white shadow-[0_24px_70px_rgba(20,20,18,0.08)]">
+              <motion.article key={selectedSuite.id} initial={reduceMotion ? false : { opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }} className="self-start overflow-hidden border border-black/10 bg-white shadow-[0_24px_70px_rgba(20,20,18,0.08)]">
                 <div className="grid gap-8 border-b border-black/10 p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:p-11">
                   <div>
                     <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#e76500]">{selectedSuite.kicker}</div>
@@ -778,29 +778,42 @@ export default function Home() {
                   <div className="grid h-20 w-20 place-items-center bg-[#151513] text-[#ff7a12]"><SelectedSuiteIcon className="h-8 w-8" /></div>
                 </div>
 
-                <div className="grid lg:grid-cols-[1fr_0.6fr]">
-                  <div className="p-6 sm:p-9 lg:p-11">
+                <div className="p-6 sm:p-9 lg:p-10">
+                  <div className="flex items-center justify-between gap-5">
                     <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Included modules</div>
-                    <div className="mt-5 grid gap-x-8 gap-y-0 sm:grid-cols-2">
-                      {selectedSuite.modules.map((item) => (
-                        <div key={item} className="flex gap-3 border-t border-black/10 py-4 text-sm leading-6 text-black/70"><Check className="mt-1 h-4 w-4 shrink-0 text-[#ff7200]" />{item}</div>
-                      ))}
-                    </div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-black/30">{String(selectedSuite.modules.length).padStart(2, "0")} capabilities</div>
                   </div>
-                  <div className="border-t border-black/10 bg-[#f7f6f2] p-6 sm:p-9 lg:border-l lg:border-t-0 lg:p-10">
-                    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e76500]">Business outcome</div>
-                    <p className="mt-5 text-xl font-medium leading-8 tracking-[-0.02em] text-[#242421]">{selectedSuite.outcome}</p>
-                    <div className="mt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">What improves</div>
-                    <div className="mt-3 border-t border-black/10">
-                      {selectedSuite.outcomes.map((item) => (
-                        <div key={item} className="flex gap-3 border-b border-black/10 py-3 text-sm leading-5 text-black/65"><CircleDot className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />{item}</div>
-                      ))}
+                  <div className="mt-5 grid gap-x-7 sm:grid-cols-2 lg:grid-cols-3">
+                    {selectedSuite.modules.map((item) => (
+                      <div key={item} className="flex gap-3 border-t border-black/10 py-3.5 text-sm leading-5 text-black/70"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />{item}</div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-black/10 bg-[#f3f2ee]">
+                  <div className="grid gap-7 p-6 sm:p-9 lg:grid-cols-[minmax(0,1fr)_300px] lg:p-10">
+                    <div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e76500]">Business outcome</div>
+                      <p className="mt-4 max-w-3xl text-xl font-medium leading-8 tracking-[-0.02em] text-[#242421]">{selectedSuite.outcome}</p>
                     </div>
-                    <div className="mt-6 border-l-2 border-[#ff7200] bg-white px-4 py-3">
+                    <div className="border-l-2 border-[#ff7200] bg-white px-5 py-4">
                       <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.18em] text-black/40"><Gauge className="h-3.5 w-3.5 text-[#e76500]" />Measure</div>
                       <div className="mt-2 text-xs font-semibold leading-5 text-black/70">{selectedSuite.measure}</div>
                     </div>
-                    <Link href="/contact" className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#d95f00] hover:text-black">Discuss this suite <ArrowRight className="h-4 w-4" /></Link>
+                  </div>
+
+                  <div className="grid gap-px border-y border-black/10 bg-black/10 sm:grid-cols-3">
+                    {selectedSuite.outcomes.map((item, index) => (
+                      <div key={item} className="flex gap-3 bg-[#f8f7f3] p-5 text-sm font-medium leading-5 text-black/65">
+                        <span className="font-mono text-[9px] text-[#e76500]">{String(index + 1).padStart(2, "0")}</span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-9 lg:px-10">
+                    <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-black/35"><CircleDot className="h-3.5 w-3.5 text-[#ff7200]" />Outcome-led module design</div>
+                    <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-bold text-[#d95f00] hover:text-black">Discuss this suite <ArrowRight className="h-4 w-4" /></Link>
                   </div>
                 </div>
               </motion.article>
