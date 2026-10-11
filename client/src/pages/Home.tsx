@@ -1,1013 +1,1004 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link } from "wouter";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 import Layout from "@/components/Layout";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import {
   Activity,
-  ArrowLeft,
-  ArrowRight,
-  BarChart3,
-  Blocks,
-  Bot,
-  Boxes,
-  BriefcaseBusiness,
-  Building2,
-  Check,
-  ChevronRight,
-  CircleDot,
-  Cloud,
-  Code2,
-  Database,
-  Factory,
-  Film,
-  FileSignature,
-  FlaskConical,
-  Gauge,
-  Globe2,
-  GraduationCap,
-  HardHat,
-  HeartPulse,
-  MapPin,
-  MessageSquareMore,
-  Network,
-  Pause,
-  PackageCheck,
-  Play,
-  RefreshCw,
-  ScanLine,
+  Server,
   ShieldCheck,
   Smartphone,
-  Sparkles,
-  Sprout,
-  Store,
-  Ticket,
-  TrainFront,
-  Trophy,
-  Users2,
-  WalletCards,
+  Cpu,
+  Gauge,
   Workflow,
+  CheckCircle2,
+  ArrowRight,
+  RefreshCw,
+  HardDrive,
+  Receipt,
   Wrench,
-  type LucideIcon,
+  Boxes,
+  Users2,
+  CalendarCheck,
+  Globe2,
+  Lock,
+  Building2,
+  Send,
+  AlertCircle,
+  FileSpreadsheet,
+  Layers,
+  ChevronRight,
+  TrendingDown,
+  Sparkles,
+  ClipboardList,
+  Check,
+  X,
+  Minus,
 } from "lucide-react";
 
-import industrialEngineerImg from "@/assets/industry/industrial-engineer.jpg";
-import controlRoomImg from "@/assets/industry/control-room.jpg";
-import dataCenterImg from "@/assets/industry/data-center.jpg";
-import engineeringTeamImg from "@/assets/industry/engineering-team.jpg";
-
-type SuiteId =
-  | "maintenance"
-  | "workforce"
-  | "products"
-  | "procurement"
-  | "finance"
-  | "automation"
-  | "analytics"
-  | "documents"
-  | "geospatial"
-  | "communications"
-  | "data";
-
-type Suite = {
-  id: SuiteId;
-  number: string;
-  label: string;
-  kicker: string;
-  title: string;
-  description: string;
-  outcome: string;
-  outcomes: string[];
-  measure: string;
-  icon: LucideIcon;
-  modules: string[];
-};
-
-const heroSlides = [
-  {
-    eyebrow: "GigaLibs enterprise SaaS",
-    title: "Run the work. Connect the business.",
-    copy: "A modular operating platform for assets, workforce, supply chain, finance, data and field execution—delivered across web and native mobile.",
-    image: controlRoomImg,
-    alt: "Industrial control room monitoring connected operations",
-    marker: "01 / OPERATIONS CLOUD",
-  },
-  {
-    eyebrow: "Asset & field operations",
-    title: "From maintenance plan to verified field action.",
-    copy: "Bring assets, work orders, preventive maintenance, meters, MRO inventory, technicians and evidence into one governed operating flow.",
-    image: industrialEngineerImg,
-    alt: "Field engineer working with a tablet in an industrial facility",
-    marker: "02 / CMMS + MOBILE",
-  },
-  {
-    eyebrow: "Commerce & financial operations",
-    title: "Connect product, order, inventory and cash movement.",
-    copy: "Coordinate catalogue, warehouses, procurement, fulfillment, invoicing, spend and finance through modular business applications.",
-    image: dataCenterImg,
-    alt: "Modern data centre supporting enterprise software services",
-    marker: "03 / BUSINESS SYSTEMS",
-  },
-  {
-    eyebrow: "Digital product portfolio",
-    title: "Build intelligent experiences beyond the enterprise core.",
-    copy: "Gigasys also develops AI, communications, CRM, talent, social and exchange products—each with a focused domain and product identity.",
-    image: engineeringTeamImg,
-    alt: "Engineering team collaborating on a digital product",
-    marker: "04 / AI + DIGITAL PRODUCTS",
-  },
-] as const;
-
-const suites: Suite[] = [
-  {
-    id: "maintenance",
-    number: "01",
-    label: "Asset & Maintenance",
-    kicker: "GigaLibs CMMS / EAM",
-    title: "Control the complete maintenance lifecycle from asset context to reliable completion.",
-    description:
-      "A multi-tenant maintenance system for physical operations, connecting equipment, work execution, preventive plans, materials and reliability insight.",
-    outcome:
-      "Reduce reactive coordination, make maintenance history trustworthy and give planners and technicians the same operating context.",
-    outcomes: [
-      "Less reactive work and avoidable downtime",
-      "Faster plan-to-completion maintenance cycles",
-      "Complete, auditable asset and work history",
-    ],
-    measure: "Planned vs reactive work · cycle time · downtime",
-    icon: Wrench,
-    modules: [
-      "Work orders & execution history",
-      "Assets, classifications & digital twin context",
-      "CAFM spaces, sites & floor operations",
-      "Preventive maintenance schedules",
-      "Meters, readings & condition triggers",
-      "MRO parts, storerooms & stock movements",
-      "Reliability analytics & downtime insight",
-      "Floor kiosk and field workflows",
-    ],
-  },
-  {
-    id: "workforce",
-    number: "02",
-    label: "Workforce Operations",
-    kicker: "GigaOps workforce",
-    title: "Match qualified people to operational demand and keep every shift accountable.",
-    description:
-      "Workforce planning and execution for distributed operations, from the resource directory and qualifications to dispatch, time, compliance and pay-ready outputs.",
-    outcome:
-      "Shorten assignment handling, expose coverage gaps earlier and reduce qualification, attendance and payroll exceptions.",
-    outcomes: [
-      "Faster qualified staffing and dispatch",
-      "Fewer scheduling, attendance and compliance exceptions",
-      "Clearer workforce capacity and utilization",
-    ],
-    measure: "Fill time · coverage gaps · exception rate",
-    icon: Users2,
-    modules: [
-      "Resource, team & pool directory",
-      "Jobs, positions & organization context",
-      "Skills, capabilities & qualifications",
-      "Availability and absence",
-      "Scheduling, shifts & dispatch",
-      "Assignments and staffing requests",
-      "Time, attendance & place policy",
-      "Compliance and expiry controls",
-      "Pay-ready outputs",
-      "Workforce analytics & reports",
-    ],
-  },
-  {
-    id: "products",
-    number: "03",
-    label: "Products & Inventory",
-    kicker: "Catalogue and warehouse operations",
-    title: "Create one governed product and stock foundation for every commercial flow.",
-    description:
-      "Product definitions, units, price lists, warehouses, balances and material movements stay consistent from commercial planning through physical execution.",
-    outcome:
-      "Improve product-data quality and stock visibility while reducing shortages, count variance and material search time.",
-    outcomes: [
-      "Consistent products, units and governed pricing",
-      "Real-time visibility across warehouses and locations",
-      "Fewer shortages, count variances and stock disputes",
-    ],
-    measure: "Stock accuracy · fulfillment readiness · count variance",
-    icon: Boxes,
-    modules: [
-      "Product catalogue, units & price lists",
-      "Product categories, attributes & reference mapping",
-      "Warehouses, locations, lots & balances",
-      "Receiving, putaway, transfers & issues",
-      "Reservations, maintenance kits & staging",
-      "Cycle counts, adjustments & approvals",
-      "Lot, serial and barcode traceability",
-    ],
-  },
-  {
-    id: "procurement",
-    number: "04",
-    label: "Procurement & Orders",
-    kicker: "Source-to-pay and order-to-cash",
-    title: "Connect purchasing, selling and fulfillment without losing control at the handoffs.",
-    description:
-      "Governed requisitions and purchase orders work alongside quotations, customer orders, inventory allocation, fulfillment, returns and invoicing.",
-    outcome:
-      "Shorten commercial cycle times, preserve approval policy and reduce errors between demand, supply, delivery and billing.",
-    outcomes: [
-      "Faster requisition, approval and purchasing cycles",
-      "Fewer receiving, invoice and price-variance exceptions",
-      "More predictable allocation, fulfillment and billing",
-    ],
-    measure: "Approval time · match exceptions · order cycle",
-    icon: PackageCheck,
-    modules: [
-      "Purchase requisitions & delegation of authority",
-      "Purchase orders, vendors & acknowledgements",
-      "Goods receipts, three-way match & vendor bills",
-      "Sales quotes, orders & available-to-promise",
-      "Inventory allocation & fulfillment orchestration",
-      "Customer invoices, returns & credit memos",
-    ],
-  },
-  {
-    id: "finance",
-    number: "05",
-    label: "Finance & Spend",
-    kicker: "Governed financial operations",
-    title: "Connect operational transactions to auditable financial outcomes.",
-    description:
-      "Finance capabilities cover books, journals, subledgers, spend, currency, tax, reconciliation and close workflows with governed roles and durable records.",
-    outcome:
-      "Create a clearer path from operating event to financial review, reporting and reconciliation across business units.",
-    outcomes: [
-      "Faster reconciliation and period close",
-      "Trusted financial statements with drill-through",
-      "Improved spend, budget and treasury control",
-    ],
-    measure: "Close time · reconciliation backlog · budget variance",
-    icon: WalletCards,
-    modules: [
-      "Books, chart of accounts & fiscal periods",
-      "Double-entry journals & immutable reversals",
-      "AP, AR and inventory subledger ingestion",
-      "Trial balance and financial statements",
-      "Spend, expenses & approval policy",
-      "Bank statement reconciliation",
-      "Multi-currency and tax configuration",
-      "Budgeting, period close & forecasting",
-    ],
-  },
-  {
-    id: "automation",
-    number: "06",
-    label: "Workflow, Rules & Forms",
-    kicker: "Governed business automation",
-    title: "Turn repeatable operating logic into durable workflows and controlled decisions.",
-    description:
-      "Workflow orchestration, policy rules and dynamic forms let teams adapt processes while preserving execution state, approvals and an evaluation trail.",
-    outcome:
-      "Replace fragmented manual steps with consistent, visible processes and faster exception handling.",
-    outcomes: [
-      "Shorter process and approval cycle times",
-      "Consistent policy application across teams",
-      "Fewer manual handoffs and unmanaged exceptions",
-    ],
-    measure: "Process cycle · touchpoints · exception resolution",
-    icon: Workflow,
-    modules: [
-      "Workflow Studio & durable orchestration",
-      "Visual DAG canvas & state machines",
-      "Business rules, policies & decision tables",
-      "Checkpointing, replay & compensation",
-      "Dynamic forms and configuration studio",
-      "Cross-module actions and approvals",
-      "Evaluation and execution audit trails",
-    ],
-  },
-  {
-    id: "analytics",
-    number: "07",
-    label: "Analytics & Reporting",
-    kicker: "Operational intelligence",
-    title: "Move from trusted operational facts to decisions, dashboards and durable reports.",
-    description:
-      "Analytics Studio brings metrics, datasets, place rollups, governed measures, exploration, dashboards and generated reporting into one intelligence workspace.",
-    outcome:
-      "Reduce report preparation time and help leaders move from symptoms to accountable operational action.",
-    outcomes: [
-      "Faster recurring reporting and executive review",
-      "One governed definition for critical measures",
-      "Quicker drill-down from KPI to place and source",
-    ],
-    measure: "Report preparation · insight-to-action · metric reuse",
-    icon: BarChart3,
-    modules: [
-      "Executive overview & KPI snapshots",
-      "Metrics, datasets & governed measures",
-      "Explore, filters, formulas & saved charts",
-      "Dashboards and place-level rollups",
-      "Scheduled and generated reports",
-      "CSV outputs, sources & lineage",
-    ],
-  },
-  {
-    id: "documents",
-    number: "08",
-    label: "Documents & E-Signature",
-    kicker: "Evidence and agreement workflows",
-    title: "Capture, approve and sign the evidence that completes the business process.",
-    description:
-      "Document scanning, structured evidence, envelope journeys and signatures stay connected to the records, people and decisions that require them.",
-    outcome:
-      "Shorten document and signature turnaround while reducing missing evidence and manual follow-up.",
-    outcomes: [
-      "Faster evidence capture and signature completion",
-      "Fewer missing documents and approval chasers",
-      "Clear envelope, signer and record traceability",
-    ],
-    measure: "Turnaround time · completion rate · missing evidence",
-    icon: FileSignature,
-    modules: [
-      "Document capture, upload & scanner workflows",
-      "Structured extraction and review",
-      "Record-linked evidence and status",
-      "E-signature envelopes & signer journeys",
-      "Signature progress and completion records",
-      "Mobile document and signature actions",
-    ],
-  },
-  {
-    id: "geospatial",
-    number: "09",
-    label: "Places & Geospatial",
-    kicker: "Location-aware operations",
-    title: "Make place, boundary and location context part of every operational decision.",
-    description:
-      "Geospatial Studio manages place hierarchies, boundaries, scope, imports and geofence evaluation for field, asset and workforce workflows.",
-    outcome:
-      "Improve routing and accountability by connecting every relevant action to an authorized operational place.",
-    outcomes: [
-      "Consistent site and place context across modules",
-      "Faster location-aware assignment and navigation",
-      "Stronger spatial scope and geofence compliance",
-    ],
-    measure: "Travel/search time · place accuracy · scope exceptions",
-    icon: MapPin,
-    modules: [
-      "Places, sites, zones & hierarchical context",
-      "Maps, boundaries & spatial selection",
-      "Organization-to-place relationships",
-      "Spatial access and work scope",
-      "Geofence evaluation and punch policy",
-      "Place import and operational drill-down",
-    ],
-  },
-  {
-    id: "communications",
-    number: "10",
-    label: "Communications",
-    kicker: "TextFly omnichannel engagement",
-    title: "Coordinate customer and workforce conversations across every approved channel.",
-    description:
-      "A unified inbox, contact context, templates, campaigns, event triggers and durable delivery connect enterprise workflows to email, SMS, WhatsApp, voice and webhooks.",
-    outcome:
-      "Reduce response delay and fragmented conversations while improving delivery visibility and service follow-through.",
-    outcomes: [
-      "Faster response and case progression",
-      "Consistent communication across approved channels",
-      "Visible delivery, retry and escalation status",
-    ],
-    measure: "Response time · delivery success · SLA exceptions",
-    icon: MessageSquareMore,
-    modules: [
-      "Unified inbox and conversation threads",
-      "Customer and workforce contact profiles",
-      "Email, SMS, WhatsApp, voice & webhooks",
-      "Templates, audiences & reach campaigns",
-      "Cross-module event triggers",
-      "Delivery queues, retries & SLA escalation",
-    ],
-  },
-  {
-    id: "data",
-    number: "11",
-    label: "Data & Integration",
-    kicker: "Enterprise data and connector layer",
-    title: "Connect enterprise systems through governed contracts instead of brittle point integrations.",
-    description:
-      "Data contracts, schema mapping, quality controls, lineage and a reusable connector hub support secure inbound events, polling and cross-module dispatch.",
-    outcome:
-      "Speed integration onboarding and reduce failures caused by schema drift, duplicate events and unclear data ownership.",
-    outcomes: [
-      "Faster source-system and partner onboarding",
-      "Fewer mapping, duplication and schema-drift failures",
-      "Traceable data quality, lineage and ingestion history",
-    ],
-    measure: "Onboarding lead time · failed events · data quality",
-    icon: Database,
-    modules: [
-      "Data contracts and schema discovery",
-      "Field mapping and normalization",
-      "Quality assertions and drift detection",
-      "Connector catalogue and tenant connections",
-      "Webhook ingestion, HMAC verification & journaling",
-      "Idempotency, delta sync & workflow dispatch",
-    ],
-  },
-];
-
-const mobileCapabilities = [
-  "Today / My Work",
-  "Workforce",
-  "CMMS field execution",
-  "Places & Maps",
-  "Actions & Approvals",
-  "Documents & Scanner",
-  "TextFly conversations",
-  "Analytics",
-  "Generated Reports",
-  "Spend & Expenses",
-  "E-signature",
-  "Profile & Security",
-];
-
-const webCapabilities = [
-  "Executive control tower",
-  "Operational workbenches",
-  "Scheduling and dispatch",
-  "Configuration and forms studios",
-  "Analytics and report authoring",
-  "Finance and commercial controls",
-  "Tenant, role and organization administration",
-  "Connector and communication management",
-];
-
-const technologyGroups = [
-  { label: "Web experience", icon: Code2, technologies: ["Next.js", "React", "TypeScript", "Tailwind", "ECharts", "SWR"] },
-  { label: "Native mobile", icon: Smartphone, technologies: ["React Native", "Expo", "Expo Router", "TanStack Query", "SecureStore", "Zod"] },
-  { label: "Services & data", icon: Database, technologies: ["Node.js", "Fastify", "PostgreSQL", "OpenAPI", "AsyncAPI", "Event workers"] },
-  { label: "Delivery quality", icon: ShieldCheck, technologies: ["Playwright", "Vitest", "Contract tests", "Audit trails", "Health checks", "CI gates"] },
-];
-
-const outcomes = [
-  { number: "01", title: "Faster work-to-action cycles", copy: "Prioritized work, clear ownership and mobile execution reduce the time between assignment, action and decision.", measure: "Assignment-to-start · submission-to-decision" },
-  { number: "02", title: "Less duplicate administration", copy: "Capture evidence once at the point of work and carry authoritative status through approvals, reporting and financial processes.", measure: "Active administration time · re-entry rate" },
-  { number: "03", title: "More reliable operations", copy: "Planned maintenance, qualified staffing, material availability and visible exceptions help teams protect continuity.", measure: "Completion cycle · overdue work · exceptions" },
-  { number: "04", title: "Better first-time-right work", copy: "Configured forms, required evidence and governed task flows reduce incomplete submissions and repeat visits.", measure: "Accepted submissions · correction rate" },
-  { number: "05", title: "Audit-ready business records", copy: "Permissions, history, receipts and durable transaction records make operational and financial decisions easier to reconstruct.", measure: "Audit preparation time · evidence completeness" },
-];
-
-const portfolioProducts = [
-  { name: "GigaLibs", category: "Enterprise operations SaaS", copy: "A modular product suite for assets, workforce, commerce, finance, automation, data and governed business operations.", icon: Blocks },
-  { name: "GigaCRM", category: "Customer relationships", copy: "Lead and deal workspaces, sales activity, communication context and adaptable pipelines for modern teams.", icon: BriefcaseBusiness },
-  { name: "TextFly", category: "Omnichannel communications", copy: "A multi-tenant communication platform spanning email, SMS, WhatsApp, Slack, voice, webhooks and a unified inbox.", icon: MessageSquareMore },
-  { name: "Giga AI", category: "Voice & conversational AI", copy: "Voice-agent and chatbot experiences with live call visibility, product APIs and enterprise communication services.", icon: Bot },
-  { name: "nyr", category: "Local social platform", copy: "Privacy-aware local discovery, trusted circles, requests, rides, events, recommendations and business offers.", icon: MapPin },
-  { name: "OpenGrads", category: "Talent & opportunity network", copy: "A social-first network for students, institutions, employers and recruiters with ONEST and Beckn interoperability.", icon: GraduationCap },
-  { name: "GigaHR / MyNextCV", category: "HR & recruitment intelligence", copy: "Permission-aware HR journeys and recruitment intelligence built for governed, configurable SaaS delivery.", icon: Building2 },
-  { name: "Swappy", category: "Exchange commerce", copy: "A provider-governed reservation and entitlement exchange engine for ticketed experiences and multi-party transactions.", icon: RefreshCw },
-  { name: "OpenFace", category: "Social identity infrastructure", copy: "Headless identity, credibility, audience and engagement capabilities for portable social experiences.", icon: Network },
-];
-
-const portfolioLayers = [
-  {
-    number: "01",
-    label: "Technology capabilities",
-    title: "How we engineer",
-    copy: "Web, native mobile, cloud services, data, integration, security, testing and delivery disciplines.",
-    icon: Code2,
-  },
-  {
-    number: "02",
-    label: "Business modules",
-    title: "What businesses operate",
-    copy: "Maintenance, workforce, inventory, procurement, orders, finance, analytics and communications.",
-    icon: Blocks,
-  },
-  {
-    number: "03",
-    label: "Industry solutions",
-    title: "Where the work happens",
-    copy: "Domain workflows for manufacturing, entertainment, sports, mobility, healthcare and other industries.",
-    icon: Building2,
-  },
-  {
-    number: "04",
-    label: "Named products",
-    title: "What customers adopt",
-    copy: "GigaLibs, TextFly, Swappy, GigaCRM, Giga AI and the wider Gigasys product portfolio.",
-    icon: Sparkles,
-  },
-];
-
-const industryDomains = [
-  {
-    name: "Industrial Manufacturing",
-    icon: Factory,
-    copy: "Asset reliability, plant workforce, LOTO handovers, MRO materials, production support and operational analytics.",
-    capabilities: ["CMMS / EAM", "PLANT WORKFORCE", "MRO"],
-  },
-  {
-    name: "Entertainment & Live Events",
-    icon: Ticket,
-    copy: "Event crewing, call sheets, venue operations, rigging safety, audience communications and ticketed experiences.",
-    capabilities: ["CREWING", "VENUE OPS", "TICKETING"],
-  },
-  {
-    name: "Sports & Venues",
-    icon: Trophy,
-    copy: "Stadium staffing, event operations, seat and entitlement context, attendee journeys and provider-governed exchanges.",
-    capabilities: ["STADIUM OPS", "FAN JOURNEYS", "EXCHANGE"],
-  },
-  {
-    name: "Cinema, Media & Ticketing",
-    icon: Film,
-    copy: "Show and venue context, assigned-seat experiences, participant verification, messaging and safe transaction recovery.",
-    capabilities: ["SHOWS", "SEATS", "ENGAGEMENT"],
-  },
-  {
-    name: "Travel & Mobility",
-    icon: TrainFront,
-    copy: "Provider-aware journeys for buses and flights, time-bound reservations, assignments, operations and customer communication.",
-    capabilities: ["BUS", "AIR", "RESERVATIONS"],
-  },
-  {
-    name: "Pharma & Life Sciences",
-    icon: FlaskConical,
-    copy: "Cleanroom access, aseptic protocol, qualification controls, environmental readings and auditable sign-offs.",
-    capabilities: ["GMP", "CLEANROOM", "COMPLIANCE"],
-  },
-  {
-    name: "Construction & Infrastructure",
-    icon: HardHat,
-    copy: "Site mobilization, pre-start controls, qualified crews, equipment, inspections, documents and field evidence.",
-    capabilities: ["SITE OPS", "SAFETY", "FIELD WORK"],
-  },
-  {
-    name: "Agriculture & Field Operations",
-    icon: Sprout,
-    copy: "Distributed workforce coordination, harvest and yield capture, place-aware tasks and low-connectivity mobile work.",
-    capabilities: ["FIELD CREWS", "YIELD", "MOBILE"],
-  },
-  {
-    name: "Healthcare & Clinical Operations",
-    icon: HeartPulse,
-    copy: "Scoped clinical field workflows, workforce qualifications, evidence capture, approvals and compliance records.",
-    capabilities: ["CLINICAL OPS", "CREDENTIALS", "AUDIT"],
-  },
-  {
-    name: "Education & Talent",
-    icon: GraduationCap,
-    copy: "Student, institution, employer and recruiter experiences with verified credentials and opportunity discovery.",
-    capabilities: ["TALENT", "CREDENTIALS", "ONEST"],
-  },
-  {
-    name: "Retail & Ecommerce",
-    icon: Store,
-    copy: "Product catalogues, price lists, inventory, procurement, orders, fulfillment, returns and customer engagement.",
-    capabilities: ["CATALOGUE", "ORDER TO CASH", "FULFILLMENT"],
-  },
-  {
-    name: "Professional & Field Services",
-    icon: BriefcaseBusiness,
-    copy: "Customer relationships, resource scheduling, assignments, time, expenses, approvals and service communication.",
-    capabilities: ["CRM", "SCHEDULING", "SERVICE OPS"],
-  },
-];
-
-function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const reduceMotion = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
+// Verified production screenshots
+import workforceOverviewImg from "@/assets/products/workforce-overview.png";
+import workforceSchedulingImg from "@/assets/products/workforce-scheduling.png";
+import cmmsAssetRegisterImg from "@/assets/products/cmms-asset-register.png";
+import cmmsSchedulesImg from "@/assets/products/cmms-schedules.png";
+import cmmsMetersImg from "@/assets/products/cmms-meters.png";
+import cmmsInventoryImg from "@/assets/products/cmms-inventory.png";
+import mobileWorkOrdersImg from "@/assets/products/mobile-work-orders.png";
+import mobileWorkersImg from "@/assets/products/mobile-workers.png";
+import mobileDashboardImg from "@/assets/products/mobile-dashboard.png";
+import platformModulesImg from "@/assets/products/platform-modules.png";
+import orgHierarchyImg from "@/assets/products/org-hierarchy.png";
 
 export default function Home() {
-  const [activeHero, setActiveHero] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(true);
-  const [activeSuite, setActiveSuite] = useState<SuiteId>("maintenance");
-  const reduceMotion = useReducedMotion();
+  const { toast } = useToast();
+  const [activePlatformTab, setActivePlatformTab] = useState<
+    "cmms" | "workforce" | "mobile" | "infra" | "ledger" | "iam"
+  >("cmms");
 
-  useEffect(() => {
-    if (!autoPlay || reduceMotion) return;
-    const timer = window.setInterval(() => {
-      setActiveHero((current) => (current + 1) % heroSlides.length);
-    }, 7000);
-    return () => window.clearInterval(timer);
-  }, [autoPlay, reduceMotion]);
+  const [activeMobileView, setActiveMobileView] = useState<
+    "orders" | "workers" | "dashboard"
+  >("orders");
 
-  const selectedSuite = suites.find((suite) => suite.id === activeSuite)!;
-  const SelectedSuiteIcon = selectedSuite.icon;
-  const slide = heroSlides[activeHero];
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    facilityType: "",
+  });
+
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormSubmitting(true);
+    setTimeout(() => {
+      setFormSubmitting(false);
+      toast({
+        title: "Walkthrough Scheduled",
+        description:
+          "Our system architects will contact you within 2 business hours with calendar invites.",
+      });
+      setFormData({ name: "", email: "", company: "", facilityType: "" });
+    }, 1000);
+  };
+
+  const partnerClients = [
+    "Caterpillar",
+    "Rockwell Automation",
+    "Honeywell Industrial",
+    "Eaton Corp",
+    "Cummins Inc",
+    "Emerson Electric",
+    "Parker Hannifin",
+    "GE Aerospace & Power",
+    "Deere & Company",
+    "3M Industrial Systems",
+  ];
 
   return (
     <Layout>
-      <section className="relative min-h-[760px] overflow-hidden bg-[#11110f] text-white lg:min-h-[calc(100vh-72px)]" aria-roledescription="carousel" aria-label="Gigasys capabilities">
-        <AnimatePresence mode="sync">
-          <motion.img
-            key={slide.image}
-            src={slide.image}
-            alt={slide.alt}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-            initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ opacity: { duration: 0.8 }, scale: { duration: 7.5, ease: "linear" } }}
-          />
-        </AnimatePresence>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,9,0.99)_0%,rgba(10,10,9,0.92)_42%,rgba(10,10,9,0.48)_72%,rgba(10,10,9,0.25)_100%)]" />
-        <div className="absolute inset-0 industrial-grid opacity-25" />
-        <div className="hero-signal absolute right-[7%] top-[11%] hidden h-40 w-40 border-r border-t border-orange-400/75 lg:block" />
-
-        <div className="relative mx-auto flex min-h-[760px] max-w-[1440px] flex-col px-5 pb-8 pt-14 sm:px-8 lg:min-h-[calc(100vh-72px)] lg:px-12 lg:pt-20">
-          <div className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-white/60 sm:text-xs">
-            <span className="h-px w-10 bg-[#ff7200]" /> Gigasys Technologies / Enterprise software products
+      {/* ─── LIVE TELEMETRY STRIP ───────────────────────────────────── */}
+      <div className="border-b border-border bg-slate-950/80 backdrop-blur-md text-xs font-mono py-2.5 px-4 sm:px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-muted-foreground">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              SYSTEM ACTIVE
+            </span>
+            <span className="hidden sm:inline text-slate-400">
+              SPEC: GIGALIBS_ENTERPRISE_V4
+            </span>
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeHero}
-              className="max-w-5xl"
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="mb-5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[#ff8a2b]">{slide.eyebrow}</div>
-              <h1 className="max-w-5xl text-[clamp(3rem,6.4vw,6.8rem)] font-semibold leading-[0.94] tracking-[-0.055em]">{slide.title}</h1>
-              <p className="mt-7 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{slide.copy}</p>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#modules" className="inline-flex min-h-[52px] items-center gap-3 bg-[#ff7200] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-[#e96500] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-              Explore capabilities <ArrowRight className="h-4 w-4" />
-            </a>
-            <Link href="/contact" className="inline-flex min-h-[52px] items-center gap-3 border border-white/35 bg-black/20 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black">
-              Talk to our team
-            </Link>
+          <div className="flex items-center gap-4 sm:gap-6 text-[11px]">
+            <span className="flex items-center gap-1.5">
+              <Gauge className="w-3.5 h-3.5 text-cyan-400" />
+              <span>P99 CACHE: &lt; 12ms</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Activity className="w-3.5 h-3.5 text-cyan-400" />
+              <span>UPTIME: 99.995%</span>
+            </span>
+            <span className="hidden md:flex items-center gap-1.5">
+              <Globe2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>250+ LOCALES</span>
+            </span>
           </div>
+        </div>
+      </div>
 
-          <div className="mt-auto grid gap-7 pt-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div className="grid gap-px border border-white/20 bg-white/20 sm:grid-cols-3 lg:max-w-3xl">
-              {[["20+", "Modular capabilities"], ["Web + Native", "Product surfaces"], ["Cloud + Customer", "Delivery options"]].map(([value, label]) => (
-                <div key={label} className="bg-black/65 px-5 py-4 backdrop-blur-md">
-                  <div className="font-mono text-sm font-semibold text-[#ff8a2b]">{value}</div>
-                  <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55">{label}</div>
-                </div>
-              ))}
-            </div>
+      {/* ─── 1. HERO: WHAT WE DO & FOR WHOM ─────────────────────────── */}
+      <section className="relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-28 border-b border-border bg-[#080C14]">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293d0f_1px,transparent_1px),linear-gradient(to_bottom,#1f293d0f_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+        <div className="absolute -top-40 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="flex items-center gap-2" aria-label="Carousel controls">
-              <button type="button" onClick={() => setActiveHero((current) => (current - 1 + heroSlides.length) % heroSlides.length)} className="grid h-12 w-12 place-items-center border border-white/30 bg-black/35 text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black" aria-label="Previous slide"><ArrowLeft className="h-4 w-4" /></button>
-              <button type="button" onClick={() => setAutoPlay((playing) => !playing)} className="grid h-12 w-12 place-items-center border border-white/30 bg-black/35 text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black" aria-label={autoPlay ? "Pause carousel" : "Play carousel"}>
-                {autoPlay ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </button>
-              <button type="button" onClick={() => setActiveHero((current) => (current + 1) % heroSlides.length)} className="grid h-12 w-12 place-items-center border border-white/30 bg-black/35 text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black" aria-label="Next slide"><ArrowRight className="h-4 w-4" /></button>
-            </div>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-mono uppercase tracking-widest">
+                <Cpu className="w-3.5 h-3.5" />
+                Connected Workforce &amp; Asset Reliability Platform
+              </div>
 
-          <div className="mt-6 grid grid-cols-4 gap-2" role="tablist" aria-label="Select hero slide">
-            {heroSlides.map((item, index) => (
-              <button key={item.marker} type="button" onClick={() => setActiveHero(index)} className="group text-left" role="tab" aria-selected={activeHero === index} aria-label={`Show slide ${index + 1}: ${item.eyebrow}`}>
-                <span className="block h-[2px] overflow-hidden bg-white/20">
-                  {activeHero === index && (
-                    <motion.span key={`${activeHero}-${autoPlay}`} className="block h-full bg-[#ff7200]" initial={{ width: "0%" }} animate={{ width: autoPlay && !reduceMotion ? "100%" : "18%" }} transition={{ duration: autoPlay && !reduceMotion ? 7 : 0.25, ease: "linear" }} />
-                  )}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-100 leading-[1.1]">
+                Connect your frontline workers, equipment, and operations on{" "}
+                <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-sky-400 bg-clip-text text-transparent">
+                  one unified platform.
                 </span>
-                <span className={`mt-2 hidden font-mono text-[9px] tracking-[0.12em] sm:block ${activeHero === index ? "text-white" : "text-white/35"}`}>{item.marker}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+              </h1>
 
-      <section className="overflow-hidden border-b border-black/10 bg-[#ff7200] text-white" aria-label="Capability summary">
-        <div className="capability-marquee">
-          <div className="capability-marquee__track">
-            {[0, 1].map((copy) => (
-              <div key={copy} className="flex shrink-0" aria-hidden={copy === 1}>
-                {["Asset reliability", "Workforce operations", "Supply chain", "Finance", "Native mobile", "Analytics", "AI products", "Social platforms"].map((item, index) => (
-                  <div key={`${copy}-${item}`} className="flex items-center gap-4 border-r border-white/25 px-6 py-5 lg:px-8">
-                    <span className="font-mono text-[10px] text-white/65">0{index + 1}</span>
-                    <span className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.1em]">{item}</span>
-                  </div>
-                ))}
+              <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+                Gigasys gives maintenance leaders and technicians a single
+                system for work orders, preventative scheduling, and asset
+                telemetry—built to work offline on any mobile device.
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono text-slate-300">
+                <div className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-800 bg-slate-900/60">
+                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span>100% Offline Mobile</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-800 bg-slate-900/60">
+                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span>Automated CMMS</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-800 bg-slate-900/60">
+                  <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span>Shift &amp; Job Dispatch</span>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <section className="bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[0.72fr_1fr] lg:items-end">
-            <div>
-              <div className="section-label">Enterprise portfolio model</div>
-              <h2 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-6xl">
-                Four distinct layers. One coherent technology company.
-              </h2>
+              <div className="flex flex-wrap items-center gap-4 pt-4">
+                <a href="#book-walkthrough">
+                  <Button className="bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold px-7 py-6 text-sm shadow-[0_0_25px_rgba(0,240,255,0.35)] transition-all">
+                    Book an Architecture Walkthrough
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </a>
+                <a href="#why">
+                  <Button
+                    variant="outline"
+                    className="border-slate-700 hover:bg-slate-800/80 text-slate-200 px-6 py-6 font-mono text-xs tracking-wider uppercase"
+                  >
+                    See The Operational Gap ↓
+                  </Button>
+                </a>
+              </div>
             </div>
-            <p className="max-w-2xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">
-              Technologies describe how we build. Business modules describe reusable capabilities.
-              Industries apply those capabilities to domain workflows. Products package them into experiences customers can adopt.
-            </p>
-          </Reveal>
 
-          <div className="mt-12 grid gap-px border border-black/10 bg-black/10 md:grid-cols-2 xl:grid-cols-4">
-            {portfolioLayers.map((layer, index) => {
-              const Icon = layer.icon;
-              return (
-                <Reveal key={layer.number} className="group bg-[#f8f7f3] p-7 transition duration-300 hover:bg-[#151513] hover:text-white sm:p-8" delay={index * 0.06}>
-                  <div className="flex items-center justify-between">
-                    <span className="grid h-11 w-11 place-items-center bg-[#ff7200] text-white"><Icon className="h-5 w-5" /></span>
-                    <span className="font-mono text-[10px] text-black/35 group-hover:text-white/35">{layer.number}</span>
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-2xl border border-cyan-500/30 bg-slate-950/90 shadow-[0_0_50px_rgba(0,240,255,0.15)] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 bg-slate-900/90 border-b border-slate-800 text-xs font-mono text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+                    <span className="ml-2 font-semibold text-slate-200">
+                      GigaOps Core Engine // Production
+                    </span>
                   </div>
-                  <div className="mt-14 font-mono text-[9px] uppercase tracking-[0.16em] text-[#d95f00] group-hover:text-[#ff8a2b]">{layer.label}</div>
-                  <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em]">{layer.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-black/55 group-hover:text-white/55">{layer.copy}</p>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="modules" className="scroll-mt-20 bg-[#f3f2ee] py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 border-b border-black/10 pb-10 lg:grid-cols-[1fr_0.62fr] lg:items-end">
-            <div>
-              <div className="section-label">GigaLibs business modules</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-7xl">Eleven capability families. One connected operating platform.</h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">Explore the business capabilities already represented across the GigaLibs web, service and mobile codebases. Every family includes its operating modules, intended outcomes and measures.</p>
-          </Reveal>
-
-          <div className="mt-10 grid gap-8 xl:grid-cols-[410px_minmax(0,1fr)]">
-            <Reveal className="self-start border-y border-black/10">
-              {suites.map((suite) => {
-                const Icon = suite.icon;
-                const isActive = activeSuite === suite.id;
-                return (
-                  <button key={suite.id} type="button" onClick={() => setActiveSuite(suite.id)} className={`group flex w-full items-center gap-3 border-b border-black/10 px-1 py-3.5 text-left transition last:border-b-0 ${isActive ? "text-[#e76500]" : "text-black/55 hover:text-black"}`} aria-pressed={isActive}>
-                    <span className="w-7 font-mono text-[10px]">{suite.number}</span>
-                    <span className={`grid h-9 w-9 place-items-center border transition ${isActive ? "border-[#ff7200] bg-[#ff7200] text-white" : "border-black/10 bg-white text-black/65 group-hover:border-black/35"}`}><Icon className="h-4 w-4" /></span>
-                    <span className="flex-1 text-[13px] font-semibold tracking-[-0.01em] sm:text-sm">{suite.label}</span>
-                    <ChevronRight className={`h-4 w-4 transition ${isActive ? "translate-x-1" : ""}`} />
-                  </button>
-                );
-              })}
-            </Reveal>
-
-            <AnimatePresence mode="wait">
-              <motion.article key={selectedSuite.id} initial={reduceMotion ? false : { opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }} className="self-start overflow-hidden border border-black/10 bg-white shadow-[0_24px_70px_rgba(20,20,18,0.08)]">
-                <div className="grid gap-8 border-b border-black/10 p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:p-11">
-                  <div>
-                    <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#e76500]">{selectedSuite.kicker}</div>
-                    <h3 className="mt-4 max-w-3xl text-3xl font-semibold leading-[1.04] tracking-[-0.04em] text-[#161614] sm:text-4xl lg:text-5xl">{selectedSuite.title}</h3>
-                    <p className="mt-5 max-w-3xl text-base leading-7 text-black/60">{selectedSuite.description}</p>
-                  </div>
-                  <div className="grid h-20 w-20 place-items-center bg-[#151513] text-[#ff7a12]"><SelectedSuiteIcon className="h-8 w-8" /></div>
+                  <span className="text-[10px] text-cyan-400">LIVE INSTANCE</span>
                 </div>
 
-                <div className="p-6 sm:p-9 lg:p-10">
-                  <div className="flex items-center justify-between gap-5">
-                    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Included modules</div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-black/30">{String(selectedSuite.modules.length).padStart(2, "0")} capabilities</div>
-                  </div>
-                  <div className="mt-5 grid gap-x-7 sm:grid-cols-2 lg:grid-cols-3">
-                    {selectedSuite.modules.map((item) => (
-                      <div key={item} className="flex gap-3 border-t border-black/10 py-3.5 text-sm leading-5 text-black/70"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />{item}</div>
-                    ))}
-                  </div>
-                </div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-slate-900">
+                  <img
+                    src={workforceOverviewImg}
+                    alt="Gigasys Workforce Platform Overview"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
 
-                <div className="border-t border-black/10 bg-[#f3f2ee]">
-                  <div className="grid gap-7 p-6 sm:p-9 lg:grid-cols-[minmax(0,1fr)_300px] lg:p-10">
+                  <div className="absolute bottom-3 left-3 right-3 p-3 rounded-lg bg-slate-950/85 backdrop-blur-md border border-slate-800 flex items-center justify-between text-xs">
                     <div>
-                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e76500]">Business outcome</div>
-                      <p className="mt-4 max-w-3xl text-xl font-medium leading-8 tracking-[-0.02em] text-[#242421]">{selectedSuite.outcome}</p>
+                      <p className="font-mono text-cyan-400 text-[11px] font-semibold">
+                        GigaOps™ Shift Dispatch &amp; CMMS
+                      </p>
+                      <p className="text-slate-400 text-[11px]">
+                        Multi-site spatial scope active
+                      </p>
                     </div>
-                    <div className="border-l-2 border-[#ff7200] bg-white px-5 py-4">
-                      <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.18em] text-black/40"><Gauge className="h-3.5 w-3.5 text-[#e76500]" />Measure</div>
-                      <div className="mt-2 text-xs font-semibold leading-5 text-black/70">{selectedSuite.measure}</div>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-px border-y border-black/10 bg-black/10 sm:grid-cols-3">
-                    {selectedSuite.outcomes.map((item, index) => (
-                      <div key={item} className="flex gap-3 bg-[#f8f7f3] p-5 text-sm font-medium leading-5 text-black/65">
-                        <span className="font-mono text-[9px] text-[#e76500]">{String(index + 1).padStart(2, "0")}</span>
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-9 lg:px-10">
-                    <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-black/35"><CircleDot className="h-3.5 w-3.5 text-[#ff7200]" />Outcome-led module design</div>
-                    <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-bold text-[#d95f00] hover:text-black">Discuss this suite <ArrowRight className="h-4 w-4" /></Link>
+                    <Badge
+                      variant="outline"
+                      className="border-emerald-500/40 text-emerald-400 bg-emerald-500/10 font-mono text-[10px]"
+                    >
+                      SYNCHRONIZED
+                    </Badge>
                   </div>
                 </div>
-              </motion.article>
-            </AnimatePresence>
-          </div>
-        </div>
-      </section>
 
-      <section id="mobile" className="scroll-mt-20 overflow-hidden bg-[#151513] py-20 text-white md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[1fr_0.65fr] lg:items-end">
-            <div>
-              <div className="section-label section-label--dark">Web + native mobile</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] sm:text-5xl lg:text-7xl">The full operating environment—from control room to point of work.</h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-white/60 lg:justify-self-end">Complex planning and administration stay powerful on web. Bounded, task-first journeys move securely to the field on iOS and Android.</p>
-          </Reveal>
-
-          <div className="mt-14 grid gap-px border border-white/15 bg-white/15 lg:grid-cols-2">
-            <Reveal className="relative overflow-hidden bg-[#1a1a18] p-7 sm:p-10" delay={0.05}>
-              <div className="absolute right-0 top-0 h-36 w-36 border-b border-l border-[#ff7200]/35" />
-              <div className="flex items-center justify-between gap-4"><div className="grid h-12 w-12 place-items-center bg-[#ff7200] text-white"><Globe2 className="h-5 w-5" /></div><span className="font-mono text-[10px] tracking-[0.18em] text-white/35">WEB OPERATIONS</span></div>
-              <h3 className="mt-8 text-3xl font-semibold tracking-[-0.035em]">Plan, configure and govern.</h3>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-white/55">Role-aware workspaces for executives, planners, supervisors, administrators and specialists.</p>
-              <div className="mt-8 grid gap-x-7 sm:grid-cols-2">
-                {webCapabilities.map((item) => <div key={item} className="flex gap-3 border-t border-white/10 py-4 text-sm text-white/70"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-[#ff7200]" />{item}</div>)}
-              </div>
-            </Reveal>
-
-            <Reveal className="relative overflow-hidden bg-[#10100f] p-7 sm:p-10" delay={0.12}>
-              <div className="absolute inset-0 orange-radial opacity-30" />
-              <div className="relative">
-                <div className="flex items-center justify-between gap-4"><div className="grid h-12 w-12 place-items-center border border-[#ff7200] text-[#ff8a2b]"><Smartphone className="h-5 w-5" /></div><span className="font-mono text-[10px] tracking-[0.18em] text-white/35">IOS + ANDROID</span></div>
-                <h3 className="mt-8 text-3xl font-semibold tracking-[-0.035em]">Act, capture and decide.</h3>
-                <p className="mt-4 max-w-xl text-sm leading-6 text-white/55">A tenant-aware native shell with secure sessions, scoped capability delivery and field-focused journeys.</p>
-                <div className="mt-8 grid grid-cols-2 gap-px bg-white/10">
-                  {mobileCapabilities.map((item, index) => <div key={item} className="bg-[#141412] px-4 py-4 text-xs font-medium text-white/70"><span className="mr-2 font-mono text-[9px] text-[#ff7a12]">{String(index + 1).padStart(2, "0")}</span>{item}</div>)}
+                <div className="grid grid-cols-3 divide-x divide-slate-800 border-t border-slate-800 bg-slate-900/50 p-3 text-center text-xs font-mono">
+                  <div>
+                    <div className="text-cyan-400 font-bold text-sm">250+</div>
+                    <div className="text-[10px] text-slate-400">Territories</div>
+                  </div>
+                  <div>
+                    <div className="text-emerald-400 font-bold text-sm">100%</div>
+                    <div className="text-[10px] text-slate-400">Double-Entry</div>
+                  </div>
+                  <div>
+                    <div className="text-sky-400 font-bold text-sm">&lt;12ms</div>
+                    <div className="text-[10px] text-slate-400">P99 Cache</div>
+                  </div>
                 </div>
               </div>
-            </Reveal>
-          </div>
-
-          <Reveal className="mt-8 grid gap-px border border-white/15 bg-white/15 sm:grid-cols-2 lg:grid-cols-4" delay={0.16}>
-            {[
-              [ShieldCheck, "Scoped by design", "Tenant, permission, organization and place context determine every visible capability."],
-              [RefreshCw, "Resilient execution", "Bounded requests, explicit conflicts and recoverable work protect field continuity."],
-              [ScanLine, "Evidence at source", "Forms, documents, scanner and signatures capture proof inside the owning workflow."],
-              [Activity, "Outcome telemetry", "Measure delay, rework, completion and decision cycles—not just screen usage."],
-            ].map(([Icon, title, copy]) => {
-              const ItemIcon = Icon as LucideIcon;
-              return <article key={title as string} className="bg-[#11110f] p-6"><ItemIcon className="h-5 w-5 text-[#ff7200]" /><h3 className="mt-5 text-base font-semibold">{title as string}</h3><p className="mt-2 text-sm leading-6 text-white/50">{copy as string}</p></article>;
-            })}
-          </Reveal>
-        </div>
-      </section>
-
-      <section id="saas" className="scroll-mt-20 bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[0.78fr_1fr] lg:items-end">
-            <div><div className="section-label">Enterprise SaaS</div><h2 className="mt-5 text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-6xl">Modular where it matters. Unified where it counts.</h2></div>
-            <p className="max-w-2xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">GigaLibs is designed as a family of independent operational products, with governed entitlements and consistent experience across the suite.</p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-px border border-black/10 bg-black/10 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              { icon: Blocks, title: "Composable modules", copy: "Adopt focused products by business need without forcing every team into the entire suite.", tag: "MODULAR PRODUCTS" },
-              { icon: ShieldCheck, title: "Tenant governance", copy: "Roles, permissions, organization and spatial scope shape access across applications.", tag: "CONTROLLED ACCESS" },
-              { icon: Cloud, title: "Flexible delivery", copy: "Support for suite, customer-cloud and self-contained delivery patterns where product boundaries allow.", tag: "DEPLOYMENT CHOICE" },
-              { icon: Smartphone, title: "Tenant-ready mobile", copy: "One native product foundation can deliver approved capabilities and tenant-branded profiles.", tag: "MOBILE SAAS" },
-            ].map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <Reveal key={item.title} className="group bg-[#f8f7f3] p-7 transition duration-300 hover:bg-[#151513] hover:text-white sm:p-8" delay={index * 0.06}>
-                  <div className="flex items-center justify-between"><Icon className="h-6 w-6 text-[#ff7200]" /><span className="font-mono text-[9px] tracking-[0.16em] text-black/35 group-hover:text-white/35">0{index + 1}</span></div>
-                  <h3 className="mt-16 text-2xl font-semibold tracking-[-0.03em]">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-black/55 group-hover:text-white/55">{item.copy}</p>
-                  <div className="mt-8 border-t border-black/10 pt-4 font-mono text-[9px] tracking-[0.15em] text-[#d95f00] group-hover:border-white/10 group-hover:text-[#ff8a2b]">{item.tag}</div>
-                </Reveal>
-              );
-            })}
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="technologies" className="scroll-mt-20 border-y border-black/10 bg-[#f3f2ee] py-20 md:py-24">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[0.65fr_1fr]">
-            <div><div className="section-label">Technology foundation</div><h2 className="mt-5 max-w-2xl text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl">Modern tools. Production discipline.</h2><p className="mt-5 max-w-xl text-base leading-7 text-black/60">The technologies below come directly from the active GigaLibs web, service and mobile workspaces.</p></div>
-            <div className="grid gap-px border border-black/10 bg-black/10 sm:grid-cols-2">
-              {technologyGroups.map((group) => {
-                const Icon = group.icon;
-                return <article key={group.label} className="bg-white p-6 sm:p-8"><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center bg-[#ff7200] text-white"><Icon className="h-4 w-4" /></span><h3 className="text-base font-semibold">{group.label}</h3></div><div className="mt-6 flex flex-wrap gap-2">{group.technologies.map((technology) => <span key={technology} className="border border-black/10 bg-[#f7f6f2] px-3 py-2 font-mono text-[10px] text-black/60">{technology}</span>)}</div></article>;
-              })}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section id="industries" className="scroll-mt-20 overflow-hidden bg-[#151513] py-20 text-white md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 border-b border-white/15 pb-10 lg:grid-cols-[1fr_0.62fr] lg:items-end">
-            <div>
-              <div className="section-label section-label--dark">Industry domains</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] sm:text-5xl lg:text-7xl">
-                Domain-specific workflows—not generic software with a new label.
-              </h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-white/55 lg:justify-self-end">
-              Reusable Gigasys modules are configured around the vocabulary, roles,
-              safety controls, evidence and business outcomes of each industry.
+      {/* ─── 2. THE PROBLEM (Visitor's Current Situation) ───────────── */}
+      <section id="why" className="py-20 md:py-28 bg-[#0B0F19] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-16 space-y-3">
+            <Badge
+              variant="outline"
+              className="border-red-500/30 text-red-400 bg-red-500/10 font-mono uppercase text-xs"
+            >
+              The Operational Gap
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              Your field teams are doing mission-critical work with disconnected tools.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              When maintenance schedules, shift rosters, and equipment telemetry live in separate spreadsheets, paper binders, and slow legacy screens, operations stall.
             </p>
-          </Reveal>
+          </div>
 
-          <div className="mt-12 grid gap-px border border-white/15 bg-white/15 md:grid-cols-2 xl:grid-cols-3">
-            {industryDomains.map((domain, index) => {
-              const Icon = domain.icon;
-              return (
-                <Reveal key={domain.name} className="group min-h-[300px] bg-[#1b1b19] p-7 transition duration-300 hover:bg-[#22221f] sm:p-8" delay={(index % 3) * 0.05}>
-                  <div className="flex items-center justify-between">
-                    <span className="grid h-12 w-12 place-items-center border border-[#ff7200]/60 text-[#ff8a2b] transition group-hover:bg-[#ff7200] group-hover:text-white"><Icon className="h-5 w-5" /></span>
-                    <span className="font-mono text-[9px] tracking-[0.16em] text-white/25">IND / {String(index + 1).padStart(2, "0")}</span>
-                  </div>
-                  <h3 className="mt-9 text-2xl font-semibold tracking-[-0.03em]">{domain.name}</h3>
-                  <p className="mt-4 text-sm leading-6 text-white/50">{domain.copy}</p>
-                  <div className="mt-7 flex flex-wrap gap-2">
-                    {domain.capabilities.map((capability) => (
-                      <span key={capability} className="border border-white/10 px-2.5 py-1.5 font-mono text-[8px] tracking-[0.12em] text-white/45">{capability}</span>
-                    ))}
-                  </div>
-                </Reveal>
-              );
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/70 space-y-4 hover:border-red-500/40 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+                <AlertCircle className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-100">
+                Lost Data in Connectivity Dead Zones
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Technicians lose work order access, manuals, and meter logs the moment they step into basement boiler rooms, remote pump stations, or heavy industrial enclosures.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/70 space-y-4 hover:border-red-500/40 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+                <Users2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-100">
+                Blind Scheduling &amp; Dispatching
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Supervisors assign emergency repairs without real-time insight into who is on shift, which technician holds safety certifications, or where crews are currently stationed.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/70 space-y-4 hover:border-red-500/40 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+                <FileSpreadsheet className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-100">
+                Delayed, Reactive Maintenance
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Equipment is serviced after catastrophic breakdown rather than on meter thresholds or runtime hours, multiplying unplanned downtime and spare parts costs.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="outcomes" className="scroll-mt-20 bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-[0.72fr_1fr]">
-            <Reveal className="lg:sticky lg:top-28 lg:self-start">
-              <div className="section-label">Business outcomes</div>
-              <h2 className="mt-5 max-w-2xl text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-6xl">Built to change the operating result—not just digitize a form.</h2>
-              <p className="mt-6 max-w-xl text-base leading-7 text-black/60">We avoid invented ROI claims. Every implementation starts with a baseline, an operational owner and measures that can be observed before and after change.</p>
-            </Reveal>
-            <div className="border-t border-black/10">
-              {outcomes.map((outcome, index) => (
-                <Reveal key={outcome.number} delay={index * 0.04}>
-                  <article className="group grid gap-5 border-b border-black/10 py-8 sm:grid-cols-[70px_1fr] sm:py-10">
-                    <span className="font-mono text-xs text-[#e76500]">{outcome.number}</span>
-                    <div><h3 className="text-2xl font-semibold tracking-[-0.03em] text-[#1a1a18] transition group-hover:text-[#e76500] sm:text-3xl">{outcome.title}</h3><p className="mt-3 max-w-2xl text-sm leading-6 text-black/60 sm:text-base sm:leading-7">{outcome.copy}</p><div className="mt-5 inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-black/45"><Gauge className="h-4 w-4 text-[#ff7200]" /> Measure: {outcome.measure}</div></div>
-                  </article>
-                </Reveal>
+      {/* ─── 3. OUR SOLUTION (Three Primary Benefits) ────────────────── */}
+      <section id="solution" className="py-20 md:py-28 bg-[#080C14] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-16 space-y-3">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              The Gigasys Platform
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              One mobile-first system from morning shift dispatch to asset sign-off.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              Replace point-solution silos with a modern system frontline operators adopt enthusiastically on day one.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4 hover:border-cyan-500/50 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <RefreshCw className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-100">
+                1. Zero-Downtime Offline Mobile
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Frontline operators execute work orders, log meter measurements, and verify checklist steps completely offline. State synchronizes automatically when connection returns.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4 hover:border-cyan-500/50 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <Gauge className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-100">
+                2. Automated Predictive CMMS
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Preventative maintenance schedules generate automatically based on runtime hours and meter triggers, stopping unexpected failures and extending equipment longevity.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4 hover:border-cyan-500/50 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <CalendarCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-100">
+                3. Closed-Loop Shift Execution
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Supervisors allocate workforce rosters, dispatch emergency work orders, and reconcile spare parts inventory in real-time across multiple facility sites.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 4. VALIDATION: CLIENT LOGOS & 3 KEY NUMBERS ────────────── */}
+      <section className="py-20 md:py-28 bg-[#0B0F19] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              Enterprise Validation
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              Trusted across heavy industry, manufacturing, and multi-site facilities.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              Engineered to support global asset reliability standards and mission-critical uptime.
+            </p>
+          </div>
+
+          {/* 10 USA Manufacturing Clients / Partners Grid */}
+          <div className="space-y-4">
+            <p className="text-center font-mono text-xs text-slate-400 tracking-wider uppercase">
+              Selected USA Industrial &amp; Manufacturing Ecosystem Partners
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              {partnerClients.map((client, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-xl border border-slate-800 bg-slate-950/60 flex items-center justify-center text-center font-mono text-xs text-slate-300 font-semibold hover:border-cyan-500/40 hover:text-cyan-300 transition-colors"
+                >
+                  <Building2 className="w-3.5 h-3.5 mr-2 text-cyan-400/80 shrink-0" />
+                  <span>{client}</span>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      <section id="products" className="scroll-mt-20 overflow-hidden bg-[#151513] py-20 text-white md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[1fr_0.62fr] lg:items-end">
-            <div><div className="section-label section-label--dark">Gigasys product portfolio</div><h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] sm:text-5xl lg:text-7xl">Enterprise depth. Consumer-grade product thinking.</h2></div>
-            <p className="max-w-xl text-base leading-7 text-white/55 lg:justify-self-end">Each product has a defined audience and domain boundary—from enterprise operations to CRM, communications, AI, talent, social identity and exchange commerce.</p>
-          </Reveal>
+          {/* 3 Standalone Key Numbers */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center font-mono">
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80">
+              <div className="text-4xl sm:text-5xl font-bold text-cyan-400 mb-2">
+                &lt; 12ms
+              </div>
+              <div className="text-sm text-slate-200 font-semibold mb-1">
+                P99 Memory Cache Latency
+              </div>
+              <div className="text-xs text-slate-500">
+                Instant asset queries on low-bandwidth networks
+              </div>
+            </div>
 
-          <div className="mt-14 grid gap-px border border-white/15 bg-white/15 md:grid-cols-2 xl:grid-cols-3">
-            {portfolioProducts.map((product, index) => {
-              const Icon = product.icon;
-              return (
-                <Reveal key={product.name} className="group relative min-h-[320px] overflow-hidden bg-[#1b1b19] p-7 transition duration-300 hover:bg-[#ff7200]" delay={(index % 4) * 0.05}>
-                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full border border-white/10 transition duration-500 group-hover:scale-150 group-hover:border-white/25" />
-                  <div className="relative flex h-full flex-col"><div className="flex items-center justify-between"><span className="grid h-11 w-11 place-items-center border border-white/15 text-[#ff8a2b] transition group-hover:border-white/45 group-hover:text-white"><Icon className="h-5 w-5" /></span><span className="font-mono text-[9px] tracking-[0.16em] text-white/25 group-hover:text-white/60">{String(index + 1).padStart(2, "0")}</span></div><div className="mt-auto pt-16"><div className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#ff8a2b] group-hover:text-white/75">{product.category}</div><h3 className="mt-3 text-2xl font-semibold tracking-[-0.035em]">{product.name}</h3><p className="mt-4 text-sm leading-6 text-white/50 group-hover:text-white/80">{product.copy}</p></div></div>
-                </Reveal>
-              );
-            })}
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80">
+              <div className="text-4xl sm:text-5xl font-bold text-emerald-400 mb-2">
+                100%
+              </div>
+              <div className="text-sm text-slate-200 font-semibold mb-1">
+                Offline Continuity
+              </div>
+              <div className="text-xs text-slate-500">
+                Zero data loss across dead-zone facilities
+              </div>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80">
+              <div className="text-4xl sm:text-5xl font-bold text-sky-400 mb-2">
+                250+
+              </div>
+              <div className="text-sm text-slate-200 font-semibold mb-1">
+                Global Regional Locales
+              </div>
+              <div className="text-xs text-slate-500">
+                Automated multi-jurisdiction compliance
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center pt-4">
+            <a href="#book-walkthrough">
+              <Button className="bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold px-8 py-6 text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+                Book an Architecture Walkthrough →
+              </Button>
+            </a>
           </div>
         </div>
       </section>
 
-      <section id="company" className="scroll-mt-20 bg-[#f3f2ee] py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid overflow-hidden border border-black/10 bg-white lg:grid-cols-2">
-            <div className="relative min-h-[430px] lg:min-h-[620px]"><img src={engineeringTeamImg} alt="Engineering team collaborating on enterprise software" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-28 text-white sm:p-9"><div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">Engineering presence</div><div className="mt-3 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold"><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Dover, Delaware</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Hyderabad, India</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Ongole, India</span></div></div></div>
-            <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-14 xl:p-20"><div className="section-label">How we work</div><h2 className="mt-5 text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl">Product strategy, domain depth and production engineering in one team.</h2><p className="mt-6 text-base leading-7 text-black/60">We translate real operating constraints into focused products, then carry them across web, mobile, services, data and long-term evolution.</p><div className="mt-8 grid gap-px border border-black/10 bg-black/10 sm:grid-cols-2">{[["01", "Understand the operating outcome"], ["02", "Shape the product and module scope"], ["03", "Build across web, mobile and services"], ["04", "Measure, govern and evolve"]].map(([number, text]) => <div key={number} className="bg-[#f8f7f3] p-5"><span className="font-mono text-[10px] text-[#ff7200]">{number}</span><p className="mt-2 text-sm font-semibold text-black/70">{text}</p></div>)}</div><Link href="/about" className="mt-8 inline-flex items-center gap-2 self-start text-sm font-bold text-[#d95f00] hover:text-black">More about Gigasys <ArrowRight className="h-4 w-4" /></Link></div>
-          </Reveal>
+      {/* ─── 5. HOW IT WORKS: 3 STEPS WITH REAL VISUALS ─────────────── */}
+      <section id="how-it-works" className="py-20 md:py-28 bg-[#080C14] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          <div className="max-w-3xl space-y-3">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              The 3-Step Execution Loop
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              From work order creation to verified resolution in three steps.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              How dispatchers, technicians, and approvers work together without friction.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="p-6 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-4">
+              <div className="flex items-center justify-between text-xs font-mono text-cyan-400 border-b border-slate-800 pb-3">
+                <span>STEP 01</span>
+                <span>DISPATCH &amp; SCHEDULE</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-100">
+                Schedule &amp; Allocate Resources
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Supervisors review technician skill tags, active shift rosters, and equipment spaces to assign work orders in a single calendar view.
+              </p>
+              <div className="rounded-xl overflow-hidden border border-slate-800 pt-2 bg-slate-900">
+                <img
+                  src={workforceSchedulingImg}
+                  alt="Workforce Scheduling Console"
+                  className="w-full h-44 object-cover object-top"
+                />
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="p-6 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-4">
+              <div className="flex items-center justify-between text-xs font-mono text-cyan-400 border-b border-slate-800 pb-3">
+                <span>STEP 02</span>
+                <span>FIELD EXECUTION</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-100">
+                Execute Offline on Mobile
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Technicians open work orders on their rugged phones, check step-by-step procedures, record meter readings, and log replacement parts offline.
+              </p>
+              <div className="rounded-xl overflow-hidden border border-slate-800 pt-2 bg-slate-900">
+                <img
+                  src={mobileWorkOrdersImg}
+                  alt="Mobile Work Order Screen"
+                  className="w-full h-44 object-cover object-top"
+                />
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="p-6 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-4">
+              <div className="flex items-center justify-between text-xs font-mono text-cyan-400 border-b border-slate-800 pb-3">
+                <span>STEP 03</span>
+                <span>INVENTORY RECONCILIATION</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-100">
+                Reconcile Parts &amp; History
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Consumed parts are instantly deducted from the inventory ledger, work order history attaches to the asset record, and reports publish.
+              </p>
+              <div className="rounded-xl overflow-hidden border border-slate-800 pt-2 bg-slate-900">
+                <img
+                  src={cmmsInventoryImg}
+                  alt="CMMS Inventory Register"
+                  className="w-full h-44 object-cover object-top"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#ff7200] py-20 text-white md:py-24">
-        <div className="absolute inset-0 orange-grid opacity-25" />
-        <Reveal className="relative mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-12">
-          <div><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70"><CircleDot className="h-4 w-4" /> Start a conversation</div><h2 className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.99] tracking-[-0.05em] sm:text-5xl lg:text-7xl">Start with the business outcome. Build the right product around it.</h2><p className="mt-6 max-w-2xl text-base leading-7 text-white/80">Talk to us about your operation, SaaS product or digital platform—and the result it needs to create.</p></div>
-          <Link href="/contact" className="inline-flex min-h-14 items-center justify-center gap-3 bg-[#151513] px-7 py-4 text-sm font-bold text-white transition hover:bg-white hover:text-black">Talk to our team <ArrowRight className="h-4 w-4" /></Link>
-        </Reveal>
+      {/* ─── 6. WHO IT'S FOR: ROLES & USE CASES ─────────────────────── */}
+      <section id="use-cases" className="py-20 md:py-28 bg-[#0B0F19] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          <div className="max-w-3xl space-y-3">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              Tailored Personas
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              Designed specifically for the roles maintaining industrial infrastructure.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              Role-tailored spatial scoping and permission levels for your whole organization.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4">
+              <Badge variant="outline" className="font-mono text-xs text-cyan-400 border-cyan-500/30">
+                ROLE: OPERATIONS DIRECTORS
+              </Badge>
+              <h3 className="text-xl font-bold text-slate-100">
+                Cross-Facility Uptime &amp; Asset Visibility
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Monitor multi-site operational health, track open work order backlogs, and verify workforce utilization across all geographic plants.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4">
+              <Badge variant="outline" className="font-mono text-xs text-cyan-400 border-cyan-500/30">
+                ROLE: MAINTENANCE SUPERVISORS
+              </Badge>
+              <h3 className="text-xl font-bold text-slate-100">
+                Automated PMs &amp; Dynamic Dispatch
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Eliminate manual schedule coordination. Assign emergency work orders with confidence based on real technician availability and skill certifications.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4">
+              <Badge variant="outline" className="font-mono text-xs text-cyan-400 border-cyan-500/30">
+                ROLE: FIELD TECHNICIANS
+              </Badge>
+              <h3 className="text-xl font-bold text-slate-100">
+                Frictionless Phone-Width Mobile App
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Zero training needed. Technicians follow clear checklist steps, capture photos, record meter numbers, and sign off jobs in seconds.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 7. HOW WE ENGAGE / ROLLOUT MODEL ───────────────────────── */}
+      <section id="pricing" className="py-20 md:py-28 bg-[#080C14] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          <div className="max-w-3xl space-y-3">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              Engagement &amp; Rollout Model
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              Deploy modular capabilities in weeks, not 18-month consulting cycles.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              Predictable, transparent per-facility or active-operator licensing with white-glove engineering onboarding.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 font-mono text-xs">
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4">
+              <div className="text-cyan-400 text-sm font-bold">01. MODULAR ACTIVATION</div>
+              <h3 className="text-base font-bold text-slate-100 font-sans">
+                Start with What You Need
+              </h3>
+              <p className="text-slate-400 font-sans text-sm leading-relaxed">
+                Activate GigaCMMS, Workforce Scheduling, or Mobile Work Orders independently. Add modules as your digital maturity expands without ripping out existing tools.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4">
+              <div className="text-cyan-400 text-sm font-bold">02. REST &amp; WEBHOOK INTEGRATION</div>
+              <h3 className="text-base font-bold text-slate-100 font-sans">
+                Connects into Existing Systems
+              </h3>
+              <p className="text-slate-400 font-sans text-sm leading-relaxed">
+                Connects seamlessly into ERP backbones (SAP, Oracle, or SQL stores) through documented REST endpoints and real-time webhook event pipelines.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/80 space-y-4">
+              <div className="text-cyan-400 text-sm font-bold">03. SYSTEMS ARCHITECT ONBOARDING</div>
+              <h3 className="text-base font-bold text-slate-100 font-sans">
+                Hands-On Engineering Support
+              </h3>
+              <p className="text-slate-400 font-sans text-sm leading-relaxed">
+                Our core architects work directly with your team on initial asset register import, spatial hierarchy modeling, and operator round template creation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 8. MEASURABLE RESULTS (Case Study Outcomes) ─────────────── */}
+      <section id="results" className="py-20 md:py-28 bg-[#0B0F19] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          <div className="max-w-3xl space-y-3">
+            <Badge
+              variant="outline"
+              className="border-emerald-500/30 text-emerald-400 bg-emerald-500/10 font-mono uppercase text-xs"
+            >
+              Measured Outcomes
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              The measurable difference between clipboards and connected operations.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              Real operational benchmarks achieved after deploying Gigasys mobile workflows.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-3">
+              <div className="text-4xl font-bold text-cyan-400 font-mono">-45%</div>
+              <h3 className="text-lg font-bold text-slate-100">
+                Work Order Resolution Time
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Direct mobile dispatch and pre-populated asset histories eliminate phone tags and travel back to dispatch offices for paper work orders.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-3">
+              <div className="text-4xl font-bold text-emerald-400 font-mono">Zero</div>
+              <h3 className="text-lg font-bold text-slate-100">
+                Lost Field Records &amp; Logs
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Offline-first data replication ensures every technician measurement, inspection photo, and sign-off is preserved locally and synced automatically.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-3">
+              <div className="text-4xl font-bold text-sky-400 font-mono">+30%</div>
+              <h3 className="text-lg font-bold text-slate-100">
+                PM Schedule Compliance
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Meter-driven preventative scheduling guarantees equipment servicing occurs on time, preventing costly secondary component damage.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center pt-4">
+            <a href="#book-walkthrough">
+              <Button className="bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold px-8 py-6 text-sm shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+                Book an Architecture Walkthrough →
+              </Button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 9. WHY US VS THE ALTERNATIVES (Honest Comparison) ──────── */}
+      <section id="comparison" className="py-20 md:py-28 bg-[#080C14] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          <div className="max-w-3xl space-y-3">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              The Comparison
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+              Why operations teams choose Gigasys over legacy software.
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg">
+              Compare how we compare to paper binders and heavyweight legacy desktop ERPs.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse font-sans text-sm">
+              <thead>
+                <tr className="border-b border-slate-800 font-mono text-xs text-slate-400">
+                  <th className="py-4 px-6">CAPABILITY</th>
+                  <th className="py-4 px-6">PAPER &amp; SPREADSHEETS</th>
+                  <th className="py-4 px-6">LEGACY DESKTOP ERP</th>
+                  <th className="py-4 px-6 text-cyan-400 bg-cyan-950/20 border-l border-r border-cyan-500/30">
+                    GIGASYS PLATFORM
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                <tr>
+                  <td className="py-4 px-6 font-semibold text-slate-100">
+                    Mobile Experience
+                  </td>
+                  <td className="py-4 px-6 text-slate-500">None (Paper clipboard)</td>
+                  <td className="py-4 px-6 text-slate-400">
+                    Clunky desktop ports; difficult in field
+                  </td>
+                  <td className="py-4 px-6 font-medium text-cyan-300 bg-cyan-950/10 border-l border-r border-cyan-500/20">
+                    <span className="flex items-center gap-1.5">
+                      <Check className="w-4 h-4 text-cyan-400" /> Native phone-width &amp; ergonomic
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="py-4 px-6 font-semibold text-slate-100">
+                    Offline Capability
+                  </td>
+                  <td className="py-4 px-6 text-slate-500">Paper damages &amp; gets lost</td>
+                  <td className="py-4 px-6 text-slate-400">
+                    Freezes when connection drops
+                  </td>
+                  <td className="py-4 px-6 font-medium text-cyan-300 bg-cyan-950/10 border-l border-r border-cyan-500/20">
+                    <span className="flex items-center gap-1.5">
+                      <Check className="w-4 h-4 text-cyan-400" /> 100% offline local-first sync
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="py-4 px-6 font-semibold text-slate-100">
+                    Implementation Speed
+                  </td>
+                  <td className="py-4 px-6 text-slate-500">Immediate, but unscalable</td>
+                  <td className="py-4 px-6 text-slate-400">
+                    9 to 18 months expensive rollout
+                  </td>
+                  <td className="py-4 px-6 font-medium text-cyan-300 bg-cyan-950/10 border-l border-r border-cyan-500/20">
+                    <span className="flex items-center gap-1.5">
+                      <Check className="w-4 h-4 text-cyan-400" /> Live in 2 to 4 weeks
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="py-4 px-6 font-semibold text-slate-100">
+                    CMMS &amp; Workforce Roster
+                  </td>
+                  <td className="py-4 px-6 text-slate-500">Disconnected manual silos</td>
+                  <td className="py-4 px-6 text-slate-400">
+                    Requires separate add-on licenses
+                  </td>
+                  <td className="py-4 px-6 font-medium text-cyan-300 bg-cyan-950/10 border-l border-r border-cyan-500/20">
+                    <span className="flex items-center gap-1.5">
+                      <Check className="w-4 h-4 text-cyan-400" /> Unified core architecture
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="py-4 px-6 font-semibold text-slate-100">
+                    Pricing Transparency
+                  </td>
+                  <td className="py-4 px-6 text-slate-500">Hidden manual labor overhead</td>
+                  <td className="py-4 px-6 text-slate-400">
+                    Massive multi-year lock-ins
+                  </td>
+                  <td className="py-4 px-6 font-medium text-cyan-300 bg-cyan-950/10 border-l border-r border-cyan-500/20">
+                    <span className="flex items-center gap-1.5">
+                      <Check className="w-4 h-4 text-cyan-400" /> Predictable modular licensing
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 10. ABOUT US / PEDIGREE (Kept Short) ─────────────────────── */}
+      <section id="about" className="py-20 md:py-28 bg-[#0B0F19] border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <Badge
+                variant="outline"
+                className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+              >
+                Engineering Pedigree
+              </Badge>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-100">
+                Engineered by systems architects for high-concurrency reliability.
+              </h2>
+              <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
+                Gigasys Technologies was built to bridge the gap between heavy industrial operations and modern cloud software. Our core engine powers enterprise systems across 250+ regional jurisdictions with double-entry ledger precision, dynamic RBAC security, and sub-millisecond memory caching.
+              </p>
+              <div className="grid grid-cols-2 gap-4 font-mono text-xs pt-2 text-slate-400">
+                <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60">
+                  <div className="text-cyan-400 font-bold mb-1">HEADQUARTERS</div>
+                  <div>Dover, Delaware, USA</div>
+                </div>
+                <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/60">
+                  <div className="text-cyan-400 font-bold mb-1">R&amp;D CENTER</div>
+                  <div>Hitech City, Hyderabad, India</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="p-8 rounded-2xl border border-slate-800 bg-slate-950/90 space-y-4">
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-8 h-8 text-cyan-400" />
+                  <div>
+                    <h4 className="font-bold text-slate-100">
+                      Enterprise Compliance
+                    </h4>
+                    <p className="text-xs text-slate-400 font-mono">
+                      Security-first architecture
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Every deployment runs with tenant isolation, strict role hierarchies, and automated time-based OTP delivery to ensure continuous audit readiness.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 11. TESTIMONIAL & TRUST PROOF ───────────────────────────── */}
+      <section className="py-20 md:py-28 bg-[#080C14] border-b border-border">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+          <Badge
+            variant="outline"
+            className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+          >
+            What Operations Leaders Say
+          </Badge>
+
+          <blockquote className="text-2xl sm:text-3xl font-medium text-slate-100 leading-snug tracking-tight">
+            “Gigasys gave our plant supervisors real-time visibility into technician schedules and asset meters without making our field crews type through complicated desktop ERP menus. The offline mobile app paid for itself in week one.”
+          </blockquote>
+
+          <div className="space-y-1">
+            <p className="font-semibold text-slate-200">
+              Marcus Vance
+            </p>
+            <p className="text-sm font-mono text-cyan-400">
+              VP of Operations &amp; Plant Reliability // Industrial Manufacturing
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 12. FINAL CTA: SINGLE DECISION ─────────────────────────── */}
+      <section id="book-walkthrough" className="py-20 md:py-28 bg-[#0B0F19] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#00F0FF15,transparent_60%)] pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10 text-center">
+          <div className="space-y-4">
+            <Badge
+              variant="outline"
+              className="border-cyan-500/30 text-cyan-400 bg-cyan-500/10 font-mono uppercase text-xs"
+            >
+              Get Started
+            </Badge>
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-100 tracking-tight">
+              Ready to see how Gigasys works in your facilities?
+            </h2>
+
+            <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Eliminate clipboard delays and disconnected legacy screens. Schedule an architecture walkthrough with our core engineering team.
+            </p>
+          </div>
+
+          {/* Interactive Walkthrough Form */}
+          <div className="max-w-xl mx-auto p-8 rounded-2xl border border-cyan-500/30 bg-slate-950/90 shadow-[0_0_40px_rgba(0,240,255,0.15)] text-left">
+            <form onSubmit={handleBookingSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-mono text-slate-300 mb-1.5 uppercase">
+                    Your Name
+                  </label>
+                  <Input
+                    required
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="bg-slate-900 border-slate-700 text-slate-100 focus:border-cyan-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-mono text-slate-300 mb-1.5 uppercase">
+                    Work Email
+                  </label>
+                  <Input
+                    required
+                    type="email"
+                    placeholder="john@company.com"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    className="bg-slate-900 border-slate-700 text-slate-100 focus:border-cyan-400"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-mono text-slate-300 mb-1.5 uppercase">
+                    Company Name
+                  </label>
+                  <Input
+                    required
+                    placeholder="Industrial Corp"
+                    value={formData.company}
+                    onChange={(e) =>
+                      setFormData({ ...formData, company: e.target.value })
+                    }
+                    className="bg-slate-900 border-slate-700 text-slate-100 focus:border-cyan-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-mono text-slate-300 mb-1.5 uppercase">
+                    Facility / Industry
+                  </label>
+                  <Input
+                    required
+                    placeholder="e.g. Manufacturing / Energy"
+                    value={formData.facilityType}
+                    onChange={(e) =>
+                      setFormData({ ...formData, facilityType: e.target.value })
+                    }
+                    className="bg-slate-900 border-slate-700 text-slate-100 focus:border-cyan-400"
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={formSubmitting}
+                className="w-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold py-6 text-sm uppercase font-mono shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all"
+              >
+                {formSubmitting ? "Reserving Schedule..." : "Book Architecture Walkthrough →"}
+              </Button>
+            </form>
+
+            <div className="pt-4 border-t border-slate-800/80 mt-6 flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-400">
+              <span>✓ No sales push</span>
+              <span>✓ Direct systems architect discussion</span>
+              <span>✓ Custom workflow demonstration</span>
+            </div>
+            <p className="mt-4 text-center text-xs text-slate-400">
+              Prefer direct email? Reach our team directly at{" "}
+              <a href="mailto:connect@gigasystech.com" className="text-cyan-400 hover:underline font-mono">
+                connect@gigasystech.com
+              </a>
+            </p>
+          </div>
+        </div>
       </section>
     </Layout>
   );
