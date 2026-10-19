@@ -202,6 +202,20 @@ function Navigation() {
     }
   };
 
+  const handleTechnologiesClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setOpenDropdown(null);
+    setMobileOpen(false);
+    if (window.location.pathname === "/" || window.location.pathname === "") {
+      e.preventDefault();
+      const elem = document.getElementById("technologies");
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.location.hash = "technologies";
+      }
+    }
+  };
+
   const toggleAccordion = (name: string) => {
     setMobileAccordion((prev) => (prev === name ? null : name));
   };
@@ -365,6 +379,17 @@ function Navigation() {
               className="inline-flex items-center px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
             >
               Industries
+            </a>
+          </div>
+
+          {/* Technologies Link */}
+          <div className="py-4">
+            <a
+              href="/#technologies"
+              onClick={handleTechnologiesClick}
+              className="inline-flex items-center px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
+            >
+              Technologies
             </a>
           </div>
 
@@ -561,6 +586,17 @@ function Navigation() {
                   className="block py-2 text-base font-semibold text-gray-900 hover:text-[#FF7200]"
                 >
                   Industries
+                </a>
+              </div>
+
+              {/* Technologies Anchor */}
+              <div className="border-b border-gray-100 pb-3">
+                <a
+                  href="/#technologies"
+                  onClick={handleTechnologiesClick}
+                  className="block py-2 text-base font-semibold text-gray-900 hover:text-[#FF7200]"
+                >
+                  Technologies
                 </a>
               </div>
 

@@ -24,6 +24,13 @@ import Communications from "@/pages/gigaops/Communications";
 import Documents from "@/pages/gigaops/Documents";
 import Geospatial from "@/pages/gigaops/Geospatial";
 import Data from "@/pages/gigaops/Data";
+import Nyr from "@/pages/products/Nyr";
+import TextFly from "@/pages/products/TextFly";
+import Swappy from "@/pages/products/Swappy";
+import GigaHR from "@/pages/products/GigaHR";
+import GigaCRM from "@/pages/products/GigaCRM";
+import GigaAI from "@/pages/products/GigaAI";
+import OpenFace from "@/pages/products/OpenFace";
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -51,6 +58,13 @@ function Router() {
       <Route path="/gigaops/documents" component={Documents} />
       <Route path="/gigaops/geospatial" component={Geospatial} />
       <Route path="/gigaops/data" component={Data} />
+      <Route path="/products/nyr" component={Nyr} />
+      <Route path="/products/textfly" component={TextFly} />
+      <Route path="/products/swappy" component={Swappy} />
+      <Route path="/products/gigahr" component={GigaHR} />
+      <Route path="/products/gigacrm" component={GigaCRM} />
+      <Route path="/products/gigaai" component={GigaAI} />
+      <Route path="/products/openface" component={OpenFace} />
       <Route path="/jobs" component={Jobs} />
       <Route path="/teams" component={Teams} />
       <Route path="/about" component={About} />

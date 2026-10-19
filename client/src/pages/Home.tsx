@@ -210,18 +210,28 @@ export default function Home() {
 
                   <div className="mt-12 pt-8 border-t border-gray-100">
                     <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
-                      Trusted by operations teams at
+                      Trusted by operations and manufacturing teams
                     </p>
-                    <div className="flex flex-wrap items-center gap-6 sm:gap-8 text-gray-400 font-medium text-sm">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-400 font-medium text-sm">
                       <span>Caterpillar</span>
                       <span className="text-gray-300">·</span>
                       <span>Honeywell</span>
                       <span className="text-gray-300">·</span>
-                      <span>Emerson</span>
+                      <span>Emerson Electric</span>
                       <span className="text-gray-300">·</span>
-                      <span>Parker</span>
+                      <span>Parker Hannifin</span>
                       <span className="text-gray-300">·</span>
                       <span>Cummins</span>
+                      <span className="text-gray-300">·</span>
+                      <span>John Deere</span>
+                      <span className="text-gray-300">·</span>
+                      <span>Rockwell Automation</span>
+                      <span className="text-gray-300">·</span>
+                      <span>General Electric</span>
+                      <span className="text-gray-300">·</span>
+                      <span>3M</span>
+                      <span className="text-gray-300">·</span>
+                      <span>Boeing</span>
                     </div>
                   </div>
                 </FadeUp>
@@ -339,7 +349,7 @@ export default function Home() {
         </section>
 
         {/* SECTION 4: MODULE SHOWCASE */}
-        <section className="bg-gray-50 py-24">
+        <section id="modules" className="bg-gray-50 py-24 scroll-mt-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <FadeUp className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -541,7 +551,7 @@ export default function Home() {
         </section>
 
         {/* SECTION 5: MOBILE SECTION */}
-        <section className="bg-gray-900 py-24 text-white">
+        <section id="technologies" className="bg-gray-900 py-24 text-white scroll-mt-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               {/* Left Column */}
@@ -653,7 +663,7 @@ export default function Home() {
         </section>
 
         {/* SECTION 7: OTHER PRODUCTS */}
-        <section className="bg-gray-50 py-24">
+        <section id="products" className="bg-gray-50 py-24 scroll-mt-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -698,7 +708,7 @@ export default function Home() {
         </section>
 
         {/* SECTION 8: INDUSTRIES */}
-        <section className="bg-white py-24">
+        <section id="industries" className="bg-white py-24 scroll-mt-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
