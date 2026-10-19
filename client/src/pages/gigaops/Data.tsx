@@ -79,7 +79,7 @@ export default function Data() {
     <Layout>
       {/* HERO */}
       <section className="bg-white pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid lg:grid-cols-2 gap-12 lg:items-center">
             <FadeUp>
               <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3 py-1 rounded-full mb-4">
@@ -121,7 +121,7 @@ export default function Data() {
 
       {/* CAPABILITIES */}
       <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp>
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold text-gray-900">Platform Capabilities</h2>
@@ -148,7 +148,7 @@ export default function Data() {
 
       {/* HOW IT WORKS */}
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp>
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold text-gray-900">How It Works</h2>
@@ -170,7 +170,7 @@ export default function Data() {
 
       {/* OUTCOMES */}
       <section className="bg-gray-900 py-24">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <FadeUp>
               <h2 className="text-3xl font-bold text-white">Business Outcomes</h2>
@@ -194,7 +194,7 @@ export default function Data() {
 
       {/* INDUSTRIES */}
       <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-5 text-center">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
           <FadeUp>
             <h2 className="text-3xl font-bold text-gray-900 mb-8">Industries We Serve</h2>
             <div className="flex flex-wrap gap-3 justify-center">

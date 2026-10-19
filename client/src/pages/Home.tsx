@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import { Link } from 'wouter';
@@ -22,10 +22,14 @@ import {
   Bot,
   RefreshCw,
   Network,
-  GraduationCap,
   BriefcaseBusiness,
   Globe2,
   ShieldCheck,
+  Search,
+  Check,
+  Smartphone,
+  Layers,
+  Sparkles,
 } from 'lucide-react';
 
 function FadeUp({
@@ -40,10 +44,10 @@ function FadeUp({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay }}
     >
       {children}
     </motion.div>
@@ -68,19 +72,19 @@ const tickerItems = [
 function Ticker() {
   const items = [...tickerItems, ...tickerItems];
   return (
-    <div className="bg-gray-900 py-4 overflow-hidden relative">
+    <div className="bg-gray-50/90 border-y border-gray-100 py-4 overflow-hidden relative">
       <motion.div
-        className="flex gap-8 whitespace-nowrap w-max"
+        className="flex gap-10 whitespace-nowrap w-max"
         animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
       >
         {items.map((item, i) => (
           <span
             key={i}
-            className="text-[11px] font-bold uppercase tracking-[0.25em] text-white/60 flex items-center"
+            className="text-[11px] font-bold uppercase tracking-[0.22em] text-gray-500 flex items-center"
           >
             {item}
-            <span className="ml-8 text-orange-500">{'\u25C6'}</span>
+            <span className="ml-10 text-[#FF7200]">◆</span>
           </span>
         ))}
       </motion.div>
@@ -93,612 +97,885 @@ const products = [
     name: 'nyr',
     category: 'Local Social Platform',
     icon: MapPin,
-    desc: 'Privacy-aware local discovery, trusted circles, ride requests, events and business recommendations.',
+    desc: 'Privacy-aware local discovery, verified resident circles, neighborhood pulse, ride coordination, and local merchant commerce.',
+    tags: ['Zero-Tracking', 'Resident Circles', 'Local Commerce'],
     href: '/products/nyr',
   },
   {
     name: 'TextFly',
     category: 'Omnichannel Communications',
     icon: MessageSquare,
-    desc: 'Multi-tenant messaging platform spanning email, SMS, WhatsApp, Slack and voice with unified inbox.',
+    desc: 'Multi-tenant enterprise messaging platform spanning WhatsApp Business, SMS, Email, Slack, and Voice with a unified inbox.',
+    tags: ['Unified Inbox', 'Multi-Carrier Failover', '99.99% SLA'],
     href: '/products/textfly',
   },
   {
     name: 'Swappy',
     category: 'Exchange Commerce',
     icon: RefreshCw,
-    desc: 'Provider-governed reservation and entitlement exchange engine for ticketed experiences.',
+    desc: 'Provider-governed reservation and entitlement exchange engine for ticketed experiences with dynamic escrow and royalty splits.',
+    tags: ['Anti-Scalping', 'Instant Escrow', 'Primary Royalties'],
     href: '/products/swappy',
   },
   {
     name: 'GigaHR / MyNextCV',
     category: 'HR & Recruitment Intelligence',
     icon: BriefcaseBusiness,
-    desc: 'Permission-aware HR journeys and recruitment intelligence for governed SaaS delivery.',
+    desc: 'Permission-aware talent pipelines and MyNextCV semantic resume parsing intelligence for governed enterprise recruitment.',
+    tags: ['Semantic Resume Parsing', 'Lifecycle ATS', 'Skill Pathing'],
     href: '/products/gigahr',
   },
   {
     name: 'GigaCRM',
     category: 'Customer Relationships',
     icon: Users2,
-    desc: 'Lead and deal workspaces, sales activity tracking and adaptable pipelines for modern teams.',
+    desc: 'Multi-stage visual deal pipelines, account stakeholder influence graphs, and zero-touch sales activity logging.',
+    tags: ['Visual Pipelines', 'Stakeholder Maps', 'CPQ & E-Sign'],
     href: '/products/gigacrm',
   },
   {
     name: 'Giga AI',
     category: 'Voice & Conversational AI',
     icon: Bot,
-    desc: 'Voice-agent and chatbot experiences with live call visibility and enterprise communication APIs.',
+    desc: 'Ultra-low latency sub-500ms voice agents with PBX telephony, domain knowledge RAG, and live call whisper supervision.',
+    tags: ['Sub-500ms Latency', 'PBX Telephony', 'Autonomous Actions'],
     href: '/products/gigaai',
   },
   {
     name: 'OpenFace',
     category: 'Social Identity Infrastructure',
     icon: Network,
-    desc: 'Headless identity, credibility, audience and engagement for portable social experiences.',
+    desc: 'Headless identity, verifiable badges, and portable audience graphs for modern decentralized consumer and SaaS apps.',
+    tags: ['Cryptographic SSO', 'Portable Graphs', 'Zero Bot Sybil'],
     href: '/products/openface',
   },
 ];
 
 const industries = [
   {
-    name: 'Manufacturing',
-    img: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=600&auto=format&fit=crop&q=80',
+    name: 'Manufacturing & Industrial',
+    desc: 'Predictive PM cycles, equipment telemetry, storeroom spares, and shop floor work order execution.',
+    img: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=700&auto=format&fit=crop&q=80',
   },
   {
     name: 'Energy & Utilities',
-    img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&auto=format&fit=crop&q=80',
+    desc: 'Substation asset management, hazardous zone compliance, and automated field dispatch across grids.',
+    img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=700&auto=format&fit=crop&q=80',
   },
   {
-    name: 'Healthcare',
-    img: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=600&auto=format&fit=crop&q=80',
+    name: 'Healthcare & Facilities',
+    desc: 'Biomedical asset compliance, strict sterilized inventory chains, and auditable hospital shift scheduling.',
+    img: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=700&auto=format&fit=crop&q=80',
   },
   {
-    name: 'Construction',
-    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80',
+    name: 'Construction & Civil',
+    desc: 'Heavy machinery tracking, subcontractor compliance, job-site delivery receipt, and milestone billing.',
+    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&auto=format&fit=crop&q=80',
   },
   {
     name: 'Transport & Logistics',
-    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80',
+    desc: 'Fleet maintenance logs, multi-depot inventory visibility, cross-dock receiving, and carrier dispatch.',
+    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&auto=format&fit=crop&q=80',
   },
   {
     name: 'Field Services',
-    img: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&auto=format&fit=crop&q=80',
+    desc: 'Offline-first mobile work orders, GPS geofenced punch, photo evidence capture, and real-time customer ETA.',
+    img: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=700&auto=format&fit=crop&q=80',
   },
 ];
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<'cmms' | 'workforce' | 'supply' | 'finance'>('cmms');
+
   return (
     <Layout>
-      <div className="bg-white text-gray-900">
-        {/* SECTION 1: HERO */}
-        <section className="bg-white py-20 lg:py-32 relative overflow-hidden">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-12 items-center">
-              {/* Left Column */}
-              <div>
-                <FadeUp>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-4 py-1.5 text-xs font-semibold text-orange-600 border border-orange-200/60 mb-6">
-                    <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
-                    <span>Enterprise Connected Systems · Powered by GigaOps</span>
+      <div className="bg-white text-gray-900 selection:bg-orange-100 selection:text-orange-900">
+        
+        {/* SECTION 1: HERO (Meta AI style, expansive centered commanding layout) */}
+        <section className="bg-white pt-20 pb-24 lg:pt-28 lg:pb-36 relative overflow-hidden">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
+            
+            {/* Pill Badge */}
+            <FadeUp>
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-orange-50/80 border border-orange-200/60 px-4 py-1.5 text-xs font-semibold text-orange-700 shadow-sm mb-8 hover:bg-orange-100/70 transition-colors">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Enterprise Connected Systems · Powered by GigaOps</span>
+                <span className="text-orange-400">|</span>
+                <span className="text-orange-600 font-bold">Release 2026</span>
+              </div>
+            </FadeUp>
+
+            {/* Headline */}
+            <FadeUp delay={0.08}>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-extrabold tracking-[-0.035em] text-gray-900 leading-[1.05] max-w-5xl mx-auto">
+                The Operating Platform for Complex Industries
+              </h1>
+            </FadeUp>
+
+            {/* Subline */}
+            <FadeUp delay={0.14}>
+              <p className="mt-8 text-xl sm:text-2xl text-gray-500 font-normal leading-relaxed max-w-3xl mx-auto">
+                GigaOps brings asset management, workforce dispatch, supply chain, finance, and field execution into one enterprise SaaS platform — with native mobile for field teams.
+              </p>
+            </FadeUp>
+
+            {/* Action Buttons */}
+            <FadeUp delay={0.2}>
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                <a
+                  href="mailto:connect@gigasystech.com?subject=GigaOps%20Enterprise%20Trial"
+                  className="inline-flex items-center gap-2 bg-[#FF7200] hover:bg-[#FF8A2B] text-white font-semibold px-8 py-4 rounded-full shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:-translate-y-0.5 transition-all text-base"
+                >
+                  Start Free Trial
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <Link
+                  href="/gigaops"
+                  className="inline-flex items-center gap-2.5 border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 text-gray-800 font-semibold px-8 py-4 rounded-full transition-all text-base shadow-sm"
+                >
+                  <Play className="h-4 w-4 text-[#FF7200] fill-[#FF7200]" />
+                  See GigaOps in action
+                </Link>
+              </div>
+            </FadeUp>
+
+            {/* Trust Bar: 10 USA Manufacturing Clients */}
+            <FadeUp delay={0.25}>
+              <div className="mt-16 pt-10 border-t border-gray-100 max-w-5xl mx-auto">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6">
+                  Trusted by operations and manufacturing leaders
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500 font-medium text-sm sm:text-base">
+                  <span className="hover:text-gray-900 transition-colors">Caterpillar</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">Honeywell</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">Emerson Electric</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">Parker Hannifin</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">Cummins</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">John Deere</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">Rockwell Automation</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">General Electric</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">3M</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="hover:text-gray-900 transition-colors">Boeing</span>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Grand Enterprise Workbench Preview Frame */}
+            <FadeUp delay={0.3}>
+              <div className="mt-16 max-w-[1360px] mx-auto rounded-3xl border border-gray-200/80 shadow-[0_30px_90px_rgba(0,0,0,0.08)] overflow-hidden bg-white text-left">
+                {/* Simulated macOS / Enterprise Header */}
+                <div className="bg-gray-100/90 border-b border-gray-200/80 px-5 py-3.5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-red-400" />
+                    <span className="h-3 w-3 rounded-full bg-amber-400" />
+                    <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                    <span className="ml-3 text-xs font-semibold text-gray-600 hidden sm:inline-block">
+                      gigaops.gigasystech.com/enterprise/workbench
+                    </span>
                   </div>
 
-                  <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-gray-900 leading-[1.08]">
-                    The Operating Platform for Complex Industries
-                  </h1>
-
-                  <p className="text-xl text-gray-500 mt-6 max-w-lg leading-relaxed">
-                    GigaOps brings asset management, workforce dispatch, supply chain, finance and field execution into one enterprise SaaS platform — with native mobile for field teams.
-                  </p>
-
-                  <div className="mt-8 flex flex-wrap items-center gap-3">
-                    <a
-                      href="mailto:connect@gigasystech.com"
-                      className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-7 py-3.5 rounded-full shadow-lg shadow-orange-200 transition-all hover:shadow-orange-300 hover:-translate-y-0.5"
-                    >
-                      Start Free Trial
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
-                    <Link
-                      href="/gigaops"
-                      className="inline-flex items-center gap-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-3.5 rounded-full transition-all hover:border-gray-400"
-                    >
-                      <Play className="h-4 w-4 text-orange-500 fill-orange-500" />
-                      See GigaOps in action
-                    </Link>
-                  </div>
-
-                  <div className="mt-12 pt-8 border-t border-gray-100">
-                    <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
-                      Trusted by operations and manufacturing teams
-                    </p>
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-400 font-medium text-sm">
-                      <span>Caterpillar</span>
-                      <span className="text-gray-300">·</span>
-                      <span>Honeywell</span>
-                      <span className="text-gray-300">·</span>
-                      <span>Emerson Electric</span>
-                      <span className="text-gray-300">·</span>
-                      <span>Parker Hannifin</span>
-                      <span className="text-gray-300">·</span>
-                      <span>Cummins</span>
-                      <span className="text-gray-300">·</span>
-                      <span>John Deere</span>
-                      <span className="text-gray-300">·</span>
-                      <span>Rockwell Automation</span>
-                      <span className="text-gray-300">·</span>
-                      <span>General Electric</span>
-                      <span className="text-gray-300">·</span>
-                      <span>3M</span>
-                      <span className="text-gray-300">·</span>
-                      <span>Boeing</span>
+                  <div className="flex items-center gap-3">
+                    <div className="hidden md:flex items-center gap-2 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs text-gray-500">
+                      <Search className="h-3.5 w-3.5 text-gray-400" />
+                      <span>Search 142 assets, work orders, ledgers...</span>
+                      <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-[10px] text-gray-400 font-mono">⌘K</kbd>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Telemetry Live</span>
                     </div>
                   </div>
-                </FadeUp>
-              </div>
+                </div>
 
-              {/* Right Column */}
-              <FadeUp delay={0.15}>
-                <div className="relative">
-                  <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-gray-50">
-                    <img
-                      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80"
-                      alt="GigaOps enterprise dashboard"
-                      className="w-full h-[500px] object-cover"
-                    />
+                {/* Workbench Top Bar & Metrics Ribbon */}
+                <div className="bg-gray-50 border-b border-gray-200/70 p-4 sm:p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-white p-4 rounded-xl border border-gray-200/70 shadow-sm">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-400">Overall Equipment (OEE)</div>
+                    <div className="text-2xl font-bold text-gray-900 mt-1">94.2%</div>
+                    <div className="text-xs text-emerald-600 font-semibold mt-1">↑ +6.8% vs last quarter</div>
                   </div>
-                  <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2.5 text-xs font-semibold text-gray-900">
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>GigaOps Platform — Live</span>
+                  <div className="bg-white p-4 rounded-xl border border-gray-200/70 shadow-sm">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-400">PM Compliance Rate</div>
+                    <div className="text-2xl font-bold text-gray-900 mt-1">99.1%</div>
+                    <div className="text-xs text-emerald-600 font-semibold mt-1">1,842 work orders closed</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl border border-gray-200/70 shadow-sm">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-400">Inventory Multi-DC Accuracy</div>
+                    <div className="text-2xl font-bold text-gray-900 mt-1">99.8%</div>
+                    <div className="text-xs text-gray-500 mt-1">8 regional distribution centers</div>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl border border-gray-200/70 shadow-sm">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-gray-400">Three-Way Invoices Cleared</div>
+                    <div className="text-2xl font-bold text-gray-900 mt-1">$4.2M</div>
+                    <div className="text-xs text-orange-600 font-semibold mt-1">Zero manual touch exceptions</div>
                   </div>
                 </div>
-              </FadeUp>
-            </div>
+
+                {/* Main Visual Image with contextual dashboard layout */}
+                <div className="relative bg-gray-950 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&auto=format&fit=crop&q=85"
+                    alt="GigaOps Enterprise Command Center"
+                    className="w-full h-[480px] lg:h-[580px] object-cover opacity-90"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Floating Context Callout 1 */}
+                  <div className="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-gray-100 max-w-sm hidden sm:block">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                      <span className="text-xs font-bold text-gray-900">Pump #P-1082 Vibration Normal</span>
+                    </div>
+                    <p className="text-xs text-gray-500 leading-snug">
+                      Predictive PM schedule triggered. Automated parts kit reserved from Warehouse Bay 4.
+                    </p>
+                  </div>
+
+                  {/* Floating Context Callout 2 */}
+                  <div className="absolute top-8 right-8 bg-gray-900/90 text-white backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-gray-800 max-w-xs hidden md:block">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold text-orange-400">Mobile Field Dispatch</span>
+                      <span className="text-[10px] bg-orange-500/20 text-orange-300 px-2 py-0.5 rounded-full">GPS Verified</span>
+                    </div>
+                    <p className="text-xs text-gray-300 leading-snug">
+                      14 certified technicians dispatched on-site. Offline execution sync ready.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </FadeUp>
+
           </div>
         </section>
 
         {/* SECTION 2: TICKER */}
         <Ticker />
 
-        {/* SECTION 3: PLATFORM OVERVIEW */}
-        <section className="bg-white py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <FadeUp className="text-center max-w-3xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        {/* SECTION 3: PLATFORM OVERVIEW (Enterprise Bento Grid) */}
+        <section className="bg-white py-24 lg:py-32">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+            <FadeUp className="text-center max-w-3xl mx-auto mb-16">
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
+                Unified SaaS Architecture
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mt-4 mb-4">
                 GigaOps — Your Entire Operation in One Platform
               </h2>
               <p className="text-lg text-gray-500 leading-relaxed">
-                A single enterprise platform that connects every business domain — from asset management to financial close — with unified mobile for field teams.
+                A single enterprise platform that connects every business domain — from plant asset maintenance to automated period close — with native mobile execution for field teams.
               </p>
             </FadeUp>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-14">
-              <FadeUp delay={0.05}>
-                <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-100 hover:shadow-md transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
-                    <Globe2 className="h-6 w-6" />
+            {/* Bento Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              
+              {/* Bento 1: Large Span 2 Columns */}
+              <FadeUp delay={0.05} className="lg:col-span-2">
+                <div className="h-full bg-gradient-to-br from-gray-50 to-white border border-gray-200/80 rounded-3xl p-8 lg:p-10 hover:border-orange-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="h-12 w-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center shadow-md shadow-orange-500/20">
+                        <Globe2 className="h-6 w-6" />
+                      </div>
+                      <span className="text-xs font-bold text-orange-600 bg-orange-100/70 px-3 py-1 rounded-full uppercase tracking-wider">
+                        Unified Experience
+                      </span>
+                    </div>
+                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
+                      Web Workbench &amp; Offline-First Native Mobile
+                    </h3>
+                    <p className="text-base text-gray-600 leading-relaxed max-w-2xl">
+                      Operations managers, supply chain leads, and controllers work in a high-density web command center. Field engineers and technicians execute with purpose-built React Native iOS and Android apps that operate without cellular coverage.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Web & Native Mobile</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Full web workbench for operations managers. Native iOS and Android apps for field workers, offline-first.
-                  </p>
+
+                  <div className="mt-8 pt-6 border-t border-gray-200/70 grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-xl font-bold text-gray-900">100%</div>
+                      <div className="text-xs text-gray-500 mt-0.5">Offline-first local cache</div>
+                    </div>
+                    <div>
+                      <div className="text-xl font-bold text-gray-900">iOS &amp; Android</div>
+                      <div className="text-xs text-gray-500 mt-0.5">Native field applications</div>
+                    </div>
+                    <div>
+                      <div className="text-xl font-bold text-gray-900">&lt; 100ms</div>
+                      <div className="text-xs text-gray-500 mt-0.5">Workbench page latency</div>
+                    </div>
+                  </div>
                 </div>
               </FadeUp>
 
+              {/* Bento 2: 30+ Business Modules */}
               <FadeUp delay={0.1}>
-                <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-100 hover:shadow-md transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
-                    <Blocks className="h-6 w-6" />
+                <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center mb-6">
+                      <Blocks className="h-6 w-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">30+ Connected Modules</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      Maintenance, scheduling, inventory, procurement, ledger, DAG automation, and GIS mapping — pre-integrated so you never suffer point-solution fragmentation.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">30+ Business Modules</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Asset management, workforce, supply chain, finance, analytics and more — all connected.
-                  </p>
+                  <Link
+                    href="/gigaops"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#FF7200] hover:text-orange-700 mt-6 group"
+                  >
+                    <span>View module catalogue</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </FadeUp>
 
+              {/* Bento 3: Multi-Tenant Enterprise */}
               <FadeUp delay={0.15}>
-                <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-100 hover:shadow-md transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
-                    <ShieldCheck className="h-6 w-6" />
+                <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center mb-6">
+                      <ShieldCheck className="h-6 w-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Multi-Tenant Isolation</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      Strict tenant boundary enforcement, custom RBAC permissions, single sign-on (SAML/OIDC), and SOC 2 Type II audit trail logging for every database transaction.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Multi-Tenant Enterprise</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Workspace isolation, RBAC, org hierarchy and per-tenant configuration from day one.
-                  </p>
+                  <div className="mt-6 text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
+                    <Check className="h-4 w-4" />
+                    <span>SOC 2 Type II · Zero Data Drift</span>
+                  </div>
                 </div>
               </FadeUp>
 
+              {/* Bento 4: Workflow Automation */}
               <FadeUp delay={0.2}>
-                <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-100 hover:shadow-md transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
-                    <Workflow className="h-6 w-6" />
+                <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center mb-6">
+                      <Workflow className="h-6 w-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Visual Workflow Engine</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      Build durable DAG approval flows, SLA escalation paths, dynamic mobile forms, and conditional cross-module triggers without writing a single line of backend code.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Workflow Automation</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Visual workflow builder, business rules engine and dynamic forms — no code required.
-                  </p>
+                  <Link
+                    href="/gigaops/automation"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#FF7200] hover:text-orange-700 mt-6 group"
+                  >
+                    <span>Explore Workflow DAG</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </FadeUp>
 
+              {/* Bento 5: Enterprise Integrations */}
               <FadeUp delay={0.25}>
-                <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-100 hover:shadow-md transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
-                    <Database className="h-6 w-6" />
+                <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center mb-6">
+                      <Database className="h-6 w-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Data Contracts &amp; APIs</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      Ingest streaming telemetry from SCADA, IoT sensors, and third-party ERPs through schema contracts, HMAC-verified webhooks, and idempotent journaling.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise Integrations</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Data contracts, webhook ingestion, connector catalogue and idempotent event dispatch.
-                  </p>
+                  <Link
+                    href="/gigaops/data"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#FF7200] hover:text-orange-700 mt-6 group"
+                  >
+                    <span>View Data Contracts</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </FadeUp>
 
-              <FadeUp delay={0.3}>
-                <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-100 hover:shadow-md transition-all">
-                  <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
-                    <BarChart3 className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Built-in Analytics</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Governed metrics, KPI dashboards, scheduled reports and place-level drill-down.
-                  </p>
-                </div>
-              </FadeUp>
             </div>
           </div>
         </section>
 
-        {/* SECTION 4: MODULE SHOWCASE */}
-        <section id="modules" className="bg-gray-50 py-24 scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* SECTION 4: MODULE SHOWCASE (Human-made enterprise layout, expansive cards) */}
+        <section id="modules" className="bg-gray-50/70 py-24 lg:py-32 scroll-mt-20 border-t border-gray-100">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp className="text-center max-w-3xl mx-auto mb-20">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
+                Core Operations Capabilities
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mt-4 mb-4">
                 Every business operation, covered
               </h2>
               <p className="text-lg text-gray-500">
-                Click into any module to see full capabilities, outcomes and industry fit.
+                Click into any module to see complete enterprise capabilities, documented business outcomes, and industry applicability.
               </p>
             </FadeUp>
 
-            {/* Module 1: Asset & Maintenance (image right, text left) */}
-            <FadeUp>
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-center mb-24 last:mb-0">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-100/70 px-3.5 py-1 text-xs font-semibold text-orange-700 mb-4">
-                    Asset & Maintenance
-                  </div>
-                  <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-                    Control Every Asset. Prevent Every Failure.
-                  </h3>
-                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Complete CMMS with work orders, PM schedules, asset registers, MRO parts and reliability analytics.
-                  </p>
-                  <ul className="mt-6 space-y-3">
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Work orders with photo evidence</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Preventive maintenance scheduling</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>MRO inventory & parts management</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <Link
-                      href="/gigaops/maintenance"
-                      className="inline-flex items-center gap-1.5 text-orange-600 font-semibold hover:text-orange-700 group"
-                    >
-                      <span>Explore CMMS module</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </div>
-                </div>
-                <div>
-                  <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700&auto=format&fit=crop&q=80"
-                    alt="Asset and Maintenance CMMS"
-                    className="w-full h-[400px] object-cover rounded-2xl shadow-xl"
-                  />
-                </div>
-              </div>
-            </FadeUp>
+            {/* Showcase 1: Asset & Maintenance */}
+            <FadeUp className="mb-20">
+              <div className="bg-white border border-gray-200/80 rounded-3xl p-8 lg:p-12 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                  <div className="lg:col-span-6">
+                    <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-700 bg-orange-100/80 px-3 py-1 rounded-full mb-4">
+                      Asset &amp; Maintenance · CMMS &amp; EAM
+                    </span>
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                      Control Every Asset. Prevent Every Failure.
+                    </h3>
+                    <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+                      Complete enterprise CMMS with work order lifecycles, preventive maintenance schedules, digital asset registers, storeroom MRO parts, and MTBF/MTTR reliability analytics.
+                    </p>
+                    
+                    <ul className="mt-6 space-y-3">
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Work orders with photo evidence, labor timers &amp; sign-off</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Preventive maintenance scheduling &amp; condition threshold alarms</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>MRO inventory &amp; automatic parts kitting against open orders</span>
+                      </li>
+                    </ul>
 
-            {/* Module 2: Workforce Operations (image left, text right) */}
-            <FadeUp>
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-center mb-24 last:mb-0">
-                <div className="order-2 lg:order-1">
-                  <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&auto=format&fit=crop&q=80"
-                    alt="Workforce Operations"
-                    className="w-full h-[400px] object-cover rounded-2xl shadow-xl"
-                  />
-                </div>
-                <div className="order-1 lg:order-2">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-100/70 px-3.5 py-1 text-xs font-semibold text-orange-700 mb-4">
-                    Workforce Operations
+                    <div className="mt-8 flex items-center gap-4">
+                      <Link
+                        href="/gigaops/maintenance"
+                        className="inline-flex items-center gap-2 bg-[#FF7200] hover:bg-[#FF8A2B] text-white font-semibold px-6 py-3 rounded-full text-sm transition-all shadow-md shadow-orange-500/20"
+                      >
+                        <span>Explore CMMS Module</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full">
+                        40% reduction in reactive downtime
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-                    Right Person. Right Place. Every Shift.
-                  </h3>
-                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Resource directories, qualification tracking, visual scheduling, dispatch and GPS-verified time.
-                  </p>
-                  <ul className="mt-6 space-y-3">
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Qualification-matched dispatch</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>GPS attendance & compliance</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Pay-ready time exports</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <Link
-                      href="/gigaops/workforce"
-                      className="inline-flex items-center gap-1.5 text-orange-600 font-semibold hover:text-orange-700 group"
-                    >
-                      <span>Explore Workforce module</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
+
+                  <div className="lg:col-span-6">
+                    <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-100 relative group">
+                      <img
+                        src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&auto=format&fit=crop&q=80"
+                        alt="Asset & Maintenance CMMS"
+                        className="w-full h-[380px] lg:h-[440px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-bold text-gray-900 border border-gray-200 shadow-md">
+                        Digital Twin · Active Equipment Hierarchy
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </FadeUp>
 
-            {/* Module 3: Inventory & Supply Chain (image right, text left) */}
-            <FadeUp>
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-center mb-24 last:mb-0">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-100/70 px-3.5 py-1 text-xs font-semibold text-orange-700 mb-4">
-                    Inventory & Supply Chain
+            {/* Showcase 2: Workforce Operations */}
+            <FadeUp className="mb-20">
+              <div className="bg-white border border-gray-200/80 rounded-3xl p-8 lg:p-12 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                  <div className="lg:col-span-6 order-2 lg:order-1">
+                    <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-100 relative group">
+                      <img
+                        src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&auto=format&fit=crop&q=80"
+                        alt="Workforce Operations"
+                        className="w-full h-[380px] lg:h-[440px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-bold text-gray-900 border border-gray-200 shadow-md">
+                        Shift Dispatch · Skill Matched
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-                    One Version of Stock Truth. Everywhere.
-                  </h3>
-                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Governed product catalogue, real-time stock across warehouses, lot traceability and cycle counting.
-                  </p>
-                  <ul className="mt-6 space-y-3">
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Multi-warehouse real-time visibility</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Lot & serial traceability</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Cycle counting with audit trail</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <Link
-                      href="/gigaops/inventory"
-                      className="inline-flex items-center gap-1.5 text-orange-600 font-semibold hover:text-orange-700 group"
-                    >
-                      <span>Explore Supply Chain module</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
+
+                  <div className="lg:col-span-6 order-1 lg:order-2">
+                    <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-700 bg-orange-100/80 px-3 py-1 rounded-full mb-4">
+                      Workforce Operations
+                    </span>
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                      Right Person. Right Place. Every Shift.
+                    </h3>
+                    <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+                      Central resource directories, qualification expiration tracking, visual drag-and-drop shift scheduling, intelligent field dispatch, and GPS-verified time and attendance.
+                    </p>
+                    
+                    <ul className="mt-6 space-y-3">
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Qualification &amp; certification-matched automated dispatch</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>GPS geofenced attendance &amp; hazard compliance tracking</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Pay-ready exports directly integrated into enterprise payroll</span>
+                      </li>
+                    </ul>
+
+                    <div className="mt-8 flex items-center gap-4">
+                      <Link
+                        href="/gigaops/workforce"
+                        className="inline-flex items-center gap-2 bg-[#FF7200] hover:bg-[#FF8A2B] text-white font-semibold px-6 py-3 rounded-full text-sm transition-all shadow-md shadow-orange-500/20"
+                      >
+                        <span>Explore Workforce Module</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full">
+                        50% faster dispatch cycle
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <img
-                    src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=700&auto=format&fit=crop&q=80"
-                    alt="Inventory and Supply Chain"
-                    className="w-full h-[400px] object-cover rounded-2xl shadow-xl"
-                  />
                 </div>
               </div>
             </FadeUp>
 
-            {/* Module 4: Finance & Procurement (image left, text right) */}
-            <FadeUp>
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-center mb-24 last:mb-0">
-                <div className="order-2 lg:order-1">
-                  <img
-                    src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=700&auto=format&fit=crop&q=80"
-                    alt="Finance and Procurement"
-                    className="w-full h-[400px] object-cover rounded-2xl shadow-xl"
-                  />
-                </div>
-                <div className="order-1 lg:order-2">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-100/70 px-3.5 py-1 text-xs font-semibold text-orange-700 mb-4">
-                    Finance & Procurement
+            {/* Showcase 3: Inventory & Supply Chain */}
+            <FadeUp className="mb-20">
+              <div className="bg-white border border-gray-200/80 rounded-3xl p-8 lg:p-12 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                  <div className="lg:col-span-6">
+                    <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-700 bg-orange-100/80 px-3 py-1 rounded-full mb-4">
+                      Inventory &amp; Supply Chain
+                    </span>
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                      One Version of Stock Truth. Everywhere.
+                    </h3>
+                    <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+                      Governed master product catalogues, multi-warehouse real-time balance tracking, PO-linked receiving gates, full lot and serial genealogy, and auditable cycle counting schedules.
+                    </p>
+                    
+                    <ul className="mt-6 space-y-3">
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Multi-warehouse bin-level visibility in real time</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Lot genealogy &amp; serialized barcode/QR tracking</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Automated cycle counting with variance reconciliation</span>
+                      </li>
+                    </ul>
+
+                    <div className="mt-8 flex items-center gap-4">
+                      <Link
+                        href="/gigaops/inventory"
+                        className="inline-flex items-center gap-2 bg-[#FF7200] hover:bg-[#FF8A2B] text-white font-semibold px-6 py-3 rounded-full text-sm transition-all shadow-md shadow-orange-500/20"
+                      >
+                        <span>Explore Supply Chain Module</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full">
+                        99.5% stock balance accuracy
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-                    From Transaction to Financial Truth.
-                  </h3>
-                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-                    Double-entry ledger, three-way matching, period close and financial reporting — connected to your operations.
-                  </p>
-                  <ul className="mt-6 space-y-3">
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Double-entry compliance</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Automated three-way matching</span>
-                    </li>
-                    <li className="flex items-center gap-3 text-gray-700 font-medium">
-                      <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0" />
-                      <span>Real-time financial statements</span>
-                    </li>
-                  </ul>
-                  <div className="mt-8">
-                    <Link
-                      href="/gigaops/finance"
-                      className="inline-flex items-center gap-1.5 text-orange-600 font-semibold hover:text-orange-700 group"
-                    >
-                      <span>Explore Finance module</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
+
+                  <div className="lg:col-span-6">
+                    <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-100 relative group">
+                      <img
+                        src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=900&auto=format&fit=crop&q=80"
+                        alt="Inventory and Supply Chain"
+                        className="w-full h-[380px] lg:h-[440px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-bold text-gray-900 border border-gray-200 shadow-md">
+                        Multi-Warehouse Live Ledger
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </FadeUp>
+
+            {/* Showcase 4: Finance & Procurement */}
+            <FadeUp>
+              <div className="bg-white border border-gray-200/80 rounded-3xl p-8 lg:p-12 shadow-sm hover:shadow-xl transition-all duration-300">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                  <div className="lg:col-span-6 order-2 lg:order-1">
+                    <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-100 relative group">
+                      <img
+                        src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=900&auto=format&fit=crop&q=80"
+                        alt="Finance and Procurement"
+                        className="w-full h-[380px] lg:h-[440px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-bold text-gray-900 border border-gray-200 shadow-md">
+                        Double-Entry Real-time Ledger
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-6 order-1 lg:order-2">
+                    <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-700 bg-orange-100/80 px-3 py-1 rounded-full mb-4">
+                      Finance &amp; Procurement
+                    </span>
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
+                      From Transaction to Financial Truth.
+                    </h3>
+                    <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+                      Immutable double-entry general ledger, automated PO three-way matching, fiscal period close checklists, and live drill-through financial statements directly connected to operations.
+                    </p>
+                    
+                    <ul className="mt-6 space-y-3">
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Automated three-way matching (PO, Goods Receipt &amp; Vendor Invoice)</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Subledger event auto-posting with zero manual journal friction</span>
+                      </li>
+                      <li className="flex items-center gap-3 text-gray-800 font-medium">
+                        <CheckCircle className="h-5 w-5 text-[#FF7200] shrink-0" />
+                        <span>Real-time P&amp;L, balance sheet, and period close governance</span>
+                      </li>
+                    </ul>
+
+                    <div className="mt-8 flex items-center gap-4">
+                      <Link
+                        href="/gigaops/finance"
+                        className="inline-flex items-center gap-2 bg-[#FF7200] hover:bg-[#FF8A2B] text-white font-semibold px-6 py-3 rounded-full text-sm transition-all shadow-md shadow-orange-500/20"
+                      >
+                        <span>Explore Finance Module</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full">
+                        70% invoices auto-cleared
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeUp>
+
           </div>
         </section>
 
-        {/* SECTION 5: MOBILE SECTION */}
-        <section id="technologies" className="bg-gray-900 py-24 text-white scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              {/* Left Column */}
-              <div>
+        {/* SECTION 5: MOBILE SECTION (Meta AI dark hardware aesthetic, photorealistic mobile mockup) */}
+        <section id="technologies" className="bg-[#0B0F17] py-24 lg:py-36 text-white scroll-mt-20 relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-[140px] pointer-events-none" />
+
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+              
+              {/* Left Column Text */}
+              <div className="lg:col-span-7">
                 <FadeUp>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/10 border border-orange-500/20 px-3.5 py-1 text-xs font-semibold text-orange-400 mb-6">
-                    Native Mobile
+                  <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/15 border border-orange-500/30 px-4 py-1.5 text-xs font-bold text-orange-400 mb-6">
+                    <Smartphone className="h-3.5 w-3.5" />
+                    <span>Native Field Mobile</span>
                   </div>
 
-                  <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
+                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.08]">
                     GigaOps Mobile — Built for the Field
                   </h2>
 
-                  <p className="mt-4 text-base sm:text-lg text-gray-400 leading-relaxed">
-                    Offline-first React Native apps for iOS and Android. Field workers execute work orders, scan assets, log time and capture evidence — with or without signal.
+                  <p className="mt-6 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl">
+                    Offline-first React Native applications for iOS and Android. Field workers execute critical work orders, scan barcodes, log time, and capture photo evidence — whether underground or miles off-grid.
                   </p>
 
-                  <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {[
-                      'Today / My Work',
-                      'CMMS field execution',
-                      'Workforce & dispatch',
-                      'Geospatial & maps',
-                      'Documents & scanner',
-                      'E-signature & approvals',
+                      { title: 'Today / My Work', desc: 'Prioritized shift agenda with instant task navigation' },
+                      { title: 'CMMS Execution', desc: 'Step-by-step PM checklists with mandatory photo proof' },
+                      { title: 'Workforce & Dispatch', desc: 'Real-time job notifications and turn-by-turn routing' },
+                      { title: 'Geospatial & Spatial Maps', desc: 'Site maps, hazardous zones, and geofence verification' },
+                      { title: 'Documents & Scanner', desc: 'Sub-second camera barcode, QR & equipment plate scanning' },
+                      { title: 'E-Sign & Approvals', desc: 'Customer sign-off and instant invoice triggering' },
                     ].map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2.5">
-                        <span className="h-2 w-2 rounded-full bg-orange-500 flex-shrink-0" />
-                        <span className="text-sm font-medium text-gray-300">{feature}</span>
+                      <div key={idx} className="bg-gray-900/60 border border-gray-800 p-4 rounded-2xl">
+                        <div className="flex items-center gap-2.5 mb-1">
+                          <span className="h-2 w-2 rounded-full bg-[#FF7200]" />
+                          <span className="text-sm font-bold text-white">{feature.title}</span>
+                        </div>
+                        <p className="text-xs text-gray-400 leading-relaxed pl-4.5">{feature.desc}</p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-12 pt-8 border-t border-gray-800 flex flex-wrap items-center gap-4 text-xs font-semibold tracking-wider uppercase text-white/80">
-                    <span>Offline-First</span>
-                    <span className="text-gray-600">·</span>
-                    <span>React Native</span>
-                    <span className="text-gray-600">·</span>
-                    <span>iOS & Android</span>
-                    <span className="text-gray-600">·</span>
+                  <div className="mt-12 pt-8 border-t border-gray-800/80 flex flex-wrap items-center gap-6 text-xs font-bold tracking-wider uppercase text-gray-400">
+                    <span className="text-orange-400 font-extrabold">Offline-First SQLite</span>
+                    <span>·</span>
+                    <span>React Native Architecture</span>
+                    <span>·</span>
+                    <span>iOS &amp; Android Native</span>
+                    <span>·</span>
                     <span>12 Mobile Modules</span>
                   </div>
                 </FadeUp>
               </div>
 
-              {/* Right Column: Phone Mockup */}
-              <FadeUp delay={0.15}>
-                <div className="relative mx-auto w-64">
-                  <div className="rounded-[2.5rem] border-4 border-gray-700 bg-gray-800 overflow-hidden shadow-2xl">
-                    <div className="bg-orange-500 h-8 flex items-center px-4">
-                      <span className="text-white text-xs font-bold">GigaOps</span>
-                      <span className="ml-auto text-white text-xs">9:41</span>
+              {/* Right Column: High-Fidelity Phone Frame */}
+              <div className="lg:col-span-5 flex justify-center">
+                <FadeUp delay={0.15}>
+                  <div className="relative w-[300px] sm:w-[320px] rounded-[48px] border-[6px] border-gray-800 bg-gray-950 p-3 shadow-[0_30px_100px_rgba(0,0,0,0.6)]">
+                    {/* Dynamic Island */}
+                    <div className="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-5 bg-black rounded-full z-30 flex items-center justify-between px-2">
+                      <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                      <div className="h-2.5 w-2.5 rounded-full bg-gray-900 border border-gray-700" />
                     </div>
-                    <div className="p-3 space-y-2">
-                      {['WO-1842 · Pump Inspection', 'WO-1843 · Filter Change', 'WO-1844 · Meter Reading'].map(
-                        (item, i) => (
-                          <div key={i} className="bg-gray-700 rounded-xl p-3">
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={`h-2 w-2 rounded-full ${
-                                  i === 0
-                                    ? 'bg-orange-400'
-                                    : i === 1
-                                    ? 'bg-yellow-400'
-                                    : 'bg-green-400'
-                                }`}
-                              />
-                              <span className="text-white text-xs">{item}</span>
-                            </div>
+
+                    {/* Phone Screen Container */}
+                    <div className="rounded-[40px] bg-gray-900 overflow-hidden text-left border border-gray-800 pt-7 pb-4">
+                      {/* Status Bar */}
+                      <div className="px-5 py-2 flex items-center justify-between text-[11px] text-gray-400 border-b border-gray-800">
+                        <span className="font-bold text-white">9:41</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                          <span className="text-[10px] text-emerald-400 font-semibold">Offline Sync Ready</span>
+                        </div>
+                      </div>
+
+                      {/* App Header */}
+                      <div className="bg-[#FF7200] px-4 py-3 text-white flex items-center justify-between">
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-orange-200">Facility Plant #4</div>
+                          <div className="text-sm font-extrabold">Today's Assigned Jobs</div>
+                        </div>
+                        <span className="bg-black/20 text-xs px-2 py-0.5 rounded-full font-bold">3 Active</span>
+                      </div>
+
+                      {/* Work Order Cards */}
+                      <div className="p-3 space-y-2.5">
+                        <div className="bg-gray-800/90 border border-gray-700 p-3 rounded-2xl shadow-sm">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[11px] font-bold text-orange-400">WO-1842 · Critical PM</span>
+                            <span className="text-[9px] bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded-full font-bold">Priority 1</span>
                           </div>
-                        )
-                      )}
-                      <div className="bg-gray-700 rounded-xl p-3 mt-2">
-                        <div className="text-gray-400 text-xs mb-1">Asset Scan</div>
-                        <div className="bg-gray-600 rounded h-16 flex items-center justify-center">
-                          <span className="text-orange-400 text-xs">Tap to scan QR/barcode</span>
+                          <div className="text-xs font-semibold text-white">Main Slurry Pump Vibration Check</div>
+                          <div className="text-[10px] text-gray-400 mt-1 flex items-center gap-2">
+                            <span>Bay 4 Substation</span>
+                            <span>•</span>
+                            <span className="text-emerald-400">GPS Verified</span>
+                          </div>
+                        </div>
+
+                        <div className="bg-gray-800/60 border border-gray-700/60 p-3 rounded-2xl">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[11px] font-bold text-gray-300">WO-1843 · Routine</span>
+                            <span className="text-[9px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded-full font-bold">In Progress</span>
+                          </div>
+                          <div className="text-xs font-semibold text-white">Hydraulic Filter Replacement</div>
+                        </div>
+
+                        {/* QR Scanner Simulation Card */}
+                        <div className="bg-gradient-to-b from-gray-800 to-gray-850 border border-orange-500/40 p-3 rounded-2xl">
+                          <div className="text-[10px] font-bold text-orange-400 uppercase tracking-wider mb-1.5">Asset Scanner Active</div>
+                          <div className="h-16 bg-black/60 rounded-xl border border-dashed border-orange-400/50 flex flex-col items-center justify-center text-center p-2">
+                            <span className="text-xs font-bold text-white">Asset #PUMP-4091</span>
+                            <span className="text-[9px] text-emerald-400 font-semibold mt-0.5">Matched: Flowserve 500HP</span>
+                          </div>
+                        </div>
+
+                        {/* Sign-off button */}
+                        <div className="bg-[#FF7200] text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-md shadow-orange-900/40">
+                          Complete Job &amp; Capture Sign-off
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </FadeUp>
+                </FadeUp>
+              </div>
+
             </div>
           </div>
         </section>
 
         {/* SECTION 6: STATS */}
-        <section className="bg-white py-20 border-b border-gray-100">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-              <FadeUp delay={0.05}>
-                <div className="text-5xl font-bold gradient-text">30+</div>
-                <div className="text-sm font-medium text-gray-500 mt-2">GigaOps modules</div>
+        <section className="bg-white py-20 lg:py-28 border-b border-gray-100">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+              <FadeUp delay={0.05} className="pt-6 lg:pt-0">
+                <div className="text-5xl lg:text-6xl font-extrabold text-[#FF7200] tracking-tight">30+</div>
+                <div className="text-sm font-bold text-gray-900 mt-2">GigaOps Modules</div>
+                <div className="text-xs text-gray-500 mt-0.5">Pre-integrated business suite</div>
               </FadeUp>
-              <FadeUp delay={0.1}>
-                <div className="text-5xl font-bold gradient-text">9</div>
-                <div className="text-sm font-medium text-gray-500 mt-2">Product lines</div>
+              <FadeUp delay={0.1} className="pt-6 lg:pt-0">
+                <div className="text-5xl lg:text-6xl font-extrabold text-[#FF7200] tracking-tight">9</div>
+                <div className="text-sm font-bold text-gray-900 mt-2">Product Lines</div>
+                <div className="text-xs text-gray-500 mt-0.5">Specialized enterprise software</div>
               </FadeUp>
-              <FadeUp delay={0.15}>
-                <div className="text-5xl font-bold gradient-text">12</div>
-                <div className="text-sm font-medium text-gray-500 mt-2">Mobile capabilities</div>
+              <FadeUp delay={0.15} className="pt-6 lg:pt-0">
+                <div className="text-5xl lg:text-6xl font-extrabold text-[#FF7200] tracking-tight">12</div>
+                <div className="text-sm font-bold text-gray-900 mt-2">Mobile Capabilities</div>
+                <div className="text-xs text-gray-500 mt-0.5">Offline-first native field tools</div>
               </FadeUp>
-              <FadeUp delay={0.2}>
-                <div className="text-5xl font-bold gradient-text">100%</div>
-                <div className="text-sm font-medium text-gray-500 mt-2">Audit trail coverage</div>
+              <FadeUp delay={0.2} className="pt-6 lg:pt-0">
+                <div className="text-5xl lg:text-6xl font-extrabold text-[#FF7200] tracking-tight">100%</div>
+                <div className="text-sm font-bold text-gray-900 mt-2">Audit Trail Lineage</div>
+                <div className="text-xs text-gray-500 mt-0.5">Immutable financial compliance</div>
               </FadeUp>
             </div>
           </div>
         </section>
 
-        {/* SECTION 7: OTHER PRODUCTS */}
-        <section id="products" className="bg-gray-50 py-24 scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* SECTION 7: OTHER PRODUCTS (Beyond GigaOps) */}
+        <section id="products" className="bg-gray-50/70 py-24 lg:py-32 scroll-mt-20">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
+                Digital Products Portfolio
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mt-4 mb-4">
                 Beyond GigaOps — The Gigasys Product Portfolio
               </h2>
               <p className="text-lg text-gray-500">
-                In addition to the GigaOps enterprise platform, Gigasys builds focused digital products for communications, commerce, social and AI.
+                In addition to the GigaOps enterprise platform, Gigasys designs, engineers, and operates focused digital software products for communications, secondary commerce, social infrastructure, and conversational AI.
               </p>
             </FadeUp>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product, idx) => {
                 const IconComponent = product.icon;
                 return (
                   <FadeUp key={product.name} delay={idx * 0.05}>
-                    <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-all group flex flex-col justify-between">
+                    <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:shadow-xl hover:border-orange-200 hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between">
                       <div>
-                        <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-4">
-                          <IconComponent className="h-6 w-6" />
+                        <div className="flex items-center justify-between mb-5">
+                          <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center group-hover:bg-[#FF7200] group-hover:text-white transition-colors duration-200">
+                            <IconComponent className="h-6 w-6" />
+                          </div>
+                          <span className="text-[10px] font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            {product.category}
+                          </span>
                         </div>
-                        <div className="text-xs text-orange-600 uppercase tracking-widest font-semibold mb-1">
-                          {product.category}
-                        </div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">{product.name}</h3>
+
+                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors mb-2">
+                          {product.name}
+                        </h3>
                         <p className="text-sm text-gray-500 leading-relaxed mb-6">
                           {product.desc}
                         </p>
+
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {product.tags.map((tag) => (
+                            <span key={tag} className="text-[10px] font-semibold text-gray-600 bg-gray-100 px-2.5 py-1 rounded-md">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <Link
-                        href={product.href}
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 group-hover:translate-x-1 transition-transform"
-                      >
-                        <span>Learn more</span>
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
+
+                      <div className="pt-4 border-t border-gray-100">
+                        <Link
+                          href={product.href}
+                          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#FF7200] group-hover:translate-x-1 transition-transform"
+                        >
+                          <span>Explore product</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </div>
                     </div>
                   </FadeUp>
                 );
@@ -708,29 +985,37 @@ export default function Home() {
         </section>
 
         {/* SECTION 8: INDUSTRIES */}
-        <section id="industries" className="bg-white py-24 scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section id="industries" className="bg-white py-24 lg:py-32 scroll-mt-20">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
+                Mission-Critical Domains
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mt-4 mb-4">
                 Built for the Industries That Keep the World Running
               </h2>
               <p className="text-lg text-gray-500">
-                GigaOps is designed for organizations operating at scale in complex physical industries.
+                GigaOps is designed for organizations operating at scale in complex physical infrastructure and demanding operational environments.
               </p>
             </FadeUp>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {industries.map((ind, idx) => (
                 <FadeUp key={ind.name} delay={idx * 0.05}>
-                  <div className="relative overflow-hidden rounded-2xl h-48 group shadow-sm">
+                  <div className="relative overflow-hidden rounded-3xl h-64 group shadow-sm border border-gray-100">
                     <img
                       src={ind.img}
                       alt={ind.name}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
-                    <div className="absolute bottom-4 left-4 text-white font-bold text-lg">
-                      {ind.name}
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent" />
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <div className="text-white font-extrabold text-xl leading-tight">
+                        {ind.name}
+                      </div>
+                      <p className="text-xs text-gray-300 mt-1.5 line-clamp-2 leading-relaxed">
+                        {ind.desc}
+                      </p>
                     </div>
                   </div>
                 </FadeUp>
@@ -740,38 +1025,53 @@ export default function Home() {
         </section>
 
         {/* SECTION 9: FINAL CTA */}
-        <section className="bg-gray-900 py-24 relative overflow-hidden">
+        <section className="bg-[#0B0F17] py-28 relative overflow-hidden text-center text-white">
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="h-[600px] w-[600px] rounded-full bg-orange-500/10 blur-3xl" />
+            <div className="h-[700px] w-[700px] rounded-full bg-orange-500/10 blur-[140px]" />
           </div>
-          <div className="relative mx-auto max-w-3xl px-5 text-center">
+
+          <div className="relative mx-auto max-w-3xl px-6">
             <FadeUp>
-              <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
+              <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-400 bg-orange-500/15 border border-orange-500/30 px-4 py-1.5 rounded-full mb-6">
+                Start Your Operational Transformation
+              </span>
+
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
                 Ready to modernize your operations?
               </h2>
-              <p className="mt-5 text-lg text-gray-400">
-                Talk to our team for a live walkthrough of GigaOps. No slides. Just a real architecture discussion tailored to your operation.
+
+              <p className="mt-6 text-lg sm:text-xl text-gray-400 leading-relaxed">
+                Talk to our systems engineering team for a live walkthrough of GigaOps. No high-level slides. Just an architectural demonstration tailored to your assets and workflows.
               </p>
+
               <div className="mt-10 flex flex-wrap gap-4 justify-center">
                 <a
-                  href="mailto:connect@gigasystech.com"
-                  className="inline-flex items-center gap-2 bg-orange-500 text-white font-bold px-8 py-4 rounded-full hover:bg-orange-400 transition-colors shadow-lg shadow-orange-900/40"
+                  href="mailto:connect@gigasystech.com?subject=GigaOps%20Architecture%20Demo"
+                  className="inline-flex items-center gap-2 bg-[#FF7200] hover:bg-[#FF8A2B] text-white font-bold px-9 py-4 rounded-full transition-all shadow-xl shadow-orange-500/20 text-base"
                 >
-                  Book a Demo <ArrowRight className="h-4 w-4" />
+                  Book an Architecture Demo <ArrowRight className="h-4 w-4" />
                 </a>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-8 py-4 rounded-full hover:bg-white/10 transition-colors"
+                  className="inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-9 py-4 rounded-full hover:bg-white/10 transition-all text-base"
                 >
                   Talk to an expert
                 </Link>
               </div>
-              <p className="mt-8 text-sm text-gray-500">
-                connect@gigasystech.com · Hyderabad · Delaware, USA
-              </p>
+
+              <div className="mt-12 pt-8 border-t border-gray-800/80 text-xs text-gray-400 flex flex-wrap items-center justify-center gap-4">
+                <a href="mailto:connect@gigasystech.com" className="text-orange-400 hover:underline">
+                  connect@gigasystech.com
+                </a>
+                <span>•</span>
+                <span>Delaware, USA</span>
+                <span>•</span>
+                <span>Hyderabad, India</span>
+              </div>
             </FadeUp>
           </div>
         </section>
+
       </div>
     </Layout>
   );

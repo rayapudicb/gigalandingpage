@@ -124,7 +124,7 @@ export default function Automation() {
       <div className="bg-white text-gray-900">
         {/* Hero */}
         <section className="bg-white pt-24 pb-16 lg:pt-28 lg:pb-24 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               <div className="lg:col-span-7">
                 <FadeUp>
@@ -176,7 +176,7 @@ export default function Automation() {
 
         {/* Capabilities */}
         <section className="bg-gray-50 py-24 border-b border-gray-200/60">
-          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp>
               <div className="mx-auto max-w-3xl text-center">
                 <div className="font-mono text-xs font-semibold uppercase tracking-widest text-orange-600">
@@ -215,7 +215,7 @@ export default function Automation() {
 
         {/* How It Works */}
         <section className="bg-white py-24 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp>
               <div className="mx-auto max-w-3xl text-center">
                 <div className="font-mono text-xs font-semibold uppercase tracking-widest text-orange-600">
@@ -252,7 +252,7 @@ export default function Automation() {
 
         {/* Business Outcomes */}
         <section className="bg-gray-900 py-24 text-white">
-          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               <div className="lg:col-span-5">
                 <FadeUp>
@@ -289,7 +289,7 @@ export default function Automation() {
 
         {/* Industries */}
         <section className="bg-white py-20 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp>
               <div className="mx-auto max-w-3xl text-center">
                 <div className="font-mono text-xs font-semibold uppercase tracking-widest text-orange-600">

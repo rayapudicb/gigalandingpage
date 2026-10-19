@@ -222,15 +222,15 @@ function Navigation() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 h-[68px] bg-white border-b border-gray-100 transition-shadow duration-200 ${
-        scrolled ? "shadow-sm" : ""
+      className={`fixed inset-x-0 top-0 z-50 h-[72px] bg-white/95 backdrop-blur-md border-b border-gray-100/90 transition-shadow duration-200 ${
+        scrolled ? "shadow-sm shadow-gray-200/50" : ""
       }`}
     >
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-6 sm:px-10 lg:px-16">
         {/* Left: Brand Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 shrink-0 group"
+          className="flex items-center gap-3 shrink-0 group"
           data-testid="link-home"
         >
           <img
@@ -238,9 +238,14 @@ function Navigation() {
             alt="Gigasys"
             className="h-8 w-8 object-contain transition-transform group-hover:scale-105"
           />
-          <span className="text-xl font-bold tracking-tight text-gray-900">
-            Gigasys
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold tracking-tight text-gray-900 leading-none">
+              Gigasys
+            </span>
+            <span className="text-[10px] tracking-widest uppercase font-semibold text-orange-600 mt-0.5">
+              Enterprise Systems
+            </span>
+          </div>
         </Link>
 
         {/* Center: Desktop Nav with Hover Dropdowns */}
@@ -275,34 +280,113 @@ function Navigation() {
             <AnimatePresence>
               {openDropdown === "gigaops" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -4 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 pt-2 z-50"
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute top-full -left-28 xl:-left-44 pt-3 z-50 w-[960px] xl:w-[1040px] max-w-[95vw]"
                 >
-                  <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 min-w-[560px]">
-                    <div className="grid grid-cols-2 gap-2">
-                      {gigaopsModules.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setOpenDropdown(null)}
-                          className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-orange-50/60 transition-colors"
-                        >
-                          <div className="h-8 w-8 rounded-lg bg-orange-100/70 text-[#FF7200] flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors">
-                            <item.icon className="h-4 w-4" />
+                  <div className="bg-white rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.12)] border border-gray-100/90 overflow-hidden">
+                    <div className="grid grid-cols-12 divide-x divide-gray-100">
+                      {/* Left 8 cols: 2 columns of rich modules grouped cleanly */}
+                      <div className="col-span-8 p-6">
+                        <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
+                          <div>
+                            <span className="text-xs font-bold text-gray-900 tracking-wider uppercase">GigaOps Platform Modules</span>
+                            <span className="ml-2 text-[10px] font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">30+ Modules Under One Hub</span>
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="text-sm font-semibold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
-                              {item.name}
-                            </div>
-                            <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                              {item.desc}
-                            </p>
+                          <Link href="/gigaops" onClick={() => setOpenDropdown(null)} className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1">
+                            <span>View All Modules</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                          {gigaopsModules.map((item) => (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              onClick={() => setOpenDropdown(null)}
+                              className="group flex items-start gap-3 p-2 rounded-xl hover:bg-orange-50/50 transition-colors"
+                            >
+                              <div className="h-8 w-8 rounded-lg bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors mt-0.5">
+                                <item.icon className="h-4 w-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-xs font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
+                                  {item.name}
+                                </div>
+                                <p className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Right 4 cols: Featured Spotlight Card */}
+                      <div className="col-span-4 bg-gradient-to-b from-orange-50/50 via-gray-50/40 to-white p-6 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[10px] font-bold tracking-widest uppercase text-gray-500">
+                              Enterprise Release
+                            </span>
                           </div>
-                        </Link>
-                      ))}
+                          <h4 className="text-base font-bold text-gray-900 leading-snug">
+                            GigaOps Platform Hub
+                          </h4>
+                          <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                            The unified SaaS platform replacing fragmented point tools with connected operations, real-time dispatch, and audited double-entry financials.
+                          </p>
+
+                          <div className="mt-4 rounded-xl overflow-hidden border border-gray-200/80 shadow-sm bg-gray-900">
+                            <img
+                              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80"
+                              alt="GigaOps Hub"
+                              className="w-full h-24 object-cover opacity-80"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="mt-6 pt-4 border-t border-gray-200/60">
+                          <Link
+                            href="/gigaops"
+                            onClick={() => setOpenDropdown(null)}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF7200] hover:text-orange-700 group"
+                          >
+                            <span>Explore Platform Hub</span>
+                            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Utility Strip */}
+                    <div className="bg-gray-50/80 border-t border-gray-100 px-6 py-3 flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center gap-6">
+                        <span className="flex items-center gap-1.5 font-medium text-gray-600">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          Multi-Tenant Isolation
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1.5 font-medium text-gray-600">
+                          <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+                          Offline-First Field Mobile
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1.5 font-medium text-gray-600">
+                          <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                          100% Audit Lineage
+                        </span>
+                      </div>
+                      <a
+                        href="mailto:connect@gigasystech.com"
+                        className="font-semibold text-gray-700 hover:text-orange-600 transition-colors"
+                      >
+                        Talk to an Architect →
+                      </a>
                     </div>
                   </div>
                 </motion.div>
@@ -336,34 +420,100 @@ function Navigation() {
             <AnimatePresence>
               {openDropdown === "products" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -4 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 pt-2 z-50"
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute top-full -left-48 xl:-left-64 pt-3 z-50 w-[880px] xl:w-[940px] max-w-[95vw]"
                 >
-                  <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 min-w-[500px]">
-                    <div className="grid grid-cols-2 gap-2">
-                      {otherProducts.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setOpenDropdown(null)}
-                          className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-orange-50/60 transition-colors"
-                        >
-                          <div className="h-8 w-8 rounded-lg bg-orange-100/70 text-[#FF7200] flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors">
-                            <item.icon className="h-4 w-4" />
+                  <div className="bg-white rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.12)] border border-gray-100/90 overflow-hidden">
+                    <div className="grid grid-cols-12 divide-x divide-gray-100">
+                      {/* Left 8 cols: 2 columns of products */}
+                      <div className="col-span-8 p-6">
+                        <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
+                          <div>
+                            <span className="text-xs font-bold text-gray-900 tracking-wider uppercase">Product Portfolio</span>
+                            <span className="ml-2 text-[10px] font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">Focused Digital SaaS</span>
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="text-sm font-semibold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
-                              {item.name}
-                            </div>
-                            <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                              {item.desc}
-                            </p>
+                          <Link href="/#products" onClick={() => setOpenDropdown(null)} className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1">
+                            <span>All Products</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                          {otherProducts.map((item) => (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              onClick={() => setOpenDropdown(null)}
+                              className="group flex items-start gap-3 p-2 rounded-xl hover:bg-orange-50/50 transition-colors"
+                            >
+                              <div className="h-8 w-8 rounded-lg bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors mt-0.5">
+                                <item.icon className="h-4 w-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-xs font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
+                                  {item.name}
+                                </div>
+                                <p className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Right 4 cols: Spotlight card */}
+                      <div className="col-span-4 bg-gradient-to-b from-orange-50/50 via-gray-50/40 to-white p-6 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
+                            <span className="text-[10px] font-bold tracking-widest uppercase text-orange-600">
+                              Voice &amp; Conversational AI
+                            </span>
                           </div>
-                        </Link>
-                      ))}
+                          <h4 className="text-base font-bold text-gray-900 leading-snug">
+                            Giga AI Autonomous Voice
+                          </h4>
+                          <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                            Ultra-low latency sub-500ms voice agents with PBX telephony, tool-calling, and live call whisper supervision.
+                          </p>
+
+                          <div className="mt-4 rounded-xl overflow-hidden border border-gray-200/80 shadow-sm bg-gray-900">
+                            <img
+                              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80"
+                              alt="Giga AI"
+                              className="w-full h-24 object-cover opacity-80"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="mt-6 pt-4 border-t border-gray-200/60">
+                          <Link
+                            href="/products/gigaai"
+                            onClick={() => setOpenDropdown(null)}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF7200] hover:text-orange-700 group"
+                          >
+                            <span>Test Live Voice Demo</span>
+                            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Utility Strip */}
+                    <div className="bg-gray-50/80 border-t border-gray-100 px-6 py-3 flex items-center justify-between text-xs text-gray-500">
+                      <span className="font-medium text-gray-600">
+                        Modular headless architecture · Webhook &amp; REST APIs
+                      </span>
+                      <a
+                        href="mailto:connect@gigasystech.com"
+                        className="font-semibold text-gray-700 hover:text-orange-600 transition-colors"
+                      >
+                        Request Partner Sandbox →
+                      </a>
                     </div>
                   </div>
                 </motion.div>
@@ -376,7 +526,7 @@ function Navigation() {
             <a
               href="/#industries"
               onClick={handleIndustriesClick}
-              className="inline-flex items-center px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
+              className="inline-flex items-center px-3.5 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
             >
               Industries
             </a>
@@ -387,7 +537,7 @@ function Navigation() {
             <a
               href="/#technologies"
               onClick={handleTechnologiesClick}
-              className="inline-flex items-center px-3 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
+              className="inline-flex items-center px-3.5 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
             >
               Technologies
             </a>
@@ -419,32 +569,75 @@ function Navigation() {
             <AnimatePresence>
               {openDropdown === "company" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -4 }}
+                  initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 pt-2 z-50"
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute top-full -left-36 pt-3 z-50 w-[560px] max-w-[90vw]"
                 >
-                  <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-3 min-w-[220px]">
-                    <div className="flex flex-col gap-1">
-                      {companyLinks.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setOpenDropdown(null)}
-                          className="group flex items-center gap-3 p-2.5 rounded-xl hover:bg-orange-50/60 transition-colors"
-                        >
-                          <div className="h-7 w-7 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors">
-                            <item.icon className="h-3.5 w-3.5" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-semibold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
-                              {item.name}
+                  <div className="bg-white rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.12)] border border-gray-100/90 overflow-hidden p-6">
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-1">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-3 pb-2">
+                          Company &amp; Culture
+                        </div>
+                        {companyLinks.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setOpenDropdown(null)}
+                            className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-orange-50/60 transition-colors"
+                          >
+                            <div className="h-7 w-7 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors mt-0.5">
+                              <item.icon className="h-3.5 w-3.5" />
                             </div>
-                            <p className="text-xs text-gray-500">{item.desc}</p>
+                            <div>
+                              <div className="text-xs font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug flex items-center gap-1.5">
+                                <span>{item.name}</span>
+                                {item.name === "Careers" && (
+                                  <span className="text-[9px] font-bold text-orange-600 bg-orange-100/80 px-1.5 py-0.2 rounded-full">
+                                    Hiring
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[11px] text-gray-500 mt-0.5">{item.desc}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+
+                      <div className="bg-gray-50/80 rounded-2xl p-4 flex flex-col justify-between border border-gray-100">
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-3">
+                            Global Locations
                           </div>
-                        </Link>
-                      ))}
+                          <div className="text-xs text-gray-600 space-y-3">
+                            <div className="flex items-start gap-2">
+                              <MapPin className="h-3.5 w-3.5 text-orange-500 shrink-0 mt-0.5" />
+                              <div>
+                                <span className="font-bold text-gray-900">Delaware, USA</span>
+                                <p className="text-[11px] text-gray-500 leading-tight">North American Operations &amp; Governance</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <MapPin className="h-3.5 w-3.5 text-orange-500 shrink-0 mt-0.5" />
+                              <div>
+                                <span className="font-bold text-gray-900">Hyderabad, India</span>
+                                <p className="text-[11px] text-gray-500 leading-tight">Global Engineering &amp; AI R&amp;D Hub</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="pt-3 border-t border-gray-200/60 mt-3">
+                          <a
+                            href="mailto:connect@gigasystech.com"
+                            className="text-xs font-semibold text-orange-600 hover:underline flex items-center gap-1"
+                          >
+                            <span>connect@gigasystech.com</span>
+                            <ArrowRight className="h-3 w-3" />
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -684,7 +877,7 @@ function Navigation() {
 function Footer() {
   return (
     <footer className="bg-[#111827] text-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Column 1: Brand */}
           <div className="space-y-4">
@@ -884,7 +1077,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <Navigation />
-      <main className="pt-[68px]">{children}</main>
+      <main className="pt-[72px]">{children}</main>
       <Footer />
     </div>
   );

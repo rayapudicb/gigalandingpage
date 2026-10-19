@@ -208,8 +208,8 @@ export default function GigaOps() {
             <div className="h-[700px] w-[700px] rounded-full bg-orange-500/10 blur-3xl" />
           </div>
 
-          <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
-            <FadeUp>
+          <div className="relative mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
+            <FadeUp className="max-w-5xl mx-auto">
               <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/10 border border-orange-500/20 px-4 py-1.5 text-xs font-semibold text-orange-400 mb-6">
                 <span>Enterprise Connected Systems · Powered by GigaOps</span>
               </div>
@@ -251,10 +251,13 @@ export default function GigaOps() {
         </section>
 
         {/* SECTION 2: MODULE GRID */}
-        <section id="modules" className="bg-white py-24 scroll-mt-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section id="modules" className="bg-white py-24 lg:py-32 scroll-mt-20">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
+                SaaS Modules Catalogue
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mt-4 mb-4">
                 All GigaOps Modules
               </h2>
               <p className="text-lg text-gray-500 leading-relaxed">
@@ -262,36 +265,38 @@ export default function GigaOps() {
               </p>
             </FadeUp>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {modules.map((m, idx) => {
                 const IconComponent = m.icon;
                 return (
                   <FadeUp key={m.slug} delay={idx * 0.04}>
-                    <div className="h-full bg-white border border-gray-100 rounded-2xl p-7 hover:border-orange-200 hover:shadow-lg transition-all group flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 group-hover:scale-105 transition-transform">
-                            <IconComponent className="h-6 w-6" />
+                    <Link href={`/gigaops/${m.slug}`} className="block h-full">
+                      <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-5">
+                            <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center group-hover:bg-[#FF7200] group-hover:text-white transition-colors duration-200">
+                              <IconComponent className="h-6 w-6" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full">
+                              {m.category}
+                            </span>
                           </div>
-                          <span className="text-[11px] font-semibold uppercase tracking-wider text-orange-600 bg-orange-50/80 px-2.5 py-1 rounded-md">
-                            {m.category}
-                          </span>
+
+                          <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#FF7200] transition-colors">
+                            {m.name}
+                          </h3>
+
+                          <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                            {m.desc}
+                          </p>
                         </div>
 
-                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
-                          {m.name}
-                        </h3>
-
-                        <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                          {m.desc}
-                        </p>
+                        <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-sm font-semibold text-[#FF7200]">
+                          <span>Explore module capabilities</span>
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </div>
                       </div>
-
-                      <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-sm font-semibold text-orange-600">
-                        <span>Explore module</span>
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </div>
-                    </div>
+                    </Link>
                   </FadeUp>
                 );
               })}
@@ -300,10 +305,13 @@ export default function GigaOps() {
         </section>
 
         {/* SECTION 3: PLATFORM ARCHITECTURE */}
-        <section className="bg-gray-50 py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="bg-gray-50/70 py-24 lg:py-32">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
+                System Topology
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mt-4 mb-4">
                 Enterprise Platform Architecture
               </h2>
               <p className="text-lg text-gray-500 leading-relaxed">
@@ -316,8 +324,8 @@ export default function GigaOps() {
                 const IconComponent = block.icon;
                 return (
                   <FadeUp key={block.title} delay={idx * 0.08}>
-                    <div className="h-full bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 mb-5">
+                    <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+                      <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center mb-6">
                         <IconComponent className="h-6 w-6" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{block.title}</h3>
@@ -336,8 +344,8 @@ export default function GigaOps() {
         </section>
 
         {/* SECTION 4: WHY GIGAOPS (COMPARISON) */}
-        <section className="bg-white py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="bg-white py-24 lg:py-32">
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
                 Why Operations Teams Choose GigaOps
@@ -450,8 +458,8 @@ export default function GigaOps() {
 
         {/* SECTION 5: CTA */}
         <section className="bg-orange-500 py-20 text-white">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <FadeUp>
+          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
+            <FadeUp className="max-w-4xl mx-auto">
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
                 Ready to modernize your operations with GigaOps?
               </h2>

@@ -75,7 +75,7 @@ export default function Teams() {
   return (
     <Layout>
       <div className="bg-muted/30 py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
           <Badge variant="outline" className="mb-4">OUR TEAMS</Badge>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
             Meet Our Teams
@@ -86,7 +86,7 @@ export default function Teams() {
         </div>
       </div>
       <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teams.map((team) => (
               <Card key={team.id} className="p-6">

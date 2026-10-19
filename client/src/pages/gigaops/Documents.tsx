@@ -43,7 +43,7 @@ export default function DocumentsPage() {
   return (
     <Layout>
       <section className="bg-white pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <FadeUp>
               <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-100 px-4 py-1.5 mb-6">
@@ -80,7 +80,7 @@ export default function DocumentsPage() {
       </section>
 
       <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp>
             <div className="text-center mb-14">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Complete document lifecycle management</h2>
@@ -104,7 +104,7 @@ export default function DocumentsPage() {
       </section>
 
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp><h2 className="text-3xl font-bold text-gray-900 mb-14 text-center">How it works</h2></FadeUp>
           <div className="grid gap-8 lg:grid-cols-3">
             {steps.map((step, i) => (
@@ -121,7 +121,7 @@ export default function DocumentsPage() {
       </section>
 
       <section className="bg-gray-900 py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp><div className="text-center mb-14"><h2 className="text-3xl font-bold text-white">Measurable business impact</h2></div></FadeUp>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {outcomes.map((o, i) => (
@@ -137,7 +137,7 @@ export default function DocumentsPage() {
       </section>
 
       <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp>
             <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Industries served</h2>
             <div className="flex flex-wrap justify-center gap-3">

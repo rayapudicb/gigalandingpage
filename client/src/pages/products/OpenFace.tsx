@@ -88,7 +88,7 @@ export default function OpenFace() {
     <Layout>
       {/* HERO */}
       <section className="bg-white pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid lg:grid-cols-2 gap-12 lg:items-center">
             <FadeUp>
               <span className="inline-block text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3 py-1 rounded-full mb-4">
@@ -130,7 +130,7 @@ export default function OpenFace() {
 
       {/* CAPABILITIES */}
       <section className="bg-gray-50 py-24">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp>
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold text-gray-900">Infrastructure Capabilities</h2>
@@ -157,7 +157,7 @@ export default function OpenFace() {
 
       {/* HOW IT WORKS */}
       <section className="bg-white py-24">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <FadeUp>
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold text-gray-900">How OpenFace Works</h2>
@@ -179,7 +179,7 @@ export default function OpenFace() {
 
       {/* OUTCOMES */}
       <section className="bg-gray-900 py-24">
-        <div className="mx-auto max-w-7xl px-5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <FadeUp>
               <h2 className="text-3xl font-bold text-white">Engineering Outcomes</h2>

@@ -104,7 +104,7 @@ export default function About() {
         <div className="absolute inset-0 orange-grid opacity-20" />
         <div className="absolute -right-36 top-10 h-[420px] w-[420px] rounded-full border border-[#ff7200]/20" />
         <div className="absolute -right-20 top-24 h-[300px] w-[300px] rounded-full border border-white/10" />
-        <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#ff8a2b]">About Gigasys Technologies</div>
           <h1 className="mt-6 max-w-5xl text-5xl font-semibold leading-[0.95] tracking-[-0.055em] sm:text-6xl lg:text-8xl">Product strategy, domain depth and engineering in one team.</h1>
           <p className="mt-7 max-w-3xl text-base leading-7 text-white/60 sm:text-lg sm:leading-8">Gigasys develops enterprise SaaS, native mobile applications and focused digital products. We turn real operating constraints into connected software that teams can adopt, govern and evolve.</p>
@@ -112,7 +112,7 @@ export default function About() {
       </section>
 
       <section className="bg-[#f3f2ee] py-16 md:py-20">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid gap-px border border-black/10 bg-black/10 sm:grid-cols-2 xl:grid-cols-4">
             {facts.map((fact) => (
               <div key={fact.label} className="bg-white p-6 sm:p-8">
@@ -127,7 +127,7 @@ export default function About() {
       </section>
 
       <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="grid gap-8 border-b border-black/10 pb-10 lg:grid-cols-[1fr_0.65fr] lg:items-end">
             <div>
               <div className="section-label">What we build</div>
@@ -174,7 +174,7 @@ export default function About() {
       </section>
 
       <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
           <div className="flex flex-col gap-5 border-b border-black/10 pb-10 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="section-label">Where we work</div>
