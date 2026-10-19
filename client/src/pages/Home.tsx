@@ -1,10 +1,8 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link } from "wouter";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import Layout from "@/components/Layout";
 import {
   Activity,
-  ArrowLeft,
   ArrowRight,
   BarChart3,
   Blocks,
@@ -12,16 +10,12 @@ import {
   Boxes,
   BriefcaseBusiness,
   Building2,
-  Check,
   ChevronRight,
-  CircleDot,
   Cloud,
   Code2,
   Database,
   Factory,
-  Film,
   FileSignature,
-  FlaskConical,
   Gauge,
   Globe2,
   GraduationCap,
@@ -30,15 +24,12 @@ import {
   MapPin,
   MessageSquareMore,
   Network,
-  Pause,
   PackageCheck,
-  Play,
   RefreshCw,
   ScanLine,
   ShieldCheck,
   Smartphone,
   Sparkles,
-  Sprout,
   Store,
   Ticket,
   TrainFront,
@@ -50,72 +41,161 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import industrialEngineerImg from "@/assets/industry/industrial-engineer.jpg";
-import controlRoomImg from "@/assets/industry/control-room.jpg";
-import dataCenterImg from "@/assets/industry/data-center.jpg";
-import engineeringTeamImg from "@/assets/industry/engineering-team.jpg";
+/* ─────────────────── Animation helpers ─────────────────── */
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduce = useReducedMotion();
 
-type SuiteId =
-  | "maintenance"
-  | "workforce"
-  | "products"
-  | "procurement"
-  | "finance"
-  | "automation"
-  | "analytics"
-  | "documents"
-  | "geospatial"
-  | "communications"
-  | "data";
+  return (
+    <motion.div
+      ref={ref}
+      initial={reduce ? {} : { opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
+function FadeIn({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const reduce = useReducedMotion();
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={reduce ? {} : { opacity: 0 }}
+      animate={inView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.8, ease: "easeOut", delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ─────────────────── Animated Mesh Gradient ─────────────────── */
+function MeshGradient() {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Base dark */}
+      <div className="absolute inset-0 bg-[#050505]" />
+      {/* Orb 1 - orange brand */}
+      <motion.div
+        className="absolute -top-40 -left-40 h-[700px] w-[700px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,114,0,0.18) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+        animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Orb 2 - indigo */}
+      <motion.div
+        className="absolute top-20 right-0 h-[600px] w-[600px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)",
+          filter: "blur(80px)",
+        }}
+        animate={{ x: [0, -50, 0], y: [0, 60, 0] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Orb 3 - amber glow */}
+      <motion.div
+        className="absolute bottom-0 left-1/3 h-[500px] w-[500px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(251,146,60,0.10) 0%, transparent 70%)",
+          filter: "blur(90px)",
+        }}
+        animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Fine grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
+        }}
+      />
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#050505] to-transparent" />
+    </div>
+  );
+}
+
+/* ─────────────────── Ticker / Marquee ─────────────────── */
+const tickerItems = [
+  "Asset Management",
+  "Workforce Dispatch",
+  "CMMS & EAM",
+  "Supply Chain",
+  "Financial Operations",
+  "Omnichannel Comms",
+  "Native Mobile",
+  "Workflow Automation",
+  "Analytics & Reports",
+  "Data Integration",
+];
+
+function Ticker() {
+  return (
+    <div className="relative overflow-hidden border-y border-white/5 bg-white/[0.02] py-3">
+      <motion.div
+        className="flex gap-12 whitespace-nowrap"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+      >
+        {[...tickerItems, ...tickerItems].map((item, i) => (
+          <span
+            key={i}
+            className="text-[11px] font-mono uppercase tracking-[0.2em] text-white/30"
+          >
+            {item}
+            <span className="ml-12 text-orange-500/40">◆</span>
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─────────────────── Data ─────────────────── */
 type Suite = {
-  id: SuiteId;
+  id: string;
   number: string;
   label: string;
   kicker: string;
   title: string;
   description: string;
-  outcome: string;
   outcomes: string[];
-  measure: string;
   icon: LucideIcon;
   modules: string[];
 };
-
-const heroSlides = [
-  {
-    eyebrow: "GigaLibs enterprise SaaS",
-    title: "Run the work. Connect the business.",
-    copy: "A modular operating platform for assets, workforce, supply chain, finance, data and field execution—delivered across web and native mobile.",
-    image: controlRoomImg,
-    alt: "Industrial control room monitoring connected operations",
-    marker: "01 / OPERATIONS CLOUD",
-  },
-  {
-    eyebrow: "Asset & field operations",
-    title: "From maintenance plan to verified field action.",
-    copy: "Bring assets, work orders, preventive maintenance, meters, MRO inventory, technicians and evidence into one governed operating flow.",
-    image: industrialEngineerImg,
-    alt: "Field engineer working with a tablet in an industrial facility",
-    marker: "02 / CMMS + MOBILE",
-  },
-  {
-    eyebrow: "Commerce & financial operations",
-    title: "Connect product, order, inventory and cash movement.",
-    copy: "Coordinate catalogue, warehouses, procurement, fulfillment, invoicing, spend and finance through modular business applications.",
-    image: dataCenterImg,
-    alt: "Modern data centre supporting enterprise software services",
-    marker: "03 / BUSINESS SYSTEMS",
-  },
-  {
-    eyebrow: "Digital product portfolio",
-    title: "Build intelligent experiences beyond the enterprise core.",
-    copy: "Gigasys also develops AI, communications, CRM, talent, social and exchange products—each with a focused domain and product identity.",
-    image: engineeringTeamImg,
-    alt: "Engineering team collaborating on a digital product",
-    marker: "04 / AI + DIGITAL PRODUCTS",
-  },
-] as const;
 
 const suites: Suite[] = [
   {
@@ -123,27 +203,24 @@ const suites: Suite[] = [
     number: "01",
     label: "Asset & Maintenance",
     kicker: "GigaLibs CMMS / EAM",
-    title: "Control the complete maintenance lifecycle from asset context to reliable completion.",
+    title: "Control the complete maintenance lifecycle.",
     description:
       "A multi-tenant maintenance system for physical operations, connecting equipment, work execution, preventive plans, materials and reliability insight.",
-    outcome:
-      "Reduce reactive coordination, make maintenance history trustworthy and give planners and technicians the same operating context.",
     outcomes: [
       "Less reactive work and avoidable downtime",
-      "Faster plan-to-completion maintenance cycles",
-      "Complete, auditable asset and work history",
+      "Faster plan-to-completion cycles",
+      "Complete, auditable asset history",
     ],
-    measure: "Planned vs reactive work · cycle time · downtime",
     icon: Wrench,
     modules: [
       "Work orders & execution history",
-      "Assets, classifications & digital twin context",
-      "CAFM spaces, sites & floor operations",
+      "Assets & digital twin context",
+      "CAFM spaces & floor operations",
       "Preventive maintenance schedules",
       "Meters, readings & condition triggers",
-      "MRO parts, storerooms & stock movements",
-      "Reliability analytics & downtime insight",
-      "Floor kiosk and field workflows",
+      "MRO parts & storerooms",
+      "Reliability analytics",
+      "Field kiosk workflows",
     ],
   },
   {
@@ -151,29 +228,24 @@ const suites: Suite[] = [
     number: "02",
     label: "Workforce Operations",
     kicker: "GigaOps workforce",
-    title: "Match qualified people to operational demand and keep every shift accountable.",
+    title: "Match qualified people to demand, keep every shift accountable.",
     description:
-      "Workforce planning and execution for distributed operations, from the resource directory and qualifications to dispatch, time, compliance and pay-ready outputs.",
-    outcome:
-      "Shorten assignment handling, expose coverage gaps earlier and reduce qualification, attendance and payroll exceptions.",
+      "Workforce planning and execution for distributed operations, from resource directory and qualifications to dispatch, time, compliance and pay-ready outputs.",
     outcomes: [
       "Faster qualified staffing and dispatch",
-      "Fewer scheduling, attendance and compliance exceptions",
+      "Fewer scheduling & compliance exceptions",
       "Clearer workforce capacity and utilization",
     ],
-    measure: "Fill time · coverage gaps · exception rate",
     icon: Users2,
     modules: [
       "Resource, team & pool directory",
-      "Jobs, positions & organization context",
       "Skills, capabilities & qualifications",
       "Availability and absence",
       "Scheduling, shifts & dispatch",
-      "Assignments and staffing requests",
+      "Assignments & staffing requests",
       "Time, attendance & place policy",
       "Compliance and expiry controls",
       "Pay-ready outputs",
-      "Workforce analytics & reports",
     ],
   },
   {
@@ -181,25 +253,21 @@ const suites: Suite[] = [
     number: "03",
     label: "Products & Inventory",
     kicker: "Catalogue and warehouse operations",
-    title: "Create one governed product and stock foundation for every commercial flow.",
+    title: "One governed product and stock foundation for every commercial flow.",
     description:
       "Product definitions, units, price lists, warehouses, balances and material movements stay consistent from commercial planning through physical execution.",
-    outcome:
-      "Improve product-data quality and stock visibility while reducing shortages, count variance and material search time.",
     outcomes: [
       "Consistent products, units and governed pricing",
-      "Real-time visibility across warehouses and locations",
-      "Fewer shortages, count variances and stock disputes",
+      "Real-time visibility across warehouses",
+      "Fewer shortages, count variances and disputes",
     ],
-    measure: "Stock accuracy · fulfillment readiness · count variance",
     icon: Boxes,
     modules: [
       "Product catalogue, units & price lists",
-      "Product categories, attributes & reference mapping",
-      "Warehouses, locations, lots & balances",
+      "Warehouses, locations & balances",
       "Receiving, putaway, transfers & issues",
-      "Reservations, maintenance kits & staging",
-      "Cycle counts, adjustments & approvals",
+      "Reservations & maintenance kits",
+      "Cycle counts & adjustments",
       "Lot, serial and barcode traceability",
     ],
   },
@@ -208,24 +276,21 @@ const suites: Suite[] = [
     number: "04",
     label: "Procurement & Orders",
     kicker: "Source-to-pay and order-to-cash",
-    title: "Connect purchasing, selling and fulfillment without losing control at the handoffs.",
+    title: "Connect purchasing, selling and fulfillment without losing control.",
     description:
       "Governed requisitions and purchase orders work alongside quotations, customer orders, inventory allocation, fulfillment, returns and invoicing.",
-    outcome:
-      "Shorten commercial cycle times, preserve approval policy and reduce errors between demand, supply, delivery and billing.",
     outcomes: [
       "Faster requisition, approval and purchasing cycles",
-      "Fewer receiving, invoice and price-variance exceptions",
-      "More predictable allocation, fulfillment and billing",
+      "Fewer receiving and invoice exceptions",
+      "More predictable fulfillment and billing",
     ],
-    measure: "Approval time · match exceptions · order cycle",
     icon: PackageCheck,
     modules: [
       "Purchase requisitions & delegation of authority",
       "Purchase orders, vendors & acknowledgements",
-      "Goods receipts, three-way match & vendor bills",
+      "Goods receipts & three-way match",
       "Sales quotes, orders & available-to-promise",
-      "Inventory allocation & fulfillment orchestration",
+      "Inventory allocation & fulfillment",
       "Customer invoices, returns & credit memos",
     ],
   },
@@ -237,14 +302,11 @@ const suites: Suite[] = [
     title: "Connect operational transactions to auditable financial outcomes.",
     description:
       "Finance capabilities cover books, journals, subledgers, spend, currency, tax, reconciliation and close workflows with governed roles and durable records.",
-    outcome:
-      "Create a clearer path from operating event to financial review, reporting and reconciliation across business units.",
     outcomes: [
       "Faster reconciliation and period close",
       "Trusted financial statements with drill-through",
       "Improved spend, budget and treasury control",
     ],
-    measure: "Close time · reconciliation backlog · budget variance",
     icon: WalletCards,
     modules: [
       "Books, chart of accounts & fiscal periods",
@@ -252,27 +314,22 @@ const suites: Suite[] = [
       "AP, AR and inventory subledger ingestion",
       "Trial balance and financial statements",
       "Spend, expenses & approval policy",
-      "Bank statement reconciliation",
       "Multi-currency and tax configuration",
-      "Budgeting, period close & forecasting",
     ],
   },
   {
     id: "automation",
     number: "06",
-    label: "Workflow, Rules & Forms",
+    label: "Workflow & Automation",
     kicker: "Governed business automation",
-    title: "Turn repeatable operating logic into durable workflows and controlled decisions.",
+    title: "Turn repeatable operating logic into durable workflows.",
     description:
       "Workflow orchestration, policy rules and dynamic forms let teams adapt processes while preserving execution state, approvals and an evaluation trail.",
-    outcome:
-      "Replace fragmented manual steps with consistent, visible processes and faster exception handling.",
     outcomes: [
       "Shorter process and approval cycle times",
       "Consistent policy application across teams",
-      "Fewer manual handoffs and unmanaged exceptions",
+      "Fewer manual handoffs and exceptions",
     ],
-    measure: "Process cycle · touchpoints · exception resolution",
     icon: Workflow,
     modules: [
       "Workflow Studio & durable orchestration",
@@ -280,7 +337,6 @@ const suites: Suite[] = [
       "Business rules, policies & decision tables",
       "Checkpointing, replay & compensation",
       "Dynamic forms and configuration studio",
-      "Cross-module actions and approvals",
       "Evaluation and execution audit trails",
     ],
   },
@@ -289,17 +345,14 @@ const suites: Suite[] = [
     number: "07",
     label: "Analytics & Reporting",
     kicker: "Operational intelligence",
-    title: "Move from trusted operational facts to decisions, dashboards and durable reports.",
+    title: "From trusted operational facts to decisions and dashboards.",
     description:
       "Analytics Studio brings metrics, datasets, place rollups, governed measures, exploration, dashboards and generated reporting into one intelligence workspace.",
-    outcome:
-      "Reduce report preparation time and help leaders move from symptoms to accountable operational action.",
     outcomes: [
       "Faster recurring reporting and executive review",
       "One governed definition for critical measures",
-      "Quicker drill-down from KPI to place and source",
+      "Quicker drill-down from KPI to source",
     ],
-    measure: "Report preparation · insight-to-action · metric reuse",
     icon: BarChart3,
     modules: [
       "Executive overview & KPI snapshots",
@@ -311,73 +364,18 @@ const suites: Suite[] = [
     ],
   },
   {
-    id: "documents",
-    number: "08",
-    label: "Documents & E-Signature",
-    kicker: "Evidence and agreement workflows",
-    title: "Capture, approve and sign the evidence that completes the business process.",
-    description:
-      "Document scanning, structured evidence, envelope journeys and signatures stay connected to the records, people and decisions that require them.",
-    outcome:
-      "Shorten document and signature turnaround while reducing missing evidence and manual follow-up.",
-    outcomes: [
-      "Faster evidence capture and signature completion",
-      "Fewer missing documents and approval chasers",
-      "Clear envelope, signer and record traceability",
-    ],
-    measure: "Turnaround time · completion rate · missing evidence",
-    icon: FileSignature,
-    modules: [
-      "Document capture, upload & scanner workflows",
-      "Structured extraction and review",
-      "Record-linked evidence and status",
-      "E-signature envelopes & signer journeys",
-      "Signature progress and completion records",
-      "Mobile document and signature actions",
-    ],
-  },
-  {
-    id: "geospatial",
-    number: "09",
-    label: "Places & Geospatial",
-    kicker: "Location-aware operations",
-    title: "Make place, boundary and location context part of every operational decision.",
-    description:
-      "Geospatial Studio manages place hierarchies, boundaries, scope, imports and geofence evaluation for field, asset and workforce workflows.",
-    outcome:
-      "Improve routing and accountability by connecting every relevant action to an authorized operational place.",
-    outcomes: [
-      "Consistent site and place context across modules",
-      "Faster location-aware assignment and navigation",
-      "Stronger spatial scope and geofence compliance",
-    ],
-    measure: "Travel/search time · place accuracy · scope exceptions",
-    icon: MapPin,
-    modules: [
-      "Places, sites, zones & hierarchical context",
-      "Maps, boundaries & spatial selection",
-      "Organization-to-place relationships",
-      "Spatial access and work scope",
-      "Geofence evaluation and punch policy",
-      "Place import and operational drill-down",
-    ],
-  },
-  {
     id: "communications",
-    number: "10",
+    number: "08",
     label: "Communications",
     kicker: "TextFly omnichannel engagement",
-    title: "Coordinate customer and workforce conversations across every approved channel.",
+    title: "Coordinate conversations across every approved channel.",
     description:
       "A unified inbox, contact context, templates, campaigns, event triggers and durable delivery connect enterprise workflows to email, SMS, WhatsApp, voice and webhooks.",
-    outcome:
-      "Reduce response delay and fragmented conversations while improving delivery visibility and service follow-through.",
     outcomes: [
       "Faster response and case progression",
-      "Consistent communication across approved channels",
+      "Consistent communication across channels",
       "Visible delivery, retry and escalation status",
     ],
-    measure: "Response time · delivery success · SLA exceptions",
     icon: MessageSquareMore,
     modules: [
       "Unified inbox and conversation threads",
@@ -388,626 +386,581 @@ const suites: Suite[] = [
       "Delivery queues, retries & SLA escalation",
     ],
   },
-  {
-    id: "data",
-    number: "11",
-    label: "Data & Integration",
-    kicker: "Enterprise data and connector layer",
-    title: "Connect enterprise systems through governed contracts instead of brittle point integrations.",
-    description:
-      "Data contracts, schema mapping, quality controls, lineage and a reusable connector hub support secure inbound events, polling and cross-module dispatch.",
-    outcome:
-      "Speed integration onboarding and reduce failures caused by schema drift, duplicate events and unclear data ownership.",
-    outcomes: [
-      "Faster source-system and partner onboarding",
-      "Fewer mapping, duplication and schema-drift failures",
-      "Traceable data quality, lineage and ingestion history",
-    ],
-    measure: "Onboarding lead time · failed events · data quality",
-    icon: Database,
-    modules: [
-      "Data contracts and schema discovery",
-      "Field mapping and normalization",
-      "Quality assertions and drift detection",
-      "Connector catalogue and tenant connections",
-      "Webhook ingestion, HMAC verification & journaling",
-      "Idempotency, delta sync & workflow dispatch",
-    ],
-  },
-];
-
-const mobileCapabilities = [
-  "Today / My Work",
-  "Workforce",
-  "CMMS field execution",
-  "Places & Maps",
-  "Actions & Approvals",
-  "Documents & Scanner",
-  "TextFly conversations",
-  "Analytics",
-  "Generated Reports",
-  "Spend & Expenses",
-  "E-signature",
-  "Profile & Security",
-];
-
-const webCapabilities = [
-  "Executive control tower",
-  "Operational workbenches",
-  "Scheduling and dispatch",
-  "Configuration and forms studios",
-  "Analytics and report authoring",
-  "Finance and commercial controls",
-  "Tenant, role and organization administration",
-  "Connector and communication management",
-];
-
-const technologyGroups = [
-  { label: "Web experience", icon: Code2, technologies: ["Next.js", "React", "TypeScript", "Tailwind", "ECharts", "SWR"] },
-  { label: "Native mobile", icon: Smartphone, technologies: ["React Native", "Expo", "Expo Router", "TanStack Query", "SecureStore", "Zod"] },
-  { label: "Services & data", icon: Database, technologies: ["Node.js", "Fastify", "PostgreSQL", "OpenAPI", "AsyncAPI", "Event workers"] },
-  { label: "Delivery quality", icon: ShieldCheck, technologies: ["Playwright", "Vitest", "Contract tests", "Audit trails", "Health checks", "CI gates"] },
-];
-
-const outcomes = [
-  { number: "01", title: "Faster work-to-action cycles", copy: "Prioritized work, clear ownership and mobile execution reduce the time between assignment, action and decision.", measure: "Assignment-to-start · submission-to-decision" },
-  { number: "02", title: "Less duplicate administration", copy: "Capture evidence once at the point of work and carry authoritative status through approvals, reporting and financial processes.", measure: "Active administration time · re-entry rate" },
-  { number: "03", title: "More reliable operations", copy: "Planned maintenance, qualified staffing, material availability and visible exceptions help teams protect continuity.", measure: "Completion cycle · overdue work · exceptions" },
-  { number: "04", title: "Better first-time-right work", copy: "Configured forms, required evidence and governed task flows reduce incomplete submissions and repeat visits.", measure: "Accepted submissions · correction rate" },
-  { number: "05", title: "Audit-ready business records", copy: "Permissions, history, receipts and durable transaction records make operational and financial decisions easier to reconstruct.", measure: "Audit preparation time · evidence completeness" },
 ];
 
 const portfolioProducts = [
-  { name: "GigaLibs", category: "Enterprise operations SaaS", copy: "A modular product suite for assets, workforce, commerce, finance, automation, data and governed business operations.", icon: Blocks },
-  { name: "GigaCRM", category: "Customer relationships", copy: "Lead and deal workspaces, sales activity, communication context and adaptable pipelines for modern teams.", icon: BriefcaseBusiness },
-  { name: "TextFly", category: "Omnichannel communications", copy: "A multi-tenant communication platform spanning email, SMS, WhatsApp, Slack, voice, webhooks and a unified inbox.", icon: MessageSquareMore },
-  { name: "Giga AI", category: "Voice & conversational AI", copy: "Voice-agent and chatbot experiences with live call visibility, product APIs and enterprise communication services.", icon: Bot },
-  { name: "nyr", category: "Local social platform", copy: "Privacy-aware local discovery, trusted circles, requests, rides, events, recommendations and business offers.", icon: MapPin },
-  { name: "OpenGrads", category: "Talent & opportunity network", copy: "A social-first network for students, institutions, employers and recruiters with ONEST and Beckn interoperability.", icon: GraduationCap },
-  { name: "GigaHR / MyNextCV", category: "HR & recruitment intelligence", copy: "Permission-aware HR journeys and recruitment intelligence built for governed, configurable SaaS delivery.", icon: Building2 },
-  { name: "Swappy", category: "Exchange commerce", copy: "A provider-governed reservation and entitlement exchange engine for ticketed experiences and multi-party transactions.", icon: RefreshCw },
-  { name: "OpenFace", category: "Social identity infrastructure", copy: "Headless identity, credibility, audience and engagement capabilities for portable social experiences.", icon: Network },
+  { name: "GigaLibs", category: "Enterprise operations SaaS", copy: "A modular suite for assets, workforce, commerce, finance and governed business operations.", icon: Blocks },
+  { name: "GigaCRM", category: "Customer relationships", copy: "Lead and deal workspaces, sales activity, communication context and adaptable pipelines.", icon: BriefcaseBusiness },
+  { name: "TextFly", category: "Omnichannel communications", copy: "Multi-tenant platform spanning email, SMS, WhatsApp, Slack, voice, webhooks and a unified inbox.", icon: MessageSquareMore },
+  { name: "Giga AI", category: "Voice & conversational AI", copy: "Voice-agent and chatbot experiences with live call visibility, product APIs and communication services.", icon: Bot },
+  { name: "nyr", category: "Local social platform", copy: "Privacy-aware local discovery, trusted circles, requests, rides, events and recommendations.", icon: MapPin },
+  { name: "OpenGrads", category: "Talent & opportunity network", copy: "Social-first network for students, institutions, employers and recruiters with ONEST interoperability.", icon: GraduationCap },
+  { name: "GigaHR / MyNextCV", category: "HR & recruitment intelligence", copy: "Permission-aware HR journeys and recruitment intelligence for governed SaaS delivery.", icon: Building2 },
+  { name: "Swappy", category: "Exchange commerce", copy: "Provider-governed reservation and entitlement exchange engine for ticketed experiences.", icon: RefreshCw },
+  { name: "OpenFace", category: "Social identity infrastructure", copy: "Headless identity, credibility, audience and engagement for portable social experiences.", icon: Network },
 ];
 
-const portfolioLayers = [
-  {
-    number: "01",
-    label: "Technology capabilities",
-    title: "How we engineer",
-    copy: "Web, native mobile, cloud services, data, integration, security, testing and delivery disciplines.",
-    icon: Code2,
-  },
-  {
-    number: "02",
-    label: "Business modules",
-    title: "What businesses operate",
-    copy: "Maintenance, workforce, inventory, procurement, orders, finance, analytics and communications.",
-    icon: Blocks,
-  },
-  {
-    number: "03",
-    label: "Industry solutions",
-    title: "Where the work happens",
-    copy: "Domain workflows for manufacturing, entertainment, sports, mobility, healthcare and other industries.",
-    icon: Building2,
-  },
-  {
-    number: "04",
-    label: "Named products",
-    title: "What customers adopt",
-    copy: "GigaLibs, TextFly, Swappy, GigaCRM, Giga AI and the wider Gigasys product portfolio.",
-    icon: Sparkles,
-  },
+const industries = [
+  { icon: Factory, label: "Manufacturing" },
+  { icon: Gauge, label: "Energy & Utilities" },
+  { icon: HardHat, label: "Construction & EPC" },
+  { icon: HeartPulse, label: "Healthcare" },
+  { icon: Globe2, label: "Government & Public" },
+  { icon: TrainFront, label: "Transport & Logistics" },
+  { icon: Trophy, label: "Sports & Entertainment" },
+  { icon: Ticket, label: "Events & Venues" },
+  { icon: Store, label: "Retail & Commerce" },
+  { icon: ScanLine, label: "Field Services" },
+  { icon: Cloud, label: "Technology" },
+  { icon: Activity, label: "Facilities Management" },
 ];
 
-const industryDomains = [
-  {
-    name: "Industrial Manufacturing",
-    icon: Factory,
-    copy: "Asset reliability, plant workforce, LOTO handovers, MRO materials, production support and operational analytics.",
-    capabilities: ["CMMS / EAM", "PLANT WORKFORCE", "MRO"],
-  },
-  {
-    name: "Entertainment & Live Events",
-    icon: Ticket,
-    copy: "Event crewing, call sheets, venue operations, rigging safety, audience communications and ticketed experiences.",
-    capabilities: ["CREWING", "VENUE OPS", "TICKETING"],
-  },
-  {
-    name: "Sports & Venues",
-    icon: Trophy,
-    copy: "Stadium staffing, event operations, seat and entitlement context, attendee journeys and provider-governed exchanges.",
-    capabilities: ["STADIUM OPS", "FAN JOURNEYS", "EXCHANGE"],
-  },
-  {
-    name: "Cinema, Media & Ticketing",
-    icon: Film,
-    copy: "Show and venue context, assigned-seat experiences, participant verification, messaging and safe transaction recovery.",
-    capabilities: ["SHOWS", "SEATS", "ENGAGEMENT"],
-  },
-  {
-    name: "Travel & Mobility",
-    icon: TrainFront,
-    copy: "Provider-aware journeys for buses and flights, time-bound reservations, assignments, operations and customer communication.",
-    capabilities: ["BUS", "AIR", "RESERVATIONS"],
-  },
-  {
-    name: "Pharma & Life Sciences",
-    icon: FlaskConical,
-    copy: "Cleanroom access, aseptic protocol, qualification controls, environmental readings and auditable sign-offs.",
-    capabilities: ["GMP", "CLEANROOM", "COMPLIANCE"],
-  },
-  {
-    name: "Construction & Infrastructure",
-    icon: HardHat,
-    copy: "Site mobilization, pre-start controls, qualified crews, equipment, inspections, documents and field evidence.",
-    capabilities: ["SITE OPS", "SAFETY", "FIELD WORK"],
-  },
-  {
-    name: "Agriculture & Field Operations",
-    icon: Sprout,
-    copy: "Distributed workforce coordination, harvest and yield capture, place-aware tasks and low-connectivity mobile work.",
-    capabilities: ["FIELD CREWS", "YIELD", "MOBILE"],
-  },
-  {
-    name: "Healthcare & Clinical Operations",
-    icon: HeartPulse,
-    copy: "Scoped clinical field workflows, workforce qualifications, evidence capture, approvals and compliance records.",
-    capabilities: ["CLINICAL OPS", "CREDENTIALS", "AUDIT"],
-  },
-  {
-    name: "Education & Talent",
-    icon: GraduationCap,
-    copy: "Student, institution, employer and recruiter experiences with verified credentials and opportunity discovery.",
-    capabilities: ["TALENT", "CREDENTIALS", "ONEST"],
-  },
-  {
-    name: "Retail & Ecommerce",
-    icon: Store,
-    copy: "Product catalogues, price lists, inventory, procurement, orders, fulfillment, returns and customer engagement.",
-    capabilities: ["CATALOGUE", "ORDER TO CASH", "FULFILLMENT"],
-  },
-  {
-    name: "Professional & Field Services",
-    icon: BriefcaseBusiness,
-    copy: "Customer relationships, resource scheduling, assignments, time, expenses, approvals and service communication.",
-    capabilities: ["CRM", "SCHEDULING", "SERVICE OPS"],
-  },
+const techGroups = [
+  { label: "Web", items: ["Next.js", "React", "TypeScript", "Tailwind", "ECharts"] },
+  { label: "Mobile", items: ["React Native", "Expo", "Expo Router", "TanStack Query", "SecureStore"] },
+  { label: "Services", items: ["Node.js", "Fastify", "PostgreSQL", "OpenAPI", "AsyncAPI"] },
+  { label: "Quality", items: ["Playwright", "Vitest", "Contract tests", "Audit trails", "CI gates"] },
 ];
 
-function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const reduceMotion = useReducedMotion();
+/* ─────────────────── Suite Card ─────────────────── */
+function SuiteCard({ suite, index }: { suite: Suite; index: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const Icon = suite.icon;
+
   return (
-    <motion.div
-      className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
+    <FadeUp delay={index * 0.05}>
+      <motion.div
+        className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 cursor-pointer"
+        whileHover={{ borderColor: "rgba(255,114,0,0.25)", backgroundColor: "rgba(255,255,255,0.05)" }}
+        transition={{ duration: 0.2 }}
+        onClick={() => setExpanded(!expanded)}
+      >
+        {/* Hover glow */}
+        <div className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ background: "radial-gradient(400px circle at var(--x,50%) var(--y,50%), rgba(255,114,0,0.06), transparent)" }} />
+
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05]">
+              <Icon className="h-5 w-5 text-orange-400" />
+            </div>
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/30">
+                {suite.number} — {suite.kicker}
+              </div>
+              <h3 className="mt-1 text-[15px] font-semibold text-white/90 leading-snug">{suite.label}</h3>
+            </div>
+          </div>
+          <ChevronRight
+            className={`h-4 w-4 shrink-0 text-white/30 transition-transform duration-300 ${expanded ? "rotate-90 text-orange-400" : ""}`}
+          />
+        </div>
+
+        <p className="mt-4 text-[13px] leading-relaxed text-white/45">{suite.description}</p>
+
+        <AnimatePresence>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="mt-5 border-t border-white/[0.06] pt-5">
+                <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-400/70">Outcomes</div>
+                <ul className="space-y-1.5">
+                  {suite.outcomes.map((o) => (
+                    <li key={o} className="flex items-start gap-2 text-[12px] text-white/50">
+                      <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-orange-500" />
+                      {o}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-400/70">Modules</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {suite.modules.map((m) => (
+                    <span key={m} className="rounded-md border border-white/[0.07] bg-white/[0.04] px-2 py-0.5 text-[11px] text-white/40">
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </FadeUp>
   );
 }
 
+/* ─────────────────── Bento Product Card ─────────────────── */
+function ProductCard({
+  product,
+  index,
+  large,
+}: {
+  product: (typeof portfolioProducts)[0];
+  index: number;
+  large?: boolean;
+}) {
+  const Icon = product.icon;
+  return (
+    <FadeUp delay={index * 0.06} className={large ? "col-span-2 row-span-1" : ""}>
+      <motion.div
+        className="group relative h-full min-h-[180px] overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6"
+        whileHover={{ borderColor: "rgba(255,114,0,0.2)", backgroundColor: "rgba(255,255,255,0.05)" }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05]">
+          <Icon className="h-5 w-5 text-orange-400" />
+        </div>
+        <div className="mt-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/30">{product.category}</div>
+          <h3 className="mt-1 text-base font-semibold text-white/90">{product.name}</h3>
+          <p className="mt-2 text-[13px] leading-relaxed text-white/40">{product.copy}</p>
+        </div>
+      </motion.div>
+    </FadeUp>
+  );
+}
+
+/* ─────────────────── Section label ─────────────────── */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/5 px-4 py-1.5">
+      <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
+      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-400/80">{children}</span>
+    </div>
+  );
+}
+
+/* ─────────────────── Main Page ─────────────────── */
 export default function Home() {
-  const [activeHero, setActiveHero] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(true);
-  const [activeSuite, setActiveSuite] = useState<SuiteId>("maintenance");
-  const reduceMotion = useReducedMotion();
-
+  // Mouse-follow glow for cards
   useEffect(() => {
-    if (!autoPlay || reduceMotion) return;
-    const timer = window.setInterval(() => {
-      setActiveHero((current) => (current + 1) % heroSlides.length);
-    }, 7000);
-    return () => window.clearInterval(timer);
-  }, [autoPlay, reduceMotion]);
-
-  const selectedSuite = suites.find((suite) => suite.id === activeSuite)!;
-  const SelectedSuiteIcon = selectedSuite.icon;
-  const slide = heroSlides[activeHero];
+    const handleMove = (e: MouseEvent) => {
+      document.querySelectorAll<HTMLElement>(".group").forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        el.style.setProperty("--x", `${e.clientX - rect.left}px`);
+        el.style.setProperty("--y", `${e.clientY - rect.top}px`);
+      });
+    };
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
 
   return (
     <Layout>
-      <section className="relative min-h-[760px] overflow-hidden bg-[#11110f] text-white lg:min-h-[calc(100vh-72px)]" aria-roledescription="carousel" aria-label="Gigasys capabilities">
-        <AnimatePresence mode="sync">
-          <motion.img
-            key={slide.image}
-            src={slide.image}
-            alt={slide.alt}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-            initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ opacity: { duration: 0.8 }, scale: { duration: 7.5, ease: "linear" } }}
-          />
-        </AnimatePresence>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,9,0.99)_0%,rgba(10,10,9,0.92)_42%,rgba(10,10,9,0.48)_72%,rgba(10,10,9,0.25)_100%)]" />
-        <div className="absolute inset-0 industrial-grid opacity-25" />
-        <div className="hero-signal absolute right-[7%] top-[11%] hidden h-40 w-40 border-r border-t border-orange-400/75 lg:block" />
+      {/* ── HERO ── */}
+      <section className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden">
+        <MeshGradient />
 
-        <div className="relative mx-auto flex min-h-[760px] max-w-[1440px] flex-col px-5 pb-8 pt-14 sm:px-8 lg:min-h-[calc(100vh-72px)] lg:px-12 lg:pt-20">
-          <div className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-white/60 sm:text-xs">
-            <span className="h-px w-10 bg-[#ff7200]" /> Gigasys Technologies / Enterprise software products
-          </div>
+        <div className="relative z-10 mx-auto max-w-5xl px-5 py-32 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <SectionLabel>Enterprise Connected Systems</SectionLabel>
+          </motion.div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeHero}
-              className="max-w-5xl"
-              initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          <motion.h1
+            className="mt-8 text-[clamp(2.8rem,8vw,7rem)] font-bold leading-[1.03] tracking-[-0.04em] text-white"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          >
+            Run the work.{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #FF7200 0%, #FF8A2B 50%, #FFB347 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
             >
-              <div className="mb-5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[#ff8a2b]">{slide.eyebrow}</div>
-              <h1 className="max-w-5xl text-[clamp(3rem,6.4vw,6.8rem)] font-semibold leading-[0.94] tracking-[-0.055em]">{slide.title}</h1>
-              <p className="mt-7 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{slide.copy}</p>
-            </motion.div>
-          </AnimatePresence>
+              Connect
+            </span>
+            {" "}the business.
+          </motion.h1>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#modules" className="inline-flex min-h-[52px] items-center gap-3 bg-[#ff7200] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-[#e96500] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-              Explore capabilities <ArrowRight className="h-4 w-4" />
-            </a>
-            <Link href="/contact" className="inline-flex min-h-[52px] items-center gap-3 border border-white/35 bg-black/20 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black">
+          <motion.p
+            className="mx-auto mt-7 max-w-2xl text-[clamp(1rem,2vw,1.3rem)] leading-relaxed text-white/50"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          >
+            A modular operating platform for assets, workforce, supply chain, finance,
+            data and field execution — delivered across web and native mobile.
+          </motion.p>
+
+          <motion.div
+            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+          >
+            <a
+              href="mailto:connect@gigasystech.com"
+              className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-7 py-3.5 text-sm font-semibold text-white shadow-[0_0_40px_rgba(255,114,0,0.35)] transition hover:bg-orange-400 hover:shadow-[0_0_60px_rgba(255,114,0,0.5)]"
+            >
               Talk to our team
-            </Link>
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href="#modules"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-7 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition hover:border-white/20 hover:bg-white/[0.08]"
+            >
+              Explore modules
+            </a>
+          </motion.div>
+
+          {/* Stats strip */}
+          <motion.div
+            className="mt-20 flex flex-wrap items-center justify-center gap-x-14 gap-y-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.6 }}
+          >
+            {[
+              { value: "11+", label: "Business modules" },
+              { value: "9", label: "Product lines" },
+              { value: "100%", label: "Offline-first mobile" },
+              { value: "Multi-tenant", label: "Enterprise SaaS" },
+            ].map((s) => (
+              <div key={s.label} className="text-center">
+                <div className="text-2xl font-bold text-white">{s.value}</div>
+                <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-white/30">{s.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="h-8 w-5 rounded-full border border-white/20 p-1">
+            <div className="h-1.5 w-1.5 rounded-full bg-white/40 mx-auto animate-[bounce_2s_infinite]" />
           </div>
+        </motion.div>
+      </section>
 
-          <div className="mt-auto grid gap-7 pt-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div className="grid gap-px border border-white/20 bg-white/20 sm:grid-cols-3 lg:max-w-3xl">
-              {[["20+", "Modular capabilities"], ["Web + Native", "Product surfaces"], ["Cloud + Customer", "Delivery options"]].map(([value, label]) => (
-                <div key={label} className="bg-black/65 px-5 py-4 backdrop-blur-md">
-                  <div className="font-mono text-sm font-semibold text-[#ff8a2b]">{value}</div>
-                  <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55">{label}</div>
-                </div>
-              ))}
-            </div>
+      {/* ── TICKER ── */}
+      <Ticker />
 
-            <div className="flex items-center gap-2" aria-label="Carousel controls">
-              <button type="button" onClick={() => setActiveHero((current) => (current - 1 + heroSlides.length) % heroSlides.length)} className="grid h-12 w-12 place-items-center border border-white/30 bg-black/35 text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black" aria-label="Previous slide"><ArrowLeft className="h-4 w-4" /></button>
-              <button type="button" onClick={() => setAutoPlay((playing) => !playing)} className="grid h-12 w-12 place-items-center border border-white/30 bg-black/35 text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black" aria-label={autoPlay ? "Pause carousel" : "Play carousel"}>
-                {autoPlay ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </button>
-              <button type="button" onClick={() => setActiveHero((current) => (current + 1) % heroSlides.length)} className="grid h-12 w-12 place-items-center border border-white/30 bg-black/35 text-white backdrop-blur transition hover:border-white hover:bg-white hover:text-black" aria-label="Next slide"><ArrowRight className="h-4 w-4" /></button>
-            </div>
-          </div>
+      {/* ── PRODUCTS BENTO ── */}
+      <section id="products" className="bg-[#050505] py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <FadeUp>
+            <SectionLabel>Product portfolio</SectionLabel>
+            <h2 className="mt-6 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight tracking-[-0.04em] text-white">
+              Nine products.{" "}
+              <span className="text-white/40">One engineering team.</span>
+            </h2>
+            <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/40">
+              From enterprise ERP to social platforms, every Gigasys product shares a common
+              design language, identity system and technology foundation.
+            </p>
+          </FadeUp>
 
-          <div className="mt-6 grid grid-cols-4 gap-2" role="tablist" aria-label="Select hero slide">
-            {heroSlides.map((item, index) => (
-              <button key={item.marker} type="button" onClick={() => setActiveHero(index)} className="group text-left" role="tab" aria-selected={activeHero === index} aria-label={`Show slide ${index + 1}: ${item.eyebrow}`}>
-                <span className="block h-[2px] overflow-hidden bg-white/20">
-                  {activeHero === index && (
-                    <motion.span key={`${activeHero}-${autoPlay}`} className="block h-full bg-[#ff7200]" initial={{ width: "0%" }} animate={{ width: autoPlay && !reduceMotion ? "100%" : "18%" }} transition={{ duration: autoPlay && !reduceMotion ? 7 : 0.25, ease: "linear" }} />
-                  )}
-                </span>
-                <span className={`mt-2 hidden font-mono text-[9px] tracking-[0.12em] sm:block ${activeHero === index ? "text-white" : "text-white/35"}`}>{item.marker}</span>
-              </button>
+          <div className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {portfolioProducts.map((p, i) => (
+              <ProductCard key={p.name} product={p} index={i} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="overflow-hidden border-b border-black/10 bg-[#ff7200] text-white" aria-label="Capability summary">
-        <div className="capability-marquee">
-          <div className="capability-marquee__track">
-            {[0, 1].map((copy) => (
-              <div key={copy} className="flex shrink-0" aria-hidden={copy === 1}>
-                {["Asset reliability", "Workforce operations", "Supply chain", "Finance", "Native mobile", "Analytics", "AI products", "Social platforms"].map((item, index) => (
-                  <div key={`${copy}-${item}`} className="flex items-center gap-4 border-r border-white/25 px-6 py-5 lg:px-8">
-                    <span className="font-mono text-[10px] text-white/65">0{index + 1}</span>
-                    <span className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.1em]">{item}</span>
+      {/* ── BUSINESS MODULES ── */}
+      <section id="modules" className="relative bg-[#050505] py-32">
+        {/* Section background glow */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-1/4 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full opacity-[0.06]"
+            style={{ background: "radial-gradient(circle, #FF7200, transparent 70%)", filter: "blur(100px)" }} />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <FadeUp>
+            <SectionLabel>Business modules</SectionLabel>
+            <h2 className="mt-6 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight tracking-[-0.04em] text-white">
+              Every operating domain,{" "}
+              <span className="text-white/40">modular by design.</span>
+            </h2>
+            <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/40">
+              GigaLibs is built as 11 independently deployable, deeply connected business
+              modules. Use what you need. Expand when you are ready.
+            </p>
+          </FadeUp>
+
+          <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {suites.map((suite, i) => (
+              <SuiteCard key={suite.id} suite={suite} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── MOBILE CAPABILITY ── */}
+      <section className="bg-[#050505] py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            <FadeUp>
+              <SectionLabel>Native mobile</SectionLabel>
+              <h2 className="mt-6 text-[clamp(2rem,5vw,3rem)] font-bold leading-tight tracking-[-0.04em] text-white">
+                Built for the field.{" "}
+                <br />
+                <span className="text-white/40">Works without signal.</span>
+              </h2>
+              <p className="mt-5 text-[15px] leading-relaxed text-white/40">
+                GigaLibs ships a React Native iOS + Android application with offline-first
+                architecture. Field staff execute, capture evidence and sign without needing
+                a network connection. Sync happens automatically when connectivity returns.
+              </p>
+              <div className="mt-8 grid grid-cols-2 gap-3">
+                {[
+                  "Today / My Work",
+                  "Workforce",
+                  "CMMS field execution",
+                  "Places & Maps",
+                  "Actions & Approvals",
+                  "Documents & Scanner",
+                  "TextFly conversations",
+                  "Analytics",
+                  "Generated Reports",
+                  "Spend & Expenses",
+                  "E-signature",
+                  "Profile & Security",
+                ].map((cap) => (
+                  <div key={cap} className="flex items-center gap-2 text-[13px] text-white/50">
+                    <span className="h-1 w-1 rounded-full bg-orange-500" />
+                    {cap}
                   </div>
                 ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </FadeUp>
 
-      <section className="bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[0.72fr_1fr] lg:items-end">
-            <div>
-              <div className="section-label">Enterprise portfolio model</div>
-              <h2 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-6xl">
-                Four distinct layers. One coherent technology company.
-              </h2>
-            </div>
-            <p className="max-w-2xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">
-              Technologies describe how we build. Business modules describe reusable capabilities.
-              Industries apply those capabilities to domain workflows. Products package them into experiences customers can adopt.
-            </p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-px border border-black/10 bg-black/10 md:grid-cols-2 xl:grid-cols-4">
-            {portfolioLayers.map((layer, index) => {
-              const Icon = layer.icon;
-              return (
-                <Reveal key={layer.number} className="group bg-[#f8f7f3] p-7 transition duration-300 hover:bg-[#151513] hover:text-white sm:p-8" delay={index * 0.06}>
-                  <div className="flex items-center justify-between">
-                    <span className="grid h-11 w-11 place-items-center bg-[#ff7200] text-white"><Icon className="h-5 w-5" /></span>
-                    <span className="font-mono text-[10px] text-black/35 group-hover:text-white/35">{layer.number}</span>
-                  </div>
-                  <div className="mt-14 font-mono text-[9px] uppercase tracking-[0.16em] text-[#d95f00] group-hover:text-[#ff8a2b]">{layer.label}</div>
-                  <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em]">{layer.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-black/55 group-hover:text-white/55">{layer.copy}</p>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="modules" className="scroll-mt-20 bg-[#f3f2ee] py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 border-b border-black/10 pb-10 lg:grid-cols-[1fr_0.62fr] lg:items-end">
-            <div>
-              <div className="section-label">GigaLibs business modules</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-7xl">Eleven capability families. One connected operating platform.</h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">Explore the business capabilities already represented across the GigaLibs web, service and mobile codebases. Every family includes its operating modules, intended outcomes and measures.</p>
-          </Reveal>
-
-          <div className="mt-10 grid gap-8 xl:grid-cols-[410px_minmax(0,1fr)]">
-            <Reveal className="self-start border-y border-black/10">
-              {suites.map((suite) => {
-                const Icon = suite.icon;
-                const isActive = activeSuite === suite.id;
-                return (
-                  <button key={suite.id} type="button" onClick={() => setActiveSuite(suite.id)} className={`group flex w-full items-center gap-3 border-b border-black/10 px-1 py-3.5 text-left transition last:border-b-0 ${isActive ? "text-[#e76500]" : "text-black/55 hover:text-black"}`} aria-pressed={isActive}>
-                    <span className="w-7 font-mono text-[10px]">{suite.number}</span>
-                    <span className={`grid h-9 w-9 place-items-center border transition ${isActive ? "border-[#ff7200] bg-[#ff7200] text-white" : "border-black/10 bg-white text-black/65 group-hover:border-black/35"}`}><Icon className="h-4 w-4" /></span>
-                    <span className="flex-1 text-[13px] font-semibold tracking-[-0.01em] sm:text-sm">{suite.label}</span>
-                    <ChevronRight className={`h-4 w-4 transition ${isActive ? "translate-x-1" : ""}`} />
-                  </button>
-                );
-              })}
-            </Reveal>
-
-            <AnimatePresence mode="wait">
-              <motion.article key={selectedSuite.id} initial={reduceMotion ? false : { opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }} className="self-start overflow-hidden border border-black/10 bg-white shadow-[0_24px_70px_rgba(20,20,18,0.08)]">
-                <div className="grid gap-8 border-b border-black/10 p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:p-11">
-                  <div>
-                    <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#e76500]">{selectedSuite.kicker}</div>
-                    <h3 className="mt-4 max-w-3xl text-3xl font-semibold leading-[1.04] tracking-[-0.04em] text-[#161614] sm:text-4xl lg:text-5xl">{selectedSuite.title}</h3>
-                    <p className="mt-5 max-w-3xl text-base leading-7 text-black/60">{selectedSuite.description}</p>
-                  </div>
-                  <div className="grid h-20 w-20 place-items-center bg-[#151513] text-[#ff7a12]"><SelectedSuiteIcon className="h-8 w-8" /></div>
-                </div>
-
-                <div className="p-6 sm:p-9 lg:p-10">
-                  <div className="flex items-center justify-between gap-5">
-                    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40">Included modules</div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-black/30">{String(selectedSuite.modules.length).padStart(2, "0")} capabilities</div>
-                  </div>
-                  <div className="mt-5 grid gap-x-7 sm:grid-cols-2 lg:grid-cols-3">
-                    {selectedSuite.modules.map((item) => (
-                      <div key={item} className="flex gap-3 border-t border-black/10 py-3.5 text-sm leading-5 text-black/70"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#ff7200]" />{item}</div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-t border-black/10 bg-[#f3f2ee]">
-                  <div className="grid gap-7 p-6 sm:p-9 lg:grid-cols-[minmax(0,1fr)_300px] lg:p-10">
-                    <div>
-                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e76500]">Business outcome</div>
-                      <p className="mt-4 max-w-3xl text-xl font-medium leading-8 tracking-[-0.02em] text-[#242421]">{selectedSuite.outcome}</p>
-                    </div>
-                    <div className="border-l-2 border-[#ff7200] bg-white px-5 py-4">
-                      <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.18em] text-black/40"><Gauge className="h-3.5 w-3.5 text-[#e76500]" />Measure</div>
-                      <div className="mt-2 text-xs font-semibold leading-5 text-black/70">{selectedSuite.measure}</div>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-px border-y border-black/10 bg-black/10 sm:grid-cols-3">
-                    {selectedSuite.outcomes.map((item, index) => (
-                      <div key={item} className="flex gap-3 bg-[#f8f7f3] p-5 text-sm font-medium leading-5 text-black/65">
-                        <span className="font-mono text-[9px] text-[#e76500]">{String(index + 1).padStart(2, "0")}</span>
-                        <span>{item}</span>
+            <FadeIn delay={0.15}>
+              <div className="relative mx-auto max-w-sm">
+                {/* Phone mockup */}
+                <div className="relative rounded-[2.5rem] border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-px shadow-[0_0_80px_rgba(255,114,0,0.12)]">
+                  <div className="rounded-[2.4rem] overflow-hidden bg-[#0a0a0a]">
+                    <div className="bg-gradient-to-b from-orange-500/20 to-transparent px-6 py-8">
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-orange-400/60 mb-2">GigaLibs Mobile</div>
+                      <div className="text-lg font-semibold text-white">Today — 12 tasks</div>
+                      <div className="mt-4 space-y-2">
+                        {["PM-0824 · Filter inspection", "WO-1103 · Pump seal replacement", "WO-1092 · Visual inspection"].map((t, i) => (
+                          <div key={i} className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.04] px-4 py-3">
+                            <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-orange-400" : i === 1 ? "bg-yellow-400" : "bg-green-400"}`} />
+                            <span className="text-[12px] text-white/60">{t}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-9 lg:px-10">
-                    <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-black/35"><CircleDot className="h-3.5 w-3.5 text-[#ff7200]" />Outcome-led module design</div>
-                    <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-bold text-[#d95f00] hover:text-black">Discuss this suite <ArrowRight className="h-4 w-4" /></Link>
+                    </div>
+                    <div className="px-6 pb-6">
+                      <div className="mb-3 font-mono text-[10px] uppercase tracking-widest text-white/20">Recent Activity</div>
+                      <div className="space-y-2">
+                        {["Asset scan verified · 09:41", "Labour logged · 09:18", "Photo evidence uploaded · 08:54"].map((a, i) => (
+                          <div key={i} className="text-[11px] text-white/30">{a}</div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </motion.article>
-            </AnimatePresence>
+                {/* Glow */}
+                <div className="absolute inset-0 -z-10 rounded-[2.5rem] blur-3xl opacity-20"
+                  style={{ background: "radial-gradient(circle, #FF7200, transparent 60%)" }} />
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      <section id="mobile" className="scroll-mt-20 overflow-hidden bg-[#151513] py-20 text-white md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[1fr_0.65fr] lg:items-end">
-            <div>
-              <div className="section-label section-label--dark">Web + native mobile</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] sm:text-5xl lg:text-7xl">The full operating environment—from control room to point of work.</h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-white/60 lg:justify-self-end">Complex planning and administration stay powerful on web. Bounded, task-first journeys move securely to the field on iOS and Android.</p>
-          </Reveal>
+      {/* ── INDUSTRIES ── */}
+      <section id="industries" className="bg-[#050505] py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <FadeUp className="text-center">
+            <SectionLabel>Industries</SectionLabel>
+            <h2 className="mt-6 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight tracking-[-0.04em] text-white">
+              Operational software for{" "}
+              <span className="text-white/40">the physical world.</span>
+            </h2>
+          </FadeUp>
 
-          <div className="mt-14 grid gap-px border border-white/15 bg-white/15 lg:grid-cols-2">
-            <Reveal className="relative overflow-hidden bg-[#1a1a18] p-7 sm:p-10" delay={0.05}>
-              <div className="absolute right-0 top-0 h-36 w-36 border-b border-l border-[#ff7200]/35" />
-              <div className="flex items-center justify-between gap-4"><div className="grid h-12 w-12 place-items-center bg-[#ff7200] text-white"><Globe2 className="h-5 w-5" /></div><span className="font-mono text-[10px] tracking-[0.18em] text-white/35">WEB OPERATIONS</span></div>
-              <h3 className="mt-8 text-3xl font-semibold tracking-[-0.035em]">Plan, configure and govern.</h3>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-white/55">Role-aware workspaces for executives, planners, supervisors, administrators and specialists.</p>
-              <div className="mt-8 grid gap-x-7 sm:grid-cols-2">
-                {webCapabilities.map((item) => <div key={item} className="flex gap-3 border-t border-white/10 py-4 text-sm text-white/70"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-[#ff7200]" />{item}</div>)}
-              </div>
-            </Reveal>
-
-            <Reveal className="relative overflow-hidden bg-[#10100f] p-7 sm:p-10" delay={0.12}>
-              <div className="absolute inset-0 orange-radial opacity-30" />
-              <div className="relative">
-                <div className="flex items-center justify-between gap-4"><div className="grid h-12 w-12 place-items-center border border-[#ff7200] text-[#ff8a2b]"><Smartphone className="h-5 w-5" /></div><span className="font-mono text-[10px] tracking-[0.18em] text-white/35">IOS + ANDROID</span></div>
-                <h3 className="mt-8 text-3xl font-semibold tracking-[-0.035em]">Act, capture and decide.</h3>
-                <p className="mt-4 max-w-xl text-sm leading-6 text-white/55">A tenant-aware native shell with secure sessions, scoped capability delivery and field-focused journeys.</p>
-                <div className="mt-8 grid grid-cols-2 gap-px bg-white/10">
-                  {mobileCapabilities.map((item, index) => <div key={item} className="bg-[#141412] px-4 py-4 text-xs font-medium text-white/70"><span className="mr-2 font-mono text-[9px] text-[#ff7a12]">{String(index + 1).padStart(2, "0")}</span>{item}</div>)}
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal className="mt-8 grid gap-px border border-white/15 bg-white/15 sm:grid-cols-2 lg:grid-cols-4" delay={0.16}>
-            {[
-              [ShieldCheck, "Scoped by design", "Tenant, permission, organization and place context determine every visible capability."],
-              [RefreshCw, "Resilient execution", "Bounded requests, explicit conflicts and recoverable work protect field continuity."],
-              [ScanLine, "Evidence at source", "Forms, documents, scanner and signatures capture proof inside the owning workflow."],
-              [Activity, "Outcome telemetry", "Measure delay, rework, completion and decision cycles—not just screen usage."],
-            ].map(([Icon, title, copy]) => {
-              const ItemIcon = Icon as LucideIcon;
-              return <article key={title as string} className="bg-[#11110f] p-6"><ItemIcon className="h-5 w-5 text-[#ff7200]" /><h3 className="mt-5 text-base font-semibold">{title as string}</h3><p className="mt-2 text-sm leading-6 text-white/50">{copy as string}</p></article>;
-            })}
-          </Reveal>
-        </div>
-      </section>
-
-      <section id="saas" className="scroll-mt-20 bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[0.78fr_1fr] lg:items-end">
-            <div><div className="section-label">Enterprise SaaS</div><h2 className="mt-5 text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-6xl">Modular where it matters. Unified where it counts.</h2></div>
-            <p className="max-w-2xl text-base leading-7 text-black/60 lg:justify-self-end lg:text-lg">GigaLibs is designed as a family of independent operational products, with governed entitlements and consistent experience across the suite.</p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-px border border-black/10 bg-black/10 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              { icon: Blocks, title: "Composable modules", copy: "Adopt focused products by business need without forcing every team into the entire suite.", tag: "MODULAR PRODUCTS" },
-              { icon: ShieldCheck, title: "Tenant governance", copy: "Roles, permissions, organization and spatial scope shape access across applications.", tag: "CONTROLLED ACCESS" },
-              { icon: Cloud, title: "Flexible delivery", copy: "Support for suite, customer-cloud and self-contained delivery patterns where product boundaries allow.", tag: "DEPLOYMENT CHOICE" },
-              { icon: Smartphone, title: "Tenant-ready mobile", copy: "One native product foundation can deliver approved capabilities and tenant-branded profiles.", tag: "MOBILE SAAS" },
-            ].map((item, index) => {
-              const Icon = item.icon;
+          <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {industries.map((ind, i) => {
+              const Icon = ind.icon;
               return (
-                <Reveal key={item.title} className="group bg-[#f8f7f3] p-7 transition duration-300 hover:bg-[#151513] hover:text-white sm:p-8" delay={index * 0.06}>
-                  <div className="flex items-center justify-between"><Icon className="h-6 w-6 text-[#ff7200]" /><span className="font-mono text-[9px] tracking-[0.16em] text-black/35 group-hover:text-white/35">0{index + 1}</span></div>
-                  <h3 className="mt-16 text-2xl font-semibold tracking-[-0.03em]">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-black/55 group-hover:text-white/55">{item.copy}</p>
-                  <div className="mt-8 border-t border-black/10 pt-4 font-mono text-[9px] tracking-[0.15em] text-[#d95f00] group-hover:border-white/10 group-hover:text-[#ff8a2b]">{item.tag}</div>
-                </Reveal>
+                <FadeUp key={ind.label} delay={i * 0.04}>
+                  <motion.div
+                    className="group flex flex-col items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 text-center"
+                    whileHover={{ borderColor: "rgba(255,114,0,0.2)", backgroundColor: "rgba(255,255,255,0.04)" }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <Icon className="h-6 w-6 text-orange-400/70 group-hover:text-orange-400 transition-colors" />
+                    <span className="text-[11px] font-medium text-white/40 group-hover:text-white/60 transition-colors">{ind.label}</span>
+                  </motion.div>
+                </FadeUp>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section id="technologies" className="scroll-mt-20 border-y border-black/10 bg-[#f3f2ee] py-20 md:py-24">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[0.65fr_1fr]">
-            <div><div className="section-label">Technology foundation</div><h2 className="mt-5 max-w-2xl text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl">Modern tools. Production discipline.</h2><p className="mt-5 max-w-xl text-base leading-7 text-black/60">The technologies below come directly from the active GigaLibs web, service and mobile workspaces.</p></div>
-            <div className="grid gap-px border border-black/10 bg-black/10 sm:grid-cols-2">
-              {technologyGroups.map((group) => {
-                const Icon = group.icon;
-                return <article key={group.label} className="bg-white p-6 sm:p-8"><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center bg-[#ff7200] text-white"><Icon className="h-4 w-4" /></span><h3 className="text-base font-semibold">{group.label}</h3></div><div className="mt-6 flex flex-wrap gap-2">{group.technologies.map((technology) => <span key={technology} className="border border-black/10 bg-[#f7f6f2] px-3 py-2 font-mono text-[10px] text-black/60">{technology}</span>)}</div></article>;
-              })}
-            </div>
-          </Reveal>
+      {/* ── TECHNOLOGY ── */}
+      <section id="technologies" className="relative bg-[#050505] py-32">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute right-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full opacity-[0.05]"
+            style={{ background: "radial-gradient(circle, #6366F1, transparent 70%)", filter: "blur(80px)" }} />
         </div>
-      </section>
 
-      <section id="industries" className="scroll-mt-20 overflow-hidden bg-[#151513] py-20 text-white md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 border-b border-white/15 pb-10 lg:grid-cols-[1fr_0.62fr] lg:items-end">
-            <div>
-              <div className="section-label section-label--dark">Industry domains</div>
-              <h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] sm:text-5xl lg:text-7xl">
-                Domain-specific workflows—not generic software with a new label.
+        <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-start">
+            <FadeUp>
+              <SectionLabel>Technology foundation</SectionLabel>
+              <h2 className="mt-6 text-[clamp(2rem,5vw,3rem)] font-bold leading-tight tracking-[-0.04em] text-white">
+                Modern stack.{" "}
+                <span className="text-white/40">Production-grade delivery.</span>
               </h2>
-            </div>
-            <p className="max-w-xl text-base leading-7 text-white/55 lg:justify-self-end">
-              Reusable Gigasys modules are configured around the vocabulary, roles,
-              safety controls, evidence and business outcomes of each industry.
+              <p className="mt-5 text-[15px] leading-relaxed text-white/40">
+                Every module is built on the same React, TypeScript, Node.js and PostgreSQL
+                foundation with Playwright end-to-end journey coverage and contract-tested APIs.
+              </p>
+
+              <div className="mt-10 grid grid-cols-2 gap-4">
+                {techGroups.map((group, i) => (
+                  <FadeUp key={group.label} delay={i * 0.08}>
+                    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
+                      <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-400/60">{group.label}</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {group.items.map((tech) => (
+                          <span key={tech} className="rounded-md border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[11px] text-white/40">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </FadeUp>
+                ))}
+              </div>
+            </FadeUp>
+
+            <FadeIn delay={0.2}>
+              <div className="space-y-3">
+                {[
+                  { label: "Multi-tenant architecture", desc: "Workspace isolation, RBAC, org hierarchy and per-tenant configuration from day one." },
+                  { label: "Offline-first mobile", desc: "React Native with local SQLite sync — field execution works without connectivity." },
+                  { label: "Event-driven integrations", desc: "Webhook ingestion, HMAC verification, idempotency and workflow dispatch built in." },
+                  { label: "Double-entry financial ledger", desc: "Immutable journal entries, subledger ingestion and period close from the core." },
+                  { label: "Journey-tested coverage", desc: "Playwright E2E journeys cover the full workflow end-to-end on every deploy." },
+                ].map((item, i) => (
+                  <FadeUp key={item.label} delay={i * 0.08}>
+                    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-orange-500" />
+                        <div>
+                          <div className="text-[14px] font-semibold text-white/80">{item.label}</div>
+                          <div className="mt-1 text-[13px] leading-relaxed text-white/40">{item.desc}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </FadeUp>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* ── COMPANY ── */}
+      <section id="company" className="bg-[#050505] py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-start">
+            <FadeUp>
+              <SectionLabel>About Gigasys</SectionLabel>
+              <h2 className="mt-6 text-[clamp(2rem,5vw,3rem)] font-bold leading-tight tracking-[-0.04em] text-white">
+                A product company building the operating infrastructure{" "}
+                <span className="text-white/40">for complex industries.</span>
+              </h2>
+              <p className="mt-5 text-[15px] leading-relaxed text-white/40">
+                Gigasys is a software company focused on enterprise connected systems and
+                field infrastructure. We build GigaLibs — a modular SaaS platform for
+                operations — and a portfolio of digital products spanning communications,
+                commerce, social and AI.
+              </p>
+              <p className="mt-4 text-[15px] leading-relaxed text-white/40">
+                We design for organizations operating at scale across physical facilities,
+                distributed workforces and complex supply chains. Our platform ships as
+                multi-tenant SaaS with native mobile execution.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="mailto:connect@gigasystech.com"
+                  className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-400">
+                  connect@gigasystech.com
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <a href="/about"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/70 transition hover:border-white/20">
+                  About us
+                </a>
+              </div>
+            </FadeUp>
+
+            <FadeIn delay={0.15}>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { title: "Enterprise SaaS", desc: "Multi-tenant, role-governed, configuration-first architecture." },
+                  { title: "Native Mobile", desc: "iOS and Android applications built with React Native and offline-first sync." },
+                  { title: "Field Operations", desc: "Designed for workers in the field, not just managers at a desk." },
+                  { title: "Open Integration", desc: "Data contracts, connectors and event dispatch to your existing systems." },
+                  { title: "India + Global", desc: "Built for global compliance and localization from day one." },
+                  { title: "Product Thinking", desc: "Domain-focused products with clear identities, not feature factories." },
+                ].map((card, i) => (
+                  <FadeUp key={card.title} delay={i * 0.06}>
+                    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5">
+                      <div className="text-[14px] font-semibold text-white/80">{card.title}</div>
+                      <div className="mt-2 text-[12px] leading-relaxed text-white/35">{card.desc}</div>
+                    </div>
+                  </FadeUp>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ── */}
+      <section className="relative overflow-hidden bg-[#050505] py-32">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(255,114,0,0.14) 0%, transparent 65%)", filter: "blur(80px)" }} />
+        </div>
+        <div className="relative mx-auto max-w-3xl px-5 text-center">
+          <FadeUp>
+            <SectionLabel>Get started</SectionLabel>
+            <h2 className="mt-6 text-[clamp(2.4rem,6vw,4.5rem)] font-bold leading-[1.05] tracking-[-0.04em] text-white">
+              Ready to connect your operations?
+            </h2>
+            <p className="mt-6 text-[16px] leading-relaxed text-white/45">
+              Talk to our team to understand how GigaLibs or any Gigasys product
+              fits your operating context. No pitch decks — just a real architecture discussion.
             </p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-px border border-white/15 bg-white/15 md:grid-cols-2 xl:grid-cols-3">
-            {industryDomains.map((domain, index) => {
-              const Icon = domain.icon;
-              return (
-                <Reveal key={domain.name} className="group min-h-[300px] bg-[#1b1b19] p-7 transition duration-300 hover:bg-[#22221f] sm:p-8" delay={(index % 3) * 0.05}>
-                  <div className="flex items-center justify-between">
-                    <span className="grid h-12 w-12 place-items-center border border-[#ff7200]/60 text-[#ff8a2b] transition group-hover:bg-[#ff7200] group-hover:text-white"><Icon className="h-5 w-5" /></span>
-                    <span className="font-mono text-[9px] tracking-[0.16em] text-white/25">IND / {String(index + 1).padStart(2, "0")}</span>
-                  </div>
-                  <h3 className="mt-9 text-2xl font-semibold tracking-[-0.03em]">{domain.name}</h3>
-                  <p className="mt-4 text-sm leading-6 text-white/50">{domain.copy}</p>
-                  <div className="mt-7 flex flex-wrap gap-2">
-                    {domain.capabilities.map((capability) => (
-                      <span key={capability} className="border border-white/10 px-2.5 py-1.5 font-mono text-[8px] tracking-[0.12em] text-white/45">{capability}</span>
-                    ))}
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="outcomes" className="scroll-mt-20 bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-[0.72fr_1fr]">
-            <Reveal className="lg:sticky lg:top-28 lg:self-start">
-              <div className="section-label">Business outcomes</div>
-              <h2 className="mt-5 max-w-2xl text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl lg:text-6xl">Built to change the operating result—not just digitize a form.</h2>
-              <p className="mt-6 max-w-xl text-base leading-7 text-black/60">We avoid invented ROI claims. Every implementation starts with a baseline, an operational owner and measures that can be observed before and after change.</p>
-            </Reveal>
-            <div className="border-t border-black/10">
-              {outcomes.map((outcome, index) => (
-                <Reveal key={outcome.number} delay={index * 0.04}>
-                  <article className="group grid gap-5 border-b border-black/10 py-8 sm:grid-cols-[70px_1fr] sm:py-10">
-                    <span className="font-mono text-xs text-[#e76500]">{outcome.number}</span>
-                    <div><h3 className="text-2xl font-semibold tracking-[-0.03em] text-[#1a1a18] transition group-hover:text-[#e76500] sm:text-3xl">{outcome.title}</h3><p className="mt-3 max-w-2xl text-sm leading-6 text-black/60 sm:text-base sm:leading-7">{outcome.copy}</p><div className="mt-5 inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-black/45"><Gauge className="h-4 w-4 text-[#ff7200]" /> Measure: {outcome.measure}</div></div>
-                  </article>
-                </Reveal>
-              ))}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="mailto:connect@gigasystech.com"
+                className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-8 py-4 text-[15px] font-semibold text-white shadow-[0_0_60px_rgba(255,114,0,0.4)] transition hover:bg-orange-400 hover:shadow-[0_0_80px_rgba(255,114,0,0.6)]"
+              >
+                connect@gigasystech.com
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
-          </div>
+            <p className="mt-6 font-mono text-[11px] uppercase tracking-widest text-white/20">
+              Hyderabad · India · Global delivery
+            </p>
+          </FadeUp>
         </div>
-      </section>
-
-      <section id="products" className="scroll-mt-20 overflow-hidden bg-[#151513] py-20 text-white md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid gap-8 lg:grid-cols-[1fr_0.62fr] lg:items-end">
-            <div><div className="section-label section-label--dark">Gigasys product portfolio</div><h2 className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.99] tracking-[-0.045em] sm:text-5xl lg:text-7xl">Enterprise depth. Consumer-grade product thinking.</h2></div>
-            <p className="max-w-xl text-base leading-7 text-white/55 lg:justify-self-end">Each product has a defined audience and domain boundary—from enterprise operations to CRM, communications, AI, talent, social identity and exchange commerce.</p>
-          </Reveal>
-
-          <div className="mt-14 grid gap-px border border-white/15 bg-white/15 md:grid-cols-2 xl:grid-cols-3">
-            {portfolioProducts.map((product, index) => {
-              const Icon = product.icon;
-              return (
-                <Reveal key={product.name} className="group relative min-h-[320px] overflow-hidden bg-[#1b1b19] p-7 transition duration-300 hover:bg-[#ff7200]" delay={(index % 4) * 0.05}>
-                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full border border-white/10 transition duration-500 group-hover:scale-150 group-hover:border-white/25" />
-                  <div className="relative flex h-full flex-col"><div className="flex items-center justify-between"><span className="grid h-11 w-11 place-items-center border border-white/15 text-[#ff8a2b] transition group-hover:border-white/45 group-hover:text-white"><Icon className="h-5 w-5" /></span><span className="font-mono text-[9px] tracking-[0.16em] text-white/25 group-hover:text-white/60">{String(index + 1).padStart(2, "0")}</span></div><div className="mt-auto pt-16"><div className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#ff8a2b] group-hover:text-white/75">{product.category}</div><h3 className="mt-3 text-2xl font-semibold tracking-[-0.035em]">{product.name}</h3><p className="mt-4 text-sm leading-6 text-white/50 group-hover:text-white/80">{product.copy}</p></div></div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="company" className="scroll-mt-20 bg-[#f3f2ee] py-20 md:py-28">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <Reveal className="grid overflow-hidden border border-black/10 bg-white lg:grid-cols-2">
-            <div className="relative min-h-[430px] lg:min-h-[620px]"><img src={engineeringTeamImg} alt="Engineering team collaborating on enterprise software" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-28 text-white sm:p-9"><div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">Engineering presence</div><div className="mt-3 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold"><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Dover, Delaware</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Hyderabad, India</span><span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#ff7a12]" /> Ongole, India</span></div></div></div>
-            <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-14 xl:p-20"><div className="section-label">How we work</div><h2 className="mt-5 text-4xl font-semibold leading-[1] tracking-[-0.045em] text-[#161614] sm:text-5xl">Product strategy, domain depth and production engineering in one team.</h2><p className="mt-6 text-base leading-7 text-black/60">We translate real operating constraints into focused products, then carry them across web, mobile, services, data and long-term evolution.</p><div className="mt-8 grid gap-px border border-black/10 bg-black/10 sm:grid-cols-2">{[["01", "Understand the operating outcome"], ["02", "Shape the product and module scope"], ["03", "Build across web, mobile and services"], ["04", "Measure, govern and evolve"]].map(([number, text]) => <div key={number} className="bg-[#f8f7f3] p-5"><span className="font-mono text-[10px] text-[#ff7200]">{number}</span><p className="mt-2 text-sm font-semibold text-black/70">{text}</p></div>)}</div><Link href="/about" className="mt-8 inline-flex items-center gap-2 self-start text-sm font-bold text-[#d95f00] hover:text-black">More about Gigasys <ArrowRight className="h-4 w-4" /></Link></div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="relative overflow-hidden bg-[#ff7200] py-20 text-white md:py-24">
-        <div className="absolute inset-0 orange-grid opacity-25" />
-        <Reveal className="relative mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-12">
-          <div><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70"><CircleDot className="h-4 w-4" /> Start a conversation</div><h2 className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.99] tracking-[-0.05em] sm:text-5xl lg:text-7xl">Start with the business outcome. Build the right product around it.</h2><p className="mt-6 max-w-2xl text-base leading-7 text-white/80">Talk to us about your operation, SaaS product or digital platform—and the result it needs to create.</p></div>
-          <Link href="/contact" className="inline-flex min-h-14 items-center justify-center gap-3 bg-[#151513] px-7 py-4 text-sm font-bold text-white transition hover:bg-white hover:text-black">Talk to our team <ArrowRight className="h-4 w-4" /></Link>
-        </Reveal>
       </section>
     </Layout>
   );

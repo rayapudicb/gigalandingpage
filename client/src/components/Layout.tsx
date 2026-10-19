@@ -32,11 +32,11 @@ function Navigation() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] max-w-[1440px] items-center px-5 sm:px-8 lg:px-12">
         <Link
           href="/"
-          className="flex items-center gap-3 text-[#151513]"
+          className="flex items-center gap-3 text-white"
           data-testid="link-home"
         >
           <img src={Logo} alt="Gigasys" className="h-10 w-10" />
@@ -52,7 +52,7 @@ function Navigation() {
                 key={link.label}
                 href={link.href}
                 onClick={(event) => handleHashClick(event, link.href)}
-                className="px-4 py-3 text-[13px] font-semibold text-black/60 transition hover:text-[#e56500]"
+                className="px-4 py-3 text-[13px] font-semibold text-white/50 transition hover:text-white"
               >
                 {link.label}
               </a>
@@ -60,7 +60,7 @@ function Navigation() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="px-4 py-3 text-[13px] font-semibold text-black/60 transition hover:text-[#e56500]"
+                className="px-4 py-3 text-[13px] font-semibold text-white/50 transition hover:text-white"
               >
                 {link.label}
               </Link>
@@ -68,17 +68,17 @@ function Navigation() {
           )}
         </nav>
 
-        <Link
-          href="/contact"
-          className="ml-auto hidden min-h-10 items-center gap-2 bg-[#ff7200] px-4 text-xs font-bold uppercase tracking-[0.08em] text-white transition hover:bg-[#de6300] sm:inline-flex lg:ml-5"
+        <a
+          href="mailto:connect@gigasystech.com"
+          className="ml-auto hidden min-h-10 items-center gap-2 rounded-full bg-orange-500 px-5 py-2.5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(255,114,0,0.3)] transition hover:bg-orange-400 lg:ml-5 lg:inline-flex"
         >
-          Start a project
-          <ArrowUpRight className="h-4 w-4" />
-        </Link>
+          Contact us
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </a>
 
         <button
           type="button"
-          className="ml-auto grid h-10 w-10 place-items-center border border-black/10 text-black lg:hidden"
+          className="ml-auto grid h-9 w-9 place-items-center rounded-lg border border-white/10 text-white/60 lg:hidden"
           onClick={() => setIsOpen((open) => !open)}
           aria-expanded={isOpen}
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
@@ -89,7 +89,7 @@ function Navigation() {
       </div>
 
       {isOpen && (
-        <nav className="border-t border-black/10 bg-white px-5 py-5 lg:hidden" aria-label="Mobile navigation">
+        <nav className="border-t border-white/[0.06] bg-[#050505]/95 backdrop-blur-xl px-5 py-5 lg:hidden" aria-label="Mobile navigation">
           <div className="mx-auto max-w-[1440px]">
             {navLinks.map((link, index) =>
               link.isHash ? (
@@ -97,7 +97,7 @@ function Navigation() {
                   key={link.label}
                   href={link.href}
                   onClick={(event) => handleHashClick(event, link.href)}
-                  className="flex items-center justify-between border-b border-black/10 py-4 text-sm font-semibold"
+                  className="flex items-center justify-between border-b border-white/[0.06] py-4 text-sm font-semibold text-white/60"
                 >
                   <span>{link.label}</span>
                   <span className="font-mono text-[10px] text-[#ff7200]">
@@ -109,7 +109,7 @@ function Navigation() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-between border-b border-black/10 py-4 text-sm font-semibold"
+                  className="flex items-center justify-between border-b border-white/[0.06] py-4 text-sm font-semibold text-white/60"
                 >
                   <span>{link.label}</span>
                   <span className="font-mono text-[10px] text-[#ff7200]">
@@ -118,14 +118,14 @@ function Navigation() {
                 </Link>
               ),
             )}
-            <Link
-              href="/contact"
+            <a
+              href="mailto:connect@gigasystech.com"
               onClick={() => setIsOpen(false)}
-              className="mt-5 flex min-h-12 items-center justify-center gap-2 bg-[#ff7200] px-5 text-sm font-bold text-white"
+              className="mt-5 flex min-h-12 items-center justify-center gap-2 rounded-full bg-orange-500 px-5 text-sm font-semibold text-white"
             >
-              Start a project
+              Contact us
               <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            </a>
           </div>
         </nav>
       )}
@@ -213,7 +213,7 @@ export default function Layout({ children }: LayoutProps) {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-[#050505] text-white">
       <Navigation />
       <motion.main
         className="pt-[72px]"
