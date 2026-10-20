@@ -679,20 +679,36 @@ export default function Home() {
 
   const [isGalleryPaused, setIsGalleryPaused] = useState(false);
   const galleryScrollRef = useRef<HTMLDivElement>(null);
+  const animFrameIdRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (isGalleryPaused) return;
-    const timer = setInterval(() => {
-      if (galleryScrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = galleryScrollRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 20) {
-          galleryScrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          galleryScrollRef.current.scrollBy({ left: 380, behavior: 'smooth' });
+    const el = galleryScrollRef.current;
+    if (!el) return;
+
+    let lastTime = performance.now();
+    const speed = 40; // 40px per second - silky smooth continuous glide
+
+    const step = (now: number) => {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
+      if (!isGalleryPaused && el) {
+        el.scrollLeft += speed * delta;
+        // Seamless infinite loop when reaching half width (cards are duplicated 2x)
+        if (el.scrollLeft >= el.scrollWidth / 2) {
+          el.scrollLeft -= el.scrollWidth / 2;
         }
       }
-    }, 4500);
-    return () => clearInterval(timer);
+      animFrameIdRef.current = requestAnimationFrame(step);
+    };
+
+    animFrameIdRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (animFrameIdRef.current) {
+        cancelAnimationFrame(animFrameIdRef.current);
+      }
+    };
   }, [isGalleryPaused]);
 
   useEffect(() => {
@@ -718,7 +734,7 @@ export default function Home() {
 
   const scrollGallery = (direction: 'left' | 'right') => {
     if (galleryScrollRef.current) {
-      const scrollAmount = direction === 'left' ? -380 : 380;
+      const scrollAmount = direction === 'left' ? -420 : 420;
       galleryScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -737,7 +753,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:32px_32px]" />
           </div>
 
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 relative">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               
               {/* Left Column: Thesis & CTAs */}
@@ -880,11 +896,10 @@ export default function Home() {
         </section>
 
         {/* SECTION 2: RUGGED MONITORING STYLE "RM EYE" GALLERY ("Where Operations Meet Unified Intelligence") */}
-        <section id="unified-intelligence" className="bg-gray-950 py-24 lg:py-32 text-white relative overflow-hidden">
+        <section id="unified-intelligence" className="bg-gray-950 py-24 lg:py-32 text-white relative overflow-hidden w-full">
           
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
-            
-            {/* Section Header */}
+          {/* Section Header with dynamic responsive padding */}
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
               <FadeUp>
                 <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/15 border border-orange-500/30 px-3.5 py-1 text-xs font-bold text-orange-400 mb-4">
@@ -892,7 +907,7 @@ export default function Home() {
                   <span>RM EYE · Unified Intelligence Architecture</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                  Where Assets Meet Unified Intelligence
+                  Where Operations Meet Unified Intelligence
                 </h2>
                 <p className="mt-3 text-base sm:text-lg text-gray-400 max-w-2xl">
                   14+ interconnected modules bring asset data, health, diagnostics, workflows, and operations into one digital environment.
@@ -904,34 +919,37 @@ export default function Home() {
                 <button
                   onClick={() => scrollGallery('left')}
                   aria-label="Scroll left"
-                  className="h-11 w-11 rounded-full border border-gray-800 bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white flex items-center justify-center transition-all"
+                  className="h-11 w-11 rounded-full border border-gray-800 bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => scrollGallery('right')}
                   aria-label="Scroll right"
-                  className="h-11 w-11 rounded-full bg-[#FF7200] hover:bg-[#FF8A2B] text-white flex items-center justify-center transition-all shadow-md shadow-orange-900/40"
+                  className="h-11 w-11 rounded-full bg-[#FF7200] hover:bg-[#FF8A2B] text-white flex items-center justify-center transition-all shadow-md shadow-orange-900/40 cursor-pointer"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
               </FadeUp>
             </div>
+          </div>
 
-            {/* Scrolling Cards Gallery */}
-            <div
-              ref={galleryScrollRef}
-              onMouseEnter={() => setIsGalleryPaused(true)}
-              onMouseLeave={() => setIsGalleryPaused(false)}
-              className="flex gap-6 overflow-x-auto pb-8 scrollbar-none snap-x snap-mandatory"
-            >
-              {unifiedIntelligenceCards.map((card) => (
-                <div
-                  key={card.id}
-                  className={`snap-start shrink-0 rounded-3xl overflow-hidden relative border border-gray-800 group transition-all duration-300 hover:border-orange-500/50 ${
-                    card.isHero ? 'w-[380px] sm:w-[460px]' : 'w-[320px] sm:w-[360px]'
-                  }`}
-                >
+          {/* Full Screen Dynamic Width Scrolling Cards Gallery */}
+          <div
+            ref={galleryScrollRef}
+            onMouseEnter={() => setIsGalleryPaused(true)}
+            onMouseLeave={() => setIsGalleryPaused(false)}
+            onTouchStart={() => setIsGalleryPaused(true)}
+            onTouchEnd={() => setIsGalleryPaused(false)}
+            className="flex gap-6 overflow-x-auto pb-8 scrollbar-none w-full px-4 sm:px-6 lg:px-8 xl:px-12 select-none"
+          >
+            {[...unifiedIntelligenceCards, ...unifiedIntelligenceCards].map((card, idx) => (
+              <div
+                key={`${card.id}-${idx}`}
+                className={`shrink-0 rounded-3xl overflow-hidden relative border border-gray-800 group transition-all duration-300 hover:border-orange-500/50 ${
+                  card.isHero ? 'w-[380px] sm:w-[460px]' : 'w-[320px] sm:w-[360px]'
+                }`}
+              >
                   {/* Background Image */}
                   <div className="h-[420px] relative">
                     <img
@@ -1010,13 +1028,11 @@ export default function Home() {
                 </div>
               ))}
             </div>
-
-          </div>
         </section>
 
         {/* SECTION 3: MULTI-INDUSTRY ADAPTATION ENGINE (Pharma, Manufacturing, Agriculture, Sports, etc.) */}
         <section id="industries" className="bg-white py-24 lg:py-32 scroll-mt-20 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
@@ -1150,7 +1166,7 @@ export default function Home() {
 
         {/* SECTION 4: CAPABILITIES MATRIX & INDUSTRY AUTOMATION NAVIGATOR (Pagination & Tab System) */}
         <section id="capabilities" className="bg-gray-50/80 py-24 lg:py-32 scroll-mt-20 border-b border-gray-200/80">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             
             {/* Header with Title and Pagination Controls */}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
@@ -1398,7 +1414,7 @@ export default function Home() {
 
         {/* SECTION 5: ENTERPRISE ERP ARCHITECTURAL HERITAGE & COMPARISON */}
         <section className="bg-white py-24 lg:py-32 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
@@ -1483,7 +1499,7 @@ export default function Home() {
         <section id="technologies" className="bg-[#0B0F17] py-24 lg:py-36 text-white scroll-mt-20 relative overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-[140px] pointer-events-none" />
 
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 relative">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               
               {/* Left Column Text */}
@@ -1714,7 +1730,7 @@ export default function Home() {
 
         {/* SECTION 7: STATS */}
         <section className="bg-white py-20 lg:py-28 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
               <FadeUp delay={0.05} className="pt-6 lg:pt-0">
                 <div className="text-5xl lg:text-6xl font-extrabold text-[#FF7200] tracking-tight">30+</div>
@@ -1742,7 +1758,7 @@ export default function Home() {
 
         {/* SECTION 8: OTHER PRODUCTS */}
         <section id="products" className="bg-gray-50/70 py-24 lg:py-32 scroll-mt-20 border-b border-gray-100">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
@@ -1802,7 +1818,6 @@ export default function Home() {
                 );
               })}
             </div>
-
           </div>
         </section>
 

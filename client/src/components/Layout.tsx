@@ -285,7 +285,7 @@ function Navigation() {
         scrolled ? "shadow-sm shadow-gray-200/50" : ""
       }`}
     >
-      <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-6 sm:px-10 lg:px-16">
+      <div className="mx-auto flex h-full w-full max-w-[1800px] items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Left: Brand Logo */}
         <Link
           href="/"
@@ -1106,7 +1106,7 @@ function Navigation() {
 function Footer() {
   return (
     <footer className="bg-[#111827] text-white">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 py-20">
+      <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8 xl:px-12 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Column 1: Brand */}
           <div className="space-y-4">

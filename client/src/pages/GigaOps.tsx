@@ -208,7 +208,7 @@ export default function GigaOps() {
             <div className="h-[700px] w-[700px] rounded-full bg-orange-500/10 blur-3xl" />
           </div>
 
-          <div className="relative mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
+          <div className="relative w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
             <FadeUp className="max-w-5xl mx-auto">
               <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/10 border border-orange-500/20 px-4 py-1.5 text-xs font-semibold text-orange-400 mb-6">
                 <span>Enterprise Connected Systems · Powered by GigaOps</span>
@@ -252,7 +252,7 @@ export default function GigaOps() {
 
         {/* SECTION 2: MODULE GRID */}
         <section id="modules" className="bg-white py-24 lg:py-32 scroll-mt-20">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
                 SaaS Modules Catalogue
@@ -306,7 +306,7 @@ export default function GigaOps() {
 
         {/* SECTION 3: PLATFORM ARCHITECTURE */}
         <section className="bg-gray-50/70 py-24 lg:py-32">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <span className="text-xs font-bold uppercase tracking-widest text-orange-600 bg-orange-50 px-3.5 py-1.5 rounded-full">
                 System Topology
@@ -345,7 +345,7 @@ export default function GigaOps() {
 
         {/* SECTION 4: WHY GIGAOPS (COMPARISON) */}
         <section className="bg-white py-24 lg:py-32">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
             <FadeUp className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
                 Why Operations Teams Choose GigaOps
@@ -458,7 +458,7 @@ export default function GigaOps() {
 
         {/* SECTION 5: CTA */}
         <section className="bg-orange-500 py-20 text-white">
-          <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 text-center">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
             <FadeUp className="max-w-4xl mx-auto">
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
                 Ready to modernize your operations with GigaOps?
