@@ -677,7 +677,23 @@ export default function Home() {
   const [activeIndustryId, setActiveIndustryId] = useState('pharma');
   const [mobilePersona, setMobilePersona] = useState<'technician' | 'worker' | 'supervisor'>('technician');
 
+  const [isGalleryPaused, setIsGalleryPaused] = useState(false);
   const galleryScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isGalleryPaused) return;
+    const timer = setInterval(() => {
+      if (galleryScrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = galleryScrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 20) {
+          galleryScrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          galleryScrollRef.current.scrollBy({ left: 380, behavior: 'smooth' });
+        }
+      }
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isGalleryPaused]);
 
   useEffect(() => {
     const handleSelectIndustry = (e: any) => {
@@ -873,13 +889,13 @@ export default function Home() {
               <FadeUp>
                 <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/15 border border-orange-500/30 px-3.5 py-1 text-xs font-bold text-orange-400 mb-4">
                   <Eye className="h-3.5 w-3.5" />
-                  <span>Unified Intelligence Architecture</span>
+                  <span>RM EYE · Unified Intelligence Architecture</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                  Where Operations Meet Unified Intelligence
+                  Where Assets Meet Unified Intelligence
                 </h2>
                 <p className="mt-3 text-base sm:text-lg text-gray-400 max-w-2xl">
-                  14+ interconnected modules bring asset data, health, diagnostics, workflows, and double-entry operations into one digital environment.
+                  14+ interconnected modules bring asset data, health, diagnostics, workflows, and operations into one digital environment.
                 </p>
               </FadeUp>
 
@@ -905,6 +921,8 @@ export default function Home() {
             {/* Scrolling Cards Gallery */}
             <div
               ref={galleryScrollRef}
+              onMouseEnter={() => setIsGalleryPaused(true)}
+              onMouseLeave={() => setIsGalleryPaused(false)}
               className="flex gap-6 overflow-x-auto pb-8 scrollbar-none snap-x snap-mandatory"
             >
               {unifiedIntelligenceCards.map((card) => (
@@ -1021,6 +1039,7 @@ export default function Home() {
                   <button
                     key={ind.id}
                     onClick={() => setActiveIndustryId(ind.id)}
+                    onMouseEnter={() => setActiveIndustryId(ind.id)}
                     className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border text-center transition-all ${
                       isSelected
                         ? 'bg-gray-950 border-gray-950 text-white shadow-lg scale-105'
