@@ -27,6 +27,14 @@ import {
   Sparkles,
   ScanFace,
   Info,
+  Pill,
+  Factory,
+  Wheat,
+  Trophy,
+  Zap,
+  HeartPulse,
+  Truck,
+  HardHat,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
 
@@ -165,7 +173,58 @@ const companyLinks = [
   },
 ];
 
-type DropdownKey = "gigaops" | "products" | "company" | null;
+const industriesMenu = [
+  {
+    icon: Pill,
+    name: "Pharmaceuticals & Life Sciences",
+    desc: "FDA 21 CFR Part 11, cleanroom validation, batch genealogy",
+    anchor: "pharma",
+  },
+  {
+    icon: Factory,
+    name: "Manufacturing & Industrial",
+    desc: "Shop floor CMMS, telemetry, OEE, MRO spare parts",
+    anchor: "manufacturing",
+  },
+  {
+    icon: Wheat,
+    name: "Agriculture & Agri-Tech",
+    desc: "Irrigation telemetry, heavy fleet maintenance, seasonal crews",
+    anchor: "agriculture",
+  },
+  {
+    icon: Trophy,
+    name: "Sports, Venues & Entertainment",
+    desc: "Stadium turnstiles, multi-gate staffing, Swappy ticketing",
+    anchor: "sports",
+  },
+  {
+    icon: Zap,
+    name: "Energy & Utilities",
+    desc: "Substation diagnostics, high-voltage asset twins, grid maintenance",
+    anchor: "energy",
+  },
+  {
+    icon: HeartPulse,
+    name: "Healthcare & Facilities",
+    desc: "Biomedical calibration, sterile inventory, compliance rosters",
+    anchor: "healthcare",
+  },
+  {
+    icon: Truck,
+    name: "Transport & Logistics",
+    desc: "Depot cross-docking, fleet telematics, multi-hub inventory",
+    anchor: "transport",
+  },
+  {
+    icon: HardHat,
+    name: "Field Services & Construction",
+    desc: "Heavy equipment inspection, mobile job routing, client sign-off",
+    anchor: "construction",
+  },
+];
+
+type DropdownKey = "gigaops" | "products" | "industries" | "company" | null;
 
 function Navigation() {
   const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null);
@@ -521,15 +580,144 @@ function Navigation() {
             </AnimatePresence>
           </div>
 
-          {/* Industries Link */}
-          <div className="py-4">
-            <a
-              href="/#industries"
-              onClick={handleIndustriesClick}
-              className="inline-flex items-center px-3.5 py-1.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors rounded-lg"
+          {/* Industries Mega-Menu Dropdown */}
+          <div
+            className="relative py-4"
+            onMouseEnter={() => setOpenDropdown("industries")}
+          >
+            <button
+              type="button"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
+                openDropdown === "industries"
+                  ? "text-[#FF7200]"
+                  : "text-gray-700 hover:text-gray-900"
+              }`}
             >
-              Industries
-            </a>
+              <span>Industries</span>
+              <ChevronDown
+                className={`h-4 w-4 transition-transform duration-200 ${
+                  openDropdown === "industries"
+                    ? "rotate-180 text-[#FF7200]"
+                    : "text-gray-400"
+                }`}
+              />
+            </button>
+
+            <AnimatePresence>
+              {openDropdown === "industries" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute top-full -left-48 xl:-left-64 pt-3 z-50 w-[920px] max-w-[95vw]"
+                >
+                  <div className="bg-white rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.12)] border border-gray-100/90 overflow-hidden">
+                    <div className="grid grid-cols-12 divide-x divide-gray-100">
+                      {/* Left 8 cols: 2 columns of 8 industries */}
+                      <div className="col-span-8 p-6">
+                        <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
+                          <div>
+                            <span className="text-xs font-bold text-gray-900 tracking-wider uppercase">
+                              Target Sectors &amp; Operating Blueprints
+                            </span>
+                            <span className="ml-2 text-[10px] font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">
+                              8 Critical Physical Sectors
+                            </span>
+                          </div>
+                          <a
+                            href="/#industries"
+                            onClick={handleIndustriesClick}
+                            className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+                          >
+                            <span>View All Sectors</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                          {industriesMenu.map((item) => (
+                            <a
+                              key={item.name}
+                              href="/#industries"
+                              onClick={(e) => {
+                                handleIndustriesClick(e);
+                                if (typeof window !== "undefined") {
+                                  window.dispatchEvent(new CustomEvent("select-industry", { detail: item.anchor }));
+                                }
+                              }}
+                              className="group flex items-start gap-3 p-2 rounded-xl hover:bg-orange-50/50 transition-colors"
+                            >
+                              <div className="h-8 w-8 rounded-lg bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors mt-0.5">
+                                <item.icon className="h-4 w-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-xs font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
+                                  {item.name}
+                                </div>
+                                <p className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Right 4 cols: Spotlight card */}
+                      <div className="col-span-4 bg-gradient-to-b from-orange-50/50 via-gray-50/40 to-white p-6 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[10px] font-bold tracking-widest uppercase text-gray-500">
+                              Sector Adaptation
+                            </span>
+                          </div>
+                          <h4 className="text-base font-bold text-gray-900 leading-snug">
+                            Universal Chassis, Configured Everywhere
+                          </h4>
+                          <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                            GigaOps is not limited to manufacturing. One core engine adapts to regulated cleanroom pharma, sports venues, precision agri-tech, and energy grids without forking code.
+                          </p>
+
+                          <div className="mt-4 rounded-xl overflow-hidden border border-gray-200/80 shadow-sm bg-gray-900">
+                            <img
+                              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80"
+                              alt="Cross-Industry Engine"
+                              className="w-full h-24 object-cover opacity-80"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="mt-6 pt-4 border-t border-gray-200/60">
+                          <a
+                            href="/#industries"
+                            onClick={handleIndustriesClick}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF7200] hover:text-orange-700 group"
+                          >
+                            <span>Explore Industry Blueprints</span>
+                            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Utility Strip */}
+                    <div className="bg-gray-50/80 border-t border-gray-100 px-6 py-3 flex items-center justify-between text-xs text-gray-500">
+                      <span className="font-medium text-gray-600">
+                        Tailored compliance frameworks: FDA 21 CFR Part 11 · ISO 55000 · SOC 2 Type II
+                      </span>
+                      <a
+                        href="mailto:connect@gigasystech.com"
+                        className="font-semibold text-gray-700 hover:text-orange-600 transition-colors"
+                      >
+                        Request Sector Deck →
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Technologies Link */}
@@ -771,15 +959,56 @@ function Navigation() {
                 </AnimatePresence>
               </div>
 
-              {/* Industries Anchor */}
+              {/* Accordion: Industries */}
               <div className="border-b border-gray-100 pb-3">
-                <a
-                  href="/#industries"
-                  onClick={handleIndustriesClick}
-                  className="block py-2 text-base font-semibold text-gray-900 hover:text-[#FF7200]"
+                <button
+                  type="button"
+                  onClick={() => toggleAccordion("industries")}
+                  className="w-full flex items-center justify-between py-2 text-base font-semibold text-gray-900"
                 >
-                  Industries
-                </a>
+                  <span>Industries</span>
+                  <ChevronDown
+                    className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+                      mobileAccordion === "industries" ? "rotate-180 text-[#FF7200]" : ""
+                    }`}
+                  />
+                </button>
+                <AnimatePresence>
+                  {mobileAccordion === "industries" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="overflow-hidden pt-2 space-y-1"
+                    >
+                      {industriesMenu.map((item) => (
+                        <a
+                          key={item.name}
+                          href="/#industries"
+                          onClick={(e) => {
+                            handleIndustriesClick(e);
+                            setMobileOpen(false);
+                            if (typeof window !== "undefined") {
+                              window.dispatchEvent(new CustomEvent("select-industry", { detail: item.anchor }));
+                            }
+                          }}
+                          className="flex items-start gap-3 p-2 rounded-lg hover:bg-orange-50/60"
+                        >
+                          <div className="h-7 w-7 rounded-md bg-orange-100/70 text-[#FF7200] flex items-center justify-center shrink-0 mt-0.5">
+                            <item.icon className="h-4 w-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-gray-900">
+                              {item.name}
+                            </div>
+                            <p className="text-xs text-gray-500">{item.desc}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Technologies Anchor */}
