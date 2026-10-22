@@ -35,6 +35,7 @@ import {
   HeartPulse,
   Truck,
   HardHat,
+  FlaskConical,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
 
@@ -149,6 +150,13 @@ const otherProducts = [
     name: "OpenFace",
     desc: "Social identity infrastructure",
     href: "/products/openface",
+  },
+  {
+    icon: FlaskConical,
+    name: "SPEED",
+    desc: "Pharma process safety screening",
+    href: "/products/speed",
+    badge: "Pharma",
   },
 ];
 
@@ -508,12 +516,23 @@ function Navigation() {
                               onClick={() => setOpenDropdown(null)}
                               className="group flex items-start gap-3 p-2 rounded-xl hover:bg-orange-50/50 transition-colors"
                             >
-                              <div className="h-8 w-8 rounded-lg bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center shrink-0 group-hover:bg-[#FF7200] group-hover:text-white transition-colors mt-0.5">
+                              <div className={`h-8 w-8 rounded-lg border flex items-center justify-center shrink-0 group-hover:text-white transition-colors mt-0.5 ${
+                                (item as any).badge === 'Pharma'
+                                  ? 'bg-teal-50 text-teal-700 border-teal-100 group-hover:bg-teal-600'
+                                  : 'bg-orange-50 text-[#FF7200] border-orange-100 group-hover:bg-[#FF7200]'
+                              }`}>
                                 <item.icon className="h-4 w-4" />
                               </div>
                               <div className="min-w-0 flex-1">
-                                <div className="text-xs font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
-                                  {item.name}
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-xs font-bold text-gray-900 group-hover:text-[#FF7200] transition-colors leading-snug">
+                                    {item.name}
+                                  </span>
+                                  {(item as any).badge && (
+                                    <span className="text-[9px] font-bold bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded-full border border-teal-100 shrink-0">
+                                      {(item as any).badge}
+                                    </span>
+                                  )}
                                 </div>
                                 <p className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
                                   {item.desc}
@@ -524,38 +543,53 @@ function Navigation() {
                         </div>
                       </div>
 
-                      {/* Right 4 cols: Spotlight card */}
-                      <div className="col-span-4 bg-gradient-to-b from-orange-50/50 via-gray-50/40 to-white p-6 flex flex-col justify-between">
+                      {/* Right 4 cols: Spotlight card — SPEED Pharma */}
+                      <div className="col-span-4 bg-gradient-to-b from-teal-50/60 via-gray-50/30 to-white p-6 flex flex-col justify-between">
                         <div>
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
-                            <span className="text-[10px] font-bold tracking-widest uppercase text-orange-600">
-                              Voice &amp; Conversational AI
+                            <span className="h-2 w-2 rounded-full bg-teal-600 animate-pulse" />
+                            <span className="text-[10px] font-bold tracking-widest uppercase text-teal-700">
+                              Pharma · Process Safety
                             </span>
                           </div>
                           <h4 className="text-base font-bold text-gray-900 leading-snug">
-                            Giga AI Autonomous Voice
+                            SPEED — Process Safety Screening
                           </h4>
                           <p className="text-xs text-gray-600 mt-2 leading-relaxed">
-                            Ultra-low latency sub-500ms voice agents with PBX telephony, tool-calling, and live call whisper supervision.
+                            Screen a synthesis route's hazards on paper in ~2 hours. Tamper-evident dossier, FDA 21 CFR Part 11 ready.
                           </p>
 
-                          <div className="mt-4 rounded-xl overflow-hidden border border-gray-200/80 shadow-sm bg-gray-900">
+                          <div className="mt-4 rounded-xl overflow-hidden border border-teal-100 shadow-sm bg-teal-900">
                             <img
-                              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80"
-                              alt="Giga AI"
-                              className="w-full h-24 object-cover opacity-80"
+                              src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&auto=format&fit=crop&q=80"
+                              alt="SPEED Pharma Process Safety"
+                              className="w-full h-24 object-cover opacity-75"
                             />
+                          </div>
+
+                          <div className="grid grid-cols-3 gap-2 mt-3 text-center">
+                            <div className="bg-teal-50 rounded-lg py-1.5">
+                              <div className="text-sm font-black text-teal-700">~2h</div>
+                              <div className="text-[9px] text-teal-600 font-semibold">Per Route</div>
+                            </div>
+                            <div className="bg-teal-50 rounded-lg py-1.5">
+                              <div className="text-sm font-black text-teal-700">1–5</div>
+                              <div className="text-[9px] text-teal-600 font-semibold">Risk Class</div>
+                            </div>
+                            <div className="bg-teal-50 rounded-lg py-1.5">
+                              <div className="text-sm font-black text-teal-700">FDA</div>
+                              <div className="text-[9px] text-teal-600 font-semibold">21 CFR Ready</div>
+                            </div>
                           </div>
                         </div>
 
                         <div className="mt-6 pt-4 border-t border-gray-200/60">
                           <Link
-                            href="/products/gigaai"
+                            href="/products/speed"
                             onClick={() => setOpenDropdown(null)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF7200] hover:text-orange-700 group"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 hover:text-teal-800 group"
                           >
-                            <span>Test Live Voice Demo</span>
+                            <span>See a Route Screened Live</span>
                             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                           </Link>
                         </div>

@@ -63,6 +63,7 @@ import {
   Eye,
   Gauge,
   Thermometer,
+  FlaskConical,
 } from 'lucide-react';
 
 function FadeUp({
@@ -481,16 +482,18 @@ const industriesData = [
     badge: 'FDA 21 CFR Part 11 · GMP Validated',
     icon: Pill,
     headline: 'Cleanroom Validation, Cold-Chain & Electronic Batch Records',
-    desc: 'Validated asset management for cleanrooms, biopharma reactors, and continuous serialization. Complete compliance with FDA 21 CFR Part 11 electronic signatures and immutable audit trails.',
-    img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80',
+    desc: 'Validated asset management for cleanrooms, biopharma reactors, and continuous serialization. Complete compliance with FDA 21 CFR Part 11 electronic signatures and immutable audit trails. SPEED screens every synthesis route for thermal hazards, energetic materials, and dangerous combinations before the first experiment.',
+    img: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&auto=format&fit=crop&q=80',
     adaptedModules: [
+      'SPEED Process Safety Screening',
       'Calibration CMMS & Instruments',
       'Cleanroom Environmental Telemetry',
       'Electronic Batch Production Records',
       'FDA 21 CFR Part 11 E-Signature',
       'Lot Genealogy & FEFO Cold-Chain',
     ],
-    outcome: '100% audit-ready FDA inspection history & zero batch contamination',
+    outcome: 'Hazards found before the first experiment · 100% audit-ready FDA inspection history',
+    spotlightProduct: { name: 'SPEED', href: '/products/speed', label: 'Process Safety Screening' },
   },
   {
     id: 'manufacturing',
@@ -669,6 +672,15 @@ const products = [
     desc: 'Headless identity, verifiable badges, and portable audience graphs for modern decentralized consumer and SaaS apps.',
     tags: ['Cryptographic SSO', 'Portable Graphs', 'Zero Bot Sybil'],
     href: '/products/openface',
+  },
+  {
+    name: 'SPEED',
+    category: 'Pharma Process Safety',
+    icon: FlaskConical,
+    desc: 'Process safety screening for synthesis routes. Screen thermal hazards, energetic materials and dangerous combinations in ~2 hours — with a tamper-evident dossier before the kilo-lab.',
+    tags: ['FDA 21 CFR Part 11', 'GMP Validated', 'Pharma Exclusive'],
+    href: '/products/speed',
+    pharma: true,
   },
 ];
 
@@ -1112,13 +1124,45 @@ export default function Home() {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {currentIndustry.adaptedModules.map((mod, mIdx) => (
-                          <div key={mIdx} className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-gray-800 bg-white border border-gray-200 px-3 py-2 rounded-xl shadow-xs">
-                            <CheckCircle className="h-4 w-4 text-[#FF7200] shrink-0" />
+                          <div key={mIdx} className={`flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-gray-800 px-3 py-2 rounded-xl shadow-xs border ${
+                            currentIndustry.id === 'pharma' && mIdx === 0
+                              ? 'bg-teal-50 border-teal-200 text-teal-800'
+                              : 'bg-white border-gray-200'
+                          }`}>
+                            <CheckCircle className={`h-4 w-4 shrink-0 ${
+                              currentIndustry.id === 'pharma' && mIdx === 0 ? 'text-teal-600' : 'text-[#FF7200]'
+                            }`} />
                             <span>{mod}</span>
+                            {currentIndustry.id === 'pharma' && mIdx === 0 && (
+                              <span className="ml-auto text-[9px] font-black text-teal-700 bg-teal-100 px-1.5 py-0.5 rounded-full shrink-0">NEW</span>
+                            )}
                           </div>
                         ))}
                       </div>
                     </div>
+
+                    {/* SPEED Pharma Spotlight — only shown when Pharma is selected */}
+                    {currentIndustry.id === 'pharma' && (
+                      <div className="bg-gradient-to-r from-teal-50 via-teal-50/60 to-white border border-teal-200 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-5">
+                        <div className="h-12 w-12 rounded-2xl bg-teal-700 text-white flex items-center justify-center shrink-0 shadow-md shadow-teal-700/20">
+                          <FlaskConical className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-[10px] font-black uppercase tracking-widest text-teal-600 mb-0.5">Pharma-Exclusive Product</div>
+                          <div className="text-base font-extrabold text-gray-900">SPEED — Process Safety Screening</div>
+                          <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                            Screen each synthesis route for thermal hazards, energetic materials, and dangerous combinations in ~2 hours. Tamper-evident dossier before the first experiment.
+                          </p>
+                        </div>
+                        <Link
+                          href="/products/speed"
+                          className="inline-flex items-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs px-5 py-3 rounded-full transition-colors shrink-0 shadow-sm"
+                        >
+                          <span>Explore SPEED</span>
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
 
                     {/* Sector ROI Outcome */}
                     <div className="pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -1778,18 +1822,32 @@ export default function Home() {
                 return (
                   <FadeUp key={product.name} delay={idx * 0.05}>
                     <Link href={product.href} className="block h-full">
-                      <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between text-left">
+                      <div className={`h-full border rounded-3xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between text-left ${
+                        (product as any).pharma
+                          ? 'bg-gradient-to-br from-teal-50 via-white to-teal-50/30 border-teal-200/80 hover:border-teal-300'
+                          : 'bg-white border-gray-200/80 hover:border-orange-200'
+                      }`}>
                         <div>
                           <div className="flex items-center justify-between mb-5">
-                            <div className="h-12 w-12 rounded-2xl bg-orange-50 text-[#FF7200] border border-orange-100 flex items-center justify-center group-hover:bg-[#FF7200] group-hover:text-white transition-colors duration-200">
+                            <div className={`h-12 w-12 rounded-2xl border flex items-center justify-center transition-colors duration-200 ${
+                              (product as any).pharma
+                                ? 'bg-teal-50 text-teal-700 border-teal-100 group-hover:bg-teal-700 group-hover:text-white'
+                                : 'bg-orange-50 text-[#FF7200] border-orange-100 group-hover:bg-[#FF7200] group-hover:text-white'
+                            }`}>
                               <IconComponent className="h-6 w-6" />
                             </div>
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                              (product as any).pharma
+                                ? 'text-teal-700 bg-teal-50 border border-teal-100'
+                                : 'text-orange-600 bg-orange-50'
+                            }`}>
                               {product.category}
                             </span>
                           </div>
 
-                          <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#FF7200] transition-colors">
+                          <h3 className={`text-xl font-bold mb-2 transition-colors ${
+                            (product as any).pharma ? 'text-gray-900 group-hover:text-teal-700' : 'text-gray-900 group-hover:text-[#FF7200]'
+                          }`}>
                             {product.name}
                           </h3>
 
@@ -1801,14 +1859,20 @@ export default function Home() {
                         <div>
                           <div className="flex flex-wrap gap-1.5 mb-6 pt-4 border-t border-gray-100">
                             {product.tags.map((tag, tIdx) => (
-                              <span key={tIdx} className="text-[10px] font-semibold bg-gray-50 text-gray-600 px-2.5 py-1 rounded-full border border-gray-100">
+                              <span key={tIdx} className={`text-[10px] font-semibold px-2.5 py-1 rounded-full border ${
+                                (product as any).pharma && tag === 'Pharma Exclusive'
+                                  ? 'bg-teal-50 text-teal-700 border-teal-100'
+                                  : 'bg-gray-50 text-gray-600 border-gray-100'
+                              }`}>
                                 {tag}
                               </span>
                             ))}
                           </div>
 
-                          <div className="flex items-center gap-1.5 text-sm font-semibold text-[#FF7200]">
-                            <span>Explore product specifications</span>
+                          <div className={`flex items-center gap-1.5 text-sm font-semibold ${
+                            (product as any).pharma ? 'text-teal-700' : 'text-[#FF7200]'
+                          }`}>
+                            <span>{(product as any).pharma ? 'See SPEED in action' : 'Explore product specifications'}</span>
                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </div>
                         </div>

@@ -31,6 +31,7 @@ import GigaHR from "@/pages/products/GigaHR";
 import GigaCRM from "@/pages/products/GigaCRM";
 import GigaAI from "@/pages/products/GigaAI";
 import OpenFace from "@/pages/products/OpenFace";
+import Speed from "@/pages/products/Speed";
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -65,6 +66,7 @@ function Router() {
       <Route path="/products/gigacrm" component={GigaCRM} />
       <Route path="/products/gigaai" component={GigaAI} />
       <Route path="/products/openface" component={OpenFace} />
+      <Route path="/products/speed" component={Speed} />
       <Route path="/jobs" component={Jobs} />
       <Route path="/teams" component={Teams} />
       <Route path="/about" component={About} />
