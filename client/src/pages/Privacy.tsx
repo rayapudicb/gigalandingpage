@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import { EnterpriseShell as Layout } from "@/pages/EnterpriseSite";
 import { Badge } from "@/components/ui/badge";
 
 export default function Privacy() {

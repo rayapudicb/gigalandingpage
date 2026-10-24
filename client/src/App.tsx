@@ -4,40 +4,22 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/Home";
-import GigaOps from "@/pages/GigaOps";
-import Jobs from "@/pages/Jobs";
-import Teams from "@/pages/Teams";
-import About from "@/pages/About";
-import Contact from "@/pages/Contact";
+import { CompanyPage, EnterpriseHome, IndustriesIndexPage, MobilePage, PlatformPage, ProductIndexPage, SolutionPage } from "@/pages/EnterpriseSite";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
-import Maintenance from "@/pages/gigaops/Maintenance";
-import Workforce from "@/pages/gigaops/Workforce";
-import Inventory from "@/pages/gigaops/Inventory";
-import Procurement from "@/pages/gigaops/Procurement";
-import Finance from "@/pages/gigaops/Finance";
-import Automation from "@/pages/gigaops/Automation";
-import Analytics from "@/pages/gigaops/Analytics";
-import Communications from "@/pages/gigaops/Communications";
-import Documents from "@/pages/gigaops/Documents";
-import Geospatial from "@/pages/gigaops/Geospatial";
-import Data from "@/pages/gigaops/Data";
-import Nyr from "@/pages/products/Nyr";
-import TextFly from "@/pages/products/TextFly";
-import Swappy from "@/pages/products/Swappy";
-import GigaHR from "@/pages/products/GigaHR";
-import GigaCRM from "@/pages/products/GigaCRM";
-import GigaAI from "@/pages/products/GigaAI";
-import OpenFace from "@/pages/products/OpenFace";
-import Speed from "@/pages/products/Speed";
 
 function ScrollToTop() {
   const [location] = useLocation();
   
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      window.requestAnimationFrame(() => {
+        document.getElementById(decodeURIComponent(hash))?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+      });
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    }
   }, [location]);
   
   return null;
@@ -46,34 +28,22 @@ function ScrollToTop() {
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/gigaops" component={GigaOps} />
-      <Route path="/gigaops/maintenance" component={Maintenance} />
-      <Route path="/gigaops/workforce" component={Workforce} />
-      <Route path="/gigaops/inventory" component={Inventory} />
-      <Route path="/gigaops/procurement" component={Procurement} />
-      <Route path="/gigaops/finance" component={Finance} />
-      <Route path="/gigaops/automation" component={Automation} />
-      <Route path="/gigaops/analytics" component={Analytics} />
-      <Route path="/gigaops/communications" component={Communications} />
-      <Route path="/gigaops/documents" component={Documents} />
-      <Route path="/gigaops/geospatial" component={Geospatial} />
-      <Route path="/gigaops/data" component={Data} />
-      <Route path="/products/nyr" component={Nyr} />
-      <Route path="/products/textfly" component={TextFly} />
-      <Route path="/products/swappy" component={Swappy} />
-      <Route path="/products/gigahr" component={GigaHR} />
-      <Route path="/products/gigacrm" component={GigaCRM} />
-      <Route path="/products/gigaai" component={GigaAI} />
-      <Route path="/products/openface" component={OpenFace} />
-      <Route path="/products/speed" component={Speed} />
-      <Route path="/jobs" component={Jobs} />
-      <Route path="/teams" component={Teams} />
-      <Route path="/about" component={About} />
-      <Route path="/contact" component={Contact} />
+      <Route path="/" component={EnterpriseHome} />
+      <Route path="/preview" component={EnterpriseHome} />
+      <Route path="/gigaops" component={PlatformPage} />
+      <Route path="/platform/mobile" component={MobilePage} />
+      <Route path="/products" component={ProductIndexPage} />
+      <Route path="/industries" component={IndustriesIndexPage} />
+      <Route path="/gigaops/:slug">{({ slug }) => <SolutionPage path={`/gigaops/${slug}`} />}</Route>
+      <Route path="/products/:slug">{({ slug }) => <SolutionPage path={`/products/${slug}`} />}</Route>
+      <Route path="/industries/:slug">{({ slug }) => <SolutionPage path={`/industries/${slug}`} />}</Route>
+      <Route path="/jobs">{() => <CompanyPage page="jobs" />}</Route>
+      <Route path="/teams">{() => <CompanyPage page="teams" />}</Route>
+      <Route path="/about">{() => <CompanyPage page="about" />}</Route>
+      <Route path="/contact">{() => <CompanyPage page="contact" />}</Route>
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
-      <Route component={NotFound} />
+      <Route>{() => <SolutionPage path="/404" />}</Route>
     </Switch>
   );
 }
