@@ -1,8 +1,14 @@
 import type { Config } from "tailwindcss";
+import medusaPreset from "@medusajs/ui-preset";
 
 export default {
+  presets: [medusaPreset],
   darkMode: ["class"],
-  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./client/index.html",
+    "./client/src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {
       borderRadius: {
