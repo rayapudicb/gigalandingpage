@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
 import { industries, moduleStages, modules, products, solutionByPath, specialistModules, type Solution } from "@/data/solutions";
+import { GigaOpsHeroDemo, SpeedExperience } from "./EnterpriseDemos";
 import "./EnterpriseSite.css";
 
 const iconByPath: Record<string, LucideIcon> = {
@@ -222,57 +223,6 @@ function InteractiveWorkspace({ choices, initialPath }: { choices: Solution[]; i
   </div>;
 }
 
-const connectedSteps = [
-  { name: "Maintenance", path: "/gigaops/maintenance", target: "Inventory", targetPath: "/gigaops/inventory", event: "Urgent repair opened", record: "Work order WO-2048", state: "Asset P-1082 · Site 12", passed: "Asset, fault, priority and required part", action: "Plan the repair and identify the part needed.", next: "Inventory sees the requirement", outcome: "The request begins with the full asset context.", companion: "WO-2048 was opened for asset P-1082 at Site 12. The repair calls for part BRG-6205. Next: check the available stock." },
-  { name: "Inventory", path: "/gigaops/inventory", target: "Procurement", targetPath: "/gigaops/procurement", event: "Part shortage found", record: "Part BRG-6205", state: "0 available at this site", passed: "Stock position, shortage and need-by time", action: "Check availability before assigning the repair.", next: "Procurement sees the shortfall", outcome: "The wait for material becomes visible early.", companion: "Part BRG-6205 is unavailable at Site 12. The work order is waiting on material. Next: route a purchase request." },
-  { name: "Procurement", path: "/gigaops/procurement", target: "Workforce", targetPath: "/gigaops/workforce", event: "Purchase request routed", record: "Request PR-318", state: "Approval pending", passed: "Approval state, supplier and expected arrival", action: "Route the request to the right approver.", next: "Workforce sees the expected arrival", outcome: "Teams can find where the handoff is waiting.", companion: "Request PR-318 is waiting for approval. The next step is an authorized review before a supplier date can be trusted." },
-  { name: "Workforce", path: "/gigaops/workforce", target: "Finance", targetPath: "/gigaops/finance", event: "Technician window aligned", record: "Crew A · Site 12", state: "Planned window 14:00", passed: "Assignment, schedule and execution status", action: "Schedule the right person around part availability.", next: "Finance sees the work completed", outcome: "A technician is not sent without the needed context.", companion: "Crew A has a planned 14:00 window. Confirm the part has arrived before dispatching the assigned technician." },
-  { name: "Finance & Analytics", path: "/gigaops/finance", target: "Analytics", targetPath: "/gigaops/analytics", event: "Cost and time reviewed", record: "Work order WO-2048", state: "Material and labor captured", passed: "Actual cost, repair time and part wait", action: "Review what the repair cost and where time was lost.", next: "Leaders see the bottleneck", outcome: "The next decision is grounded in the same trail.", companion: "WO-2048 now has material and labor entries. Review repair time and part wait against the baseline before choosing a follow-up." },
-];
-
-function ConnectedJourney() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [phase, setPhase] = useState(0);
-  const [playing, setPlaying] = useState(() => typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  useEffect(() => {
-    if (!playing) return;
-    const timer = window.setTimeout(() => {
-      if (phase < 2) setPhase(phase + 1);
-      else { setPhase(0); setActiveIndex((index) => (index + 1) % connectedSteps.length); }
-    }, phase === 2 ? 1700 : 1150);
-    return () => window.clearTimeout(timer);
-  }, [activeIndex, phase, playing]);
-  const active = connectedSteps[activeIndex];
-  const phaseNames = ["Source event received", "SaaS core checks and routes", "Next module receives context"];
-  const chooseStep = (index: number) => { setPlaying(false); setActiveIndex(index); setPhase(0); };
-  return <section className="es-section es-connected-section" id="connected-work"><div className="es-container">
-    <div className="es-connected-heading"><div><span className="es-overline">CONNECTED WORK, STEP BY STEP</span><h2>One issue. Every team has the context.</h2></div><p>An urgent repair can stall while work, parts, approvals and people sit in separate systems. Watch an example event travel through the GigaOps SaaS core and into the next module.</p></div>
-    <div className="es-connected-stage">
-      <div className="es-connected-bar"><span><i /> GIGAOPS / SHARED WORK ITEM</span><div><span>ILLUSTRATIVE AUTO-RUN</span><button type="button" onClick={() => setPlaying(!playing)} aria-label={playing ? "Pause connected workflow" : "Play connected workflow"}>{playing ? <Pause size={13} /> : <Play size={13} />}{playing ? "Pause" : "Play"}</button></div></div>
-      <div className="es-connected-mobile-hint">Swipe to explore the modules <ArrowRight size={13} /></div>
-      <div className="es-connected-tabs" role="group" aria-label="Explore connected modules">{connectedSteps.map((step, index) => <button type="button" key={step.name} className={activeIndex === index ? "es-connected-tab is-active" : index < activeIndex ? "es-connected-tab is-complete" : "es-connected-tab"} onClick={() => chooseStep(index)} aria-pressed={activeIndex === index}>
-        <span className="es-connected-tab-icon"><SolutionIcon path={step.path} size={17} /></span><span><small>{String(index + 1).padStart(2, "0")} / MODULE</small><strong>{step.name}</strong></span>{index < connectedSteps.length - 1 && <ArrowRight size={15} className="es-connected-arrow" />}
-      </button>)}</div>
-      <div className="es-sync-status"><div><span className="es-sync-pulse" /><strong>{phaseNames[phase]}</strong><span>{active.name} → GigaOps SaaS core → {active.target}</span></div><small>{String(activeIndex + 1).padStart(2, "0")} / {String(connectedSteps.length).padStart(2, "0")} HANDOFF</small></div>
-      <div className="es-sync-visual" role="group" aria-label={`Example data flow: ${active.name} through the GigaOps SaaS core to ${active.target}`}>
-        <Link href={active.path} className={phase === 0 ? "es-sync-module is-active" : "es-sync-module is-complete"}><span>MODULE / SOURCE</span><div><SolutionIcon path={active.path} size={23} /><strong>{active.name}</strong></div><small>{active.record}</small></Link>
-        <div className={phase === 0 ? "es-sync-connector" : phase === 1 ? "es-sync-connector is-active" : "es-sync-connector is-complete"}><span>EVENT</span></div>
-        <div className={phase === 1 ? "es-sync-core is-active" : phase === 2 ? "es-sync-core is-complete" : "es-sync-core"}><span>SHARED SAAS FOUNDATION</span><div><Layers3 size={24} /><strong>GigaOps SaaS core</strong></div><p>Tenant scope · permissions · event context · workflow rules · audit trail</p></div>
-        <div className={phase === 2 ? "es-sync-connector is-active" : "es-sync-connector"}><span>CONTEXT</span></div>
-        <Link href={active.targetPath} className={phase === 2 ? "es-sync-module is-active" : "es-sync-module"}><span>MODULE / RECEIVER</span><div><SolutionIcon path={active.targetPath} size={23} /><strong>{active.target}</strong></div><small>{phase === 2 ? "Context received" : "Waiting for the handoff"}</small></Link>
-      </div>
-      <div className="es-sync-payload"><span>DATA IN TRANSIT</span><strong>{active.passed}</strong><span>{phase === 0 ? "Captured at source" : phase === 1 ? "Checked against tenant and access rules" : `Delivered to ${active.target}`}</span></div>
-      <div className="es-sync-progress" role="progressbar" aria-label="Example workflow progress" aria-valuemin={0} aria-valuemax={connectedSteps.length * 3} aria-valuenow={activeIndex * 3 + phase + 1}><span style={{ width: `${((activeIndex * 3 + phase + 1) / (connectedSteps.length * 3)) * 100}%` }} /></div>
-      <div className="es-connected-body" aria-live={playing ? "off" : "polite"}>
-        <div className="es-connected-main"><span className="es-overline">{String(activeIndex + 1).padStart(2, "0")} / {active.name.toUpperCase()}</span><h3>{active.event}</h3><p>{active.action}</p><div className="es-connected-record"><span>SHARED RECORD</span><strong>{active.record}</strong><small>{active.state}</small></div><Link href={active.path} className="es-connected-link">Explore {active.name} <ArrowRight size={16} /></Link></div>
-        <div className="es-connected-context"><span className="es-overline">THE CONTEXT THAT MOVES</span><div className="es-context-row"><span>01 / DATA PASSED ON</span><strong>{active.passed}</strong></div><div className="es-context-row"><span>02 / NEXT TEAM</span><strong>{active.next}</strong></div><div className="es-context-row"><span>03 / BUSINESS EFFECT</span><strong>{active.outcome}</strong></div><button type="button" className="es-connected-next" onClick={() => chooseStep((activeIndex + 1) % connectedSteps.length)}>Follow the next handoff <ArrowRight size={16} /></button></div>
-      </div>
-      <div className="es-connected-foot"><span>MEASURE THE JOURNEY</span><strong>Time to repair</strong><strong>Part wait</strong><strong>Approval age</strong><span>From the same work trail</span></div>
-    </div>
-    <div className="es-companion-story"><div><span className="es-overline">GENERATIVE UI / PRODUCT DIRECTION</span><h3>A companion that follows the case, not just the chat.</h3><p>The planned GigaOps Companion would assemble a case from authorized events, explain what is known with source links, propose a next action and follow the result. People stay in control of changes.</p></div><div className="es-companion-example" aria-live={playing ? "off" : "polite"}><div><Sparkles size={16} /><span>GIGAOPS COMPANION / EXAMPLE</span><span>PLANNED</span></div><p>{active.event}.</p><div><span>{active.companion} Any proposed change still needs the required confirmation.</span><span className="es-companion-source">Source modules: <Link href="/gigaops/maintenance">Maintenance</Link>{active.path !== "/gigaops/maintenance" && <> · <Link href={active.path}>{active.name}</Link></>}</span></div></div></div>
-  </div></section>;
-}
-
 const architectureStages = [
   { label: "01 / SIGNAL", title: "Trusted event", detail: "A system or person reports what changed.", path: "/gigaops/data", icon: Zap },
   { label: "02 / CONNECT", title: "Connector Hub", detail: "Source and identity travel with the event.", path: "/gigaops/connector-hub", icon: Database },
@@ -316,15 +266,13 @@ function ClosingCTA({ title = "See how the work fits together." }: { title?: str
 }
 
 export function EnterpriseHome() {
-  const demoChoices = demoPaths.map((path) => solutionByPath.get(path)!);
   useEffect(() => { document.title = "Gigasys | Connected enterprise software"; }, []);
   return <EnterpriseShell>
     <section className="es-hero es-home-hero"><div className="es-container">
-      <span className="es-kicker"><i /> GIGAOPS / ENTERPRISE PLATFORM</span>
-      <div className="es-hero-grid"><div><h1>One platform for the work that runs your business.</h1><p>Connect people, processes and data in one governed workspace. Build focused operating journeys for life sciences, finance, field teams and more.</p><div className="es-hero-actions"><a href="#connected-work" className="es-button es-button-dark">See how work connects <ArrowRight size={17} /></a><Link href="/gigaops" className="es-button es-button-outline">Explore the platform</Link></div></div><aside><span>ONE CONNECTED SYSTEM</span><p>Life sciences <i /> Finance <i /> Field work <i /> Workflow automation</p><strong>Purpose-built journeys on a common foundation.</strong></aside></div>
+      <span className="es-kicker"><i /> GIGAOPS / CONNECTED ENTERPRISE WORK</span>
+      <div className="es-home-intro"><div><h1>When work changes, the right team already knows.</h1><p>Follow one urgent repair through maintenance, inventory, procurement, field work and finance. See the shared record and the next decision at every handoff.</p></div><div className="es-home-intro-actions"><a href="#connected-work" className="es-button es-button-dark">Watch the work move <ArrowRight size={17} /></a><Link href="/gigaops" className="es-button es-button-outline">Explore GigaOps</Link></div></div>
+      <GigaOpsHeroDemo />
     </div></section>
-    <ConnectedJourney />
-    <section className="es-section es-section-soft" id="workflows"><div className="es-container"><div className="es-section-row"><SectionHeading label="EXPLORE THE PLATFORM" title="Click through the work." copy="Select a workflow, then follow the decisions and actions that move it forward." /><span className="es-interactive-label"><Play size={15} /> Interactive walkthrough</span></div><InteractiveWorkspace choices={demoChoices} initialPath="/gigaops/automation" /></div></section>
     <ArchitectureFlow />
     <section className="es-section es-mobile-home" id="mobile"><div className="es-container"><MobileExperience compact /></div></section>
     <section className="es-section es-section-dark es-home-index" id="products"><div className="es-container"><SectionHeading label="CHOOSE A DIRECTION" title="Go deeper where it matters." copy="Start with the platform, a specialist product, or the work in your industry." /><div className="es-home-links">
@@ -383,15 +331,16 @@ export function SolutionPage({ path }: { path: string }) {
   const item = solutionByPath.get(path);
   useEffect(() => { document.title = `${item?.name ?? "Page"} | Gigasys`; }, [item?.name]);
   if (!item) return <EnterpriseShell><div className="es-container es-not-found"><h1>Page not found</h1><Link href="/">Return home <ArrowRight size={16} /></Link></div></EnterpriseShell>;
+  const isSpeed = item.path === "/products/speed";
   const related = item.related.map((relatedPath) => solutionByPath.get(relatedPath)).filter((value): value is Solution => Boolean(value));
   return <EnterpriseShell>
-    <section className="es-hero es-solution-hero"><div className="es-container">
+    <section className={isSpeed ? "es-hero es-solution-hero es-speed-hero" : "es-hero es-solution-hero"}><div className="es-container">
       <div className="es-breadcrumb"><Link href="/">Gigasys</Link><ChevronRight size={13} /><Link href={item.kind === "module" ? "/gigaops" : item.kind === "product" ? "/products" : "/industries"}>{item.kind === "module" ? "GigaOps" : item.kind === "product" ? "Products" : "Industries"}</Link><ChevronRight size={13} /><span>{item.name}</span></div>
       <div className="es-kicker-row"><span className="es-kicker"><i /> {item.name.toUpperCase()} / {item.category.toUpperCase()}</span>{moduleStages[item.path] && <span className="es-stage">{moduleStages[item.path]}</span>}<ChannelBadges path={item.path} /></div>
-      <div className="es-hero-grid"><div><h1>{item.headline}</h1><p>{item.summary}</p><div className="es-hero-actions"><a href="#experience" className="es-button es-button-dark">See the workflow <ArrowRight size={17} /></a><Link href="/contact" className="es-button es-button-outline">Discuss your use case</Link></div></div><aside><span>{item.kind.toUpperCase()} / {item.name.toUpperCase()}</span><div className="es-hero-aside-icon"><SolutionIcon path={item.path} size={37} /></div><strong>From context to the next clear action.</strong></aside></div>
+      <div className={isSpeed ? "es-speed-intro" : "es-hero-grid"}><div><h1>{item.headline}</h1><p>{item.summary}</p><div className="es-hero-actions"><a href="#experience" className="es-button es-button-dark">See the workflow <ArrowRight size={17} /></a><Link href="/contact" className="es-button es-button-outline">Discuss your use case</Link></div></div>{!isSpeed && <aside><span>{item.kind.toUpperCase()} / {item.name.toUpperCase()}</span><div className="es-hero-aside-icon"><SolutionIcon path={item.path} size={37} /></div><strong>From context to the next clear action.</strong></aside>}</div>
     </div></section>
     <div className="es-page-tabs"><div className="es-container"><a href="#experience">Experience</a><a href="#outcomes">Outcomes</a><a href="#capabilities">Capabilities</a><a href="#approach">Why Gigasys</a></div></div>
-    <section className="es-section es-section-soft" id="experience"><div className="es-container"><div className="es-section-row"><SectionHeading label="INTERACTIVE EXPERIENCE" title={`Work through ${item.name}.`} copy="Select each action to see how this journey moves from a work item to a decision." /><span className="es-interactive-label"><Play size={15} /> Clickable workflow</span></div><InteractiveWorkspace key={item.path} choices={[item]} initialPath={item.path} /></div></section>
+    <section className={isSpeed ? "es-section es-section-soft es-speed-experience" : "es-section es-section-soft"} id="experience"><div className="es-container">{!isSpeed && <div className="es-section-row"><SectionHeading label="INTERACTIVE EXPERIENCE" title={`Work through ${item.name}.`} copy="Select each action to see how this journey moves from a work item to a decision." /><span className="es-interactive-label"><Play size={15} /> Interactive example</span></div>}{isSpeed ? <SpeedExperience /> : <InteractiveWorkspace key={item.path} choices={[item]} initialPath={item.path} />}</div></section>
     <section className="es-section" id="outcomes"><div className="es-container"><SectionHeading label="BUSINESS OUTCOMES" title="Make the improvement measurable." copy="Agree on a baseline and target during discovery. These are the operational measures this solution is built to improve." /><div className="es-outcome-grid">{item.outcomes.map(([name, description], index) => <div className="es-outcome" key={name}><span>0{index + 1} / MEASURE</span><h3>{name}</h3><p>{description}</p></div>)}</div></div></section>
     <section className="es-section es-section-dark" id="capabilities"><div className="es-container"><SectionHeading label="WHAT THE SOFTWARE ENABLES" title="Give every team a usable next step." /><div className="es-capability-grid">{item.capabilities.map((capability, index) => <div key={capability}><span>0{index + 1}</span><Check size={21} /><h3>{capability}</h3><p>{item.steps[Math.min(index, item.steps.length - 1)][1]}</p></div>)}</div></div></section>
     <section className="es-section" id="approach"><div className="es-container es-approach-grid"><SectionHeading label="WHY GIGASYS" title="A system that keeps the work connected." copy="The value comes from a clear workflow, the context to act, and a record of what happened." /><div>{[["01", "Start with the work", `The ${item.name} experience starts with an actual operational task, not a generic dashboard.`], ["02", "Connect the context", "People, records and decisions are visible in the same flow."], ["03", "Prove the result", `Use ${item.outcomes[0][0].toLowerCase()} and related measures to assess improvement against your own baseline.`]].map(([num, name, copy]) => <div className="es-reason" key={num}><span>{num}</span><div><h3>{name}</h3><p>{copy}</p></div></div>)}</div></div></section>

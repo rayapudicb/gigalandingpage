@@ -106,6 +106,12 @@ const gigaopsModules = [
     desc: "Connectors, contracts, webhook ingestion",
     href: "/gigaops/data",
   },
+  {
+    icon: FlaskConical,
+    name: "SPEED Process Safety",
+    desc: "Pharma synthesis route hazard screening",
+    href: "/products/speed",
+  },
 ];
 
 const otherProducts = [
@@ -302,15 +308,15 @@ function Navigation() {
         >
           <img
             src={Logo}
-            alt="Gigasys"
+            alt="GigaOps"
             className="h-8 w-8 object-contain transition-transform group-hover:scale-105"
           />
           <div className="flex flex-col">
             <span className="text-xl font-bold tracking-tight text-gray-900 leading-none">
-              Gigasys
+              GigaOps
             </span>
             <span className="text-[10px] tracking-widest uppercase font-semibold text-orange-600 mt-0.5">
-              Enterprise Systems
+              Enterprise Platform
             </span>
           </div>
         </Link>
@@ -1145,9 +1151,9 @@ function Footer() {
           {/* Column 1: Brand */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5">
-              <img src={Logo} alt="Gigasys" className="h-8 w-8" />
+              <img src={Logo} alt="GigaOps" className="h-8 w-8" />
               <span className="text-2xl font-bold tracking-tight text-white">
-                Gigasys
+                GigaOps
               </span>
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
@@ -1277,6 +1283,14 @@ function Footer() {
                   className="text-gray-300 hover:text-white transition-colors"
                 >
                   Giga AI
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products/speed"
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  SPEED
                 </Link>
               </li>
             </ul>

@@ -289,7 +289,7 @@ const enterpriseCapabilities: EnterpriseCapability[] = [
     linkText: 'Explore Financial Architecture',
     simulatedPreview: {
       topStatus: 'GENERAL LEDGER BALANCED · PERIOD OPEN',
-      subStatus: 'Q4 Fiscal Ledger · Entity: Gigasys Industrial Corp',
+      subStatus: 'Q4 Fiscal Ledger · Entity: GigaOps Operations Corp',
       metrics: [
         { label: 'Fiscal Period', val: 'Q4-2026', statusColor: 'text-blue-600' },
         { label: 'Subledger Sync', val: '100% Live', statusColor: 'text-emerald-600' },
@@ -1809,10 +1809,10 @@ export default function Home() {
                 Product Portfolio
               </span>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight mt-4 mb-4">
-                Beyond GigaOps — The Gigasys Product Suite
+                Beyond GigaOps — Digital Product Portfolio
               </h2>
               <p className="text-lg text-gray-500 leading-relaxed">
-                In addition to the unified GigaOps enterprise operational platform, Gigasys engineers focused digital products for communications, exchange commerce, identity, and conversational AI.
+                In addition to the unified GigaOps enterprise operational platform, our portfolio includes focused digital products for communications, exchange commerce, identity, and conversational AI.
               </p>
             </FadeUp>
 

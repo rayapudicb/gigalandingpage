@@ -41,7 +41,7 @@ const capabilities = [
     number: "01",
     title: "Enterprise SaaS",
     description:
-      "GigaLibs brings maintenance, workforce, inventory, procurement, orders, finance, workflow, analytics, documents, communications and data into a modular operating platform.",
+      "GigaOps brings maintenance, workforce, inventory, procurement, orders, finance, workflow, analytics, documents, communications and data into a modular operating platform.",
   },
   {
     icon: Smartphone,

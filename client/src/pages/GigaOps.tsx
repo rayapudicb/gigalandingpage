@@ -15,6 +15,7 @@ import {
   FileSignature,
   MapPin,
   Database,
+  FlaskConical,
   CheckCircle2,
   Globe2,
   Smartphone,
@@ -123,6 +124,14 @@ const modules = [
     slug: 'data',
     desc: 'Data contracts, schema mapping, webhook ingestion, connector catalogue, lineage',
     category: 'Platform',
+  },
+  {
+    icon: FlaskConical,
+    name: 'SPEED Process Safety',
+    slug: 'speed',
+    href: '/products/speed',
+    desc: 'Synthesis route screening for thermal hazards, energetic materials, and compatibility risks',
+    category: 'Pharma',
   },
 ];
 
@@ -270,7 +279,7 @@ export default function GigaOps() {
                 const IconComponent = m.icon;
                 return (
                   <FadeUp key={m.slug} delay={idx * 0.04}>
-                    <Link href={`/gigaops/${m.slug}`} className="block h-full">
+                    <Link href={m.href ?? `/gigaops/${m.slug}`} className="block h-full">
                       <div className="h-full bg-white border border-gray-200/80 rounded-3xl p-8 hover:border-orange-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between">
                         <div>
                           <div className="flex items-center justify-between mb-5">
