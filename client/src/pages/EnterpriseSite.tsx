@@ -2,26 +2,32 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Activity, ArrowRight, BarChart3, Boxes, BriefcaseBusiness, Building2,
-  Check, ChevronDown, ChevronRight, ClipboardCheck, Compass, Database,
+  Check, ChevronDown, ChevronRight, ClipboardCheck, Compass, Cpu, Database,
   Factory, FileCheck2, FileSignature, FlaskConical, HardHat, HeartPulse,
   Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare, Monitor,
   Pause, Play, Repeat2, Settings2, ShieldCheck, Smartphone, Sparkles,
   Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
-import { industries, moduleStages, modules, products, solutionByPath, specialistModules, type Solution } from "@/data/solutions";
+import colleaguesReview from "@/assets/industry/colleagues-review.jpg";
+import engineeringTeam from "@/assets/industry/engineering-team.jpg";
+import fieldCrew from "@/assets/industry/field-crew.jpg";
+import industrialEngineer from "@/assets/industry/industrial-engineer.jpg";
+import labScientist from "@/assets/industry/lab-scientist.jpg";
+import { digitalProducts, enterpriseProducts, industries, modules, products, solutionByPath, specialistModules, type Solution } from "@/data/solutions";
 import { SpeedExperience } from "./EnterpriseDemos";
-import { SceneCompany, SceneConnectedWork, SceneIndustry, SceneMobile, SceneModule, ScenePlatform } from "./enterpriseIllustrations";
+import { SceneCompany, SceneConnectedWork, SceneIndustry, SceneModule, ScenePlatform } from "./enterpriseIllustrations";
 import "./EnterpriseSite.css";
 
 const iconByPath: Record<string, LucideIcon> = {
   "/gigaops": Layers3,
   "/gigaops/maintenance": Wrench, "/gigaops/workforce": Users2,
   "/gigaops/inventory": Boxes, "/gigaops/procurement": ClipboardCheck,
+  "/gigaops/manufacturing": Factory, "/gigaops/iot": Cpu, "/gigaops/projects": BriefcaseBusiness,
   "/gigaops/finance": FileCheck2, "/gigaops/automation": Workflow,
   "/gigaops/analytics": BarChart3, "/gigaops/communications": MessageSquare,
   "/gigaops/documents": FileSignature, "/gigaops/geospatial": MapPin,
-  "/gigaops/data": Database, "/products/speed": FlaskConical,
+  "/gigaops/data": Database, "/gigaops/returns": Repeat2, "/products/speed": FlaskConical,
   "/gigaops/accounts-receivable": FileCheck2, "/gigaops/autonomous-recovery": ShieldCheck,
   "/gigaops/document-scanner": FileSignature, "/gigaops/esignature": ClipboardCheck,
   "/gigaops/multi-currency": Activity, "/gigaops/ontology": Layers3,
@@ -40,8 +46,16 @@ const iconByPath: Record<string, LucideIcon> = {
   "/industries/construction": HardHat,
 };
 
-const demoPaths = ["/products/speed", "/gigaops/automation", "/gigaops/finance", "/gigaops/workforce"];
+const demoPaths = ["/gigaops/maintenance", "/gigaops/workforce", "/gigaops/inventory", "/products/speed"];
 const mobileRoadmapPaths = new Set(["/gigaops/maintenance", "/gigaops/workforce", "/gigaops/inventory", "/gigaops/product-catalogue"]);
+const platformMenuPaths = [
+  "/gigaops/maintenance", "/gigaops/workforce", "/gigaops/inventory", "/gigaops/manufacturing",
+  "/gigaops/procurement", "/gigaops/finance", "/gigaops/iot", "/gigaops/geospatial",
+  "/gigaops/documents", "/gigaops/analytics", "/gigaops/automation", "/products/speed",
+];
+function solutionsFrom(paths: string[]) {
+  return paths.map((path) => solutionByPath.get(path)).filter((item): item is Solution => Boolean(item));
+}
 
 function ChannelBadges({ path }: { path: string }) {
   if (!path.startsWith("/gigaops/") || !mobileRoadmapPaths.has(path)) return null;
@@ -76,14 +90,14 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const headerRef = useRef<HTMLElement>(null);
-  const navRef = useRef<HTMLElement>(null);
   useEffect(() => { setMenuOpen(false); setOpenDropdown(null); }, [location]);
   useEffect(() => {
     if (!openDropdown && !menuOpen) return;
     const onPointerDown = (event: PointerEvent) => {
       const target = event.target as Node;
-      if (openDropdown && !navRef.current?.contains(target)) setOpenDropdown(null);
-      if (menuOpen && !headerRef.current?.contains(target)) setMenuOpen(false);
+      if (headerRef.current?.contains(target)) return;
+      setOpenDropdown(null);
+      setMenuOpen(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") { setOpenDropdown(null); setMenuOpen(false); }
@@ -96,12 +110,12 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
     };
   }, [openDropdown, menuOpen]);
   const close = () => { setMenuOpen(false); setOpenDropdown(null); };
-
   const groups = [
-    { key: "platform", label: "Platform", lead: "/gigaops", leadLabel: "Platform overview", items: modules, secondary: specialistModules },
-    { key: "products", label: "Products", lead: "/products", leadLabel: "All products", items: products, secondary: [] },
-    { key: "industries", label: "Industries", lead: "/industries", leadLabel: "All industries", items: industries, secondary: [] },
+    { key: "platform", label: "Platform", lead: "/gigaops", leadLabel: "Platform overview", items: solutionsFrom(platformMenuPaths), feature: { href: "/industries/manufacturing", image: engineeringTeam, title: "Manufacturing", copy: "The first packaged solution: work, people, parts and production on one plant record." } },
+    { key: "products", label: "Products", lead: "/products", leadLabel: "All products", items: products, feature: { href: "/products/speed", image: labScientist, title: "SPEED", copy: "Desk-side process-safety screening before chemistry moves toward the plant." } },
+    { key: "industries", label: "Industries", lead: "/industries", leadLabel: "All industries", items: industries, feature: { href: "/contact", image: colleaguesReview, title: "Talk to the team", copy: "Bring a site map, a crew list and the tools you want to retire." } },
   ];
+  const activeGroup = groups.find((group) => group.key === openDropdown);
 
   return (
     <div className="es">
@@ -110,7 +124,7 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
           <Link href="/" className="es-brand" aria-label="GigaOps home" onClick={close}>
             <img src={Logo} alt="" /><span>GigaOps</span>
           </Link>
-          <nav className="es-nav" aria-label="Main navigation" ref={navRef}>
+          <nav className="es-nav" aria-label="Main navigation">
             {groups.map((group) => (
               <div className="es-nav-item" key={group.key}>
                 <button type="button" className={openDropdown === group.key ? "es-nav-trigger is-open" : "es-nav-trigger"}
@@ -118,13 +132,6 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
                   aria-expanded={openDropdown === group.key} aria-controls={`menu-${group.key}`}>
                   {group.label}<ChevronDown size={14} strokeWidth={1.5} />
                 </button>
-                {openDropdown === group.key && (
-                  <div className="es-mega" id={`menu-${group.key}`}>
-                    <div className="es-mega-top"><span>{group.label}</span><Link href={group.lead} onClick={close}>{group.leadLabel}<ArrowRight size={15} strokeWidth={1.5} /></Link></div>
-                    <MenuGroup title={group.key === "platform" ? "GigaOps modules" : group.label} items={group.items} close={close} />
-                    {group.secondary.length > 0 && <MenuGroup title="Specialist modules" items={group.secondary} close={close} />}
-                  </div>
-                )}
               </div>
             ))}
             <Link href="/about" className="es-nav-simple" onClick={close}>Company</Link>
@@ -140,21 +147,38 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
           <Link href="/gigaops" onClick={close}>Platform overview <ArrowRight size={15} strokeWidth={1.5} /></Link>
           {groups.map((group) => <details key={group.key}>
             <summary>{group.label}<ChevronDown size={15} strokeWidth={1.5} /></summary>
-            <div><Link href={group.lead} onClick={close}><ArrowRight size={17} strokeWidth={1.5} />{group.leadLabel}</Link>{[...group.items, ...group.secondary].map((item) => <Link href={item.path} key={item.path} onClick={close}><SolutionIcon path={item.path} size={17} />{item.name}</Link>)}</div>
+            <div><Link href={group.lead} onClick={close}><ArrowRight size={17} strokeWidth={1.5} />{group.leadLabel}</Link>{group.items.map((item) => <Link href={item.path} key={item.path} onClick={close}><SolutionIcon path={item.path} size={17} />{item.name}</Link>)}</div>
           </details>)}
           <Link href="/about" onClick={close}>Company <ArrowRight size={15} strokeWidth={1.5} /></Link>
           <Link href="/contact" onClick={close}>Contact <ArrowRight size={15} strokeWidth={1.5} /></Link>
         </nav>}
+        {activeGroup && (
+          <div className="es-mega" id={`menu-${activeGroup.key}`}>
+            <div className="es-container">
+              <div className="es-mega-top"><span>{activeGroup.label}</span><Link href={activeGroup.lead} onClick={close}>{activeGroup.leadLabel}<ArrowRight size={15} strokeWidth={1.5} /></Link></div>
+              <div className="es-mega-layout">
+                <MenuGroup title={activeGroup.key === "platform" ? "GigaOps modules" : activeGroup.label} items={activeGroup.items} close={close} />
+                <Link href={activeGroup.feature.href} onClick={close} className="es-mega-feature">
+                  <img src={activeGroup.feature.image} alt="" />
+                  <strong>{activeGroup.feature.title}</strong>
+                  <p>{activeGroup.feature.copy}</p>
+                  <span>Explore <ArrowRight size={16} strokeWidth={1.5} /></span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
+      {openDropdown && <button type="button" className="es-mega-scrim" aria-label="Close menu" onClick={close} />}
       <main>{children}</main>
       <footer className="es-footer">
         <div className="es-container es-footer-grid">
-          <div><Link href="/" className="es-brand es-footer-brand"><img src={Logo} alt="" /><span>GigaOps</span></Link><p>Connected software for the work that runs your organization.</p><a href="mailto:connect@gigasystech.com">connect@gigasystech.com <ArrowRight size={14} strokeWidth={1.5} /></a></div>
-          <div><strong>Platform</strong><Link href="/gigaops">GigaOps</Link><Link href="/platform/mobile">Mobile experiences</Link><Link href="/gigaops/automation">Workflow Studio</Link><Link href="/gigaops/data">Data & Integration</Link><Link href="/gigaops/analytics">Analytics</Link></div>
+          <div><Link href="/" className="es-brand es-footer-brand"><img src={Logo} alt="" /><span>GigaOps</span></Link><p>Operations software for plants, field teams and regulated work — one record for the job, the person, the part and the evidence.</p><a href="mailto:connect@gigasystech.com">connect@gigasystech.com <ArrowRight size={14} strokeWidth={1.5} /></a></div>
+          <div><strong>Platform</strong><Link href="/gigaops">GigaOps</Link><Link href="/gigaops/maintenance">Asset & Maintenance</Link><Link href="/gigaops/workforce">Workforce</Link><Link href="/gigaops/inventory">Inventory</Link><Link href="/platform/mobile">Frontline mobile</Link></div>
           <div><strong>Products</strong><Link href="/gigaops">GigaOps</Link><Link href="/products/speed">SPEED</Link><Link href="/products/textfly">TextFly</Link><Link href="/products">Explore all</Link></div>
           <div><strong>Company</strong><Link href="/about">About</Link><Link href="/jobs">Careers</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
         </div>
-        <div className="es-container es-footer-bottom"><span>© {new Date().getFullYear()} Gigasys Technologies</span><span>Enterprise software, designed around action.</span></div>
+        <div className="es-container es-footer-bottom"><span>© {new Date().getFullYear()} Gigasys Technologies Inc · Gigasys Technologies Pvt Ltd</span><span>Configure the operation. Do not fork the product.</span></div>
       </footer>
     </div>
   );
@@ -181,7 +205,7 @@ function CatalogTile({ item }: { item: Solution }) {
       <strong>{item.name}</strong>
       <p>{item.summary}</p>
       <div className="es-tile-foot">
-        <small>{moduleStages[item.path] ?? item.category}</small>
+        <small>{item.category}</small>
         <SolutionIcon path={item.path} size={32} />
       </div>
     </Link>
@@ -197,7 +221,53 @@ function ProofCard({ kicker, title, metric, detail }: { kicker: string; title: s
   );
 }
 
-function ClosingCTA({ title = "See how the work fits together." }: { title?: string }) {
+function PeopleSpotlight({ src, alt, label, title, copy }: { src: string; alt: string; label: string; title: string; copy: string }) {
+  return (
+    <section className="es-section">
+      <div className="es-container es-split">
+        <div className="es-split-copy">
+          <span className="es-overline">{label}</span>
+          <h2 className="is-ink">{title}</h2>
+          <p>{copy}</p>
+        </div>
+        <div className="es-spotlight"><img src={src} alt={alt} /></div>
+      </div>
+    </section>
+  );
+}
+
+const fieldModules: { icon: LucideIcon; title: string; copy: string; pos: string }[] = [
+  { icon: ClipboardCheck, title: "Operator rounds", copy: "Route, checkpoint, reading.", pos: "tl" },
+  { icon: Wrench, title: "Work orders", copy: "Asset, tasks, close-out.", pos: "tr" },
+  { icon: Boxes, title: "Parts issue", copy: "Reserve, pick, issue.", pos: "ml" },
+  { icon: FileCheck2, title: "Evidence", copy: "Photo, checklist, sign.", pos: "mr" },
+  { icon: WifiOff, title: "Offline queue", copy: "Draft until receipt.", pos: "bl" },
+  { icon: MapPin, title: "Site & asset", copy: "The place on the record.", pos: "br" },
+];
+
+function FieldMobileScene({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className={compact ? "es-field is-compact" : "es-field"} role="img" aria-label="Frontline mobile modules around a technician on the plant floor">
+      {fieldModules.map((item) => {
+        const Icon = item.icon;
+        return (
+          <div className={`es-field-label es-field-${item.pos}`} key={item.title}>
+            <span className="es-field-icon"><Icon size={16} strokeWidth={1.5} /></span>
+            <span>
+              <strong>{item.title}</strong>
+              <small>{item.copy}</small>
+            </span>
+          </div>
+        );
+      })}
+      <div className="es-field-photo">
+        <img src={industrialEngineer} alt="Maintenance technician on the plant floor holding a tablet" />
+      </div>
+    </div>
+  );
+}
+
+function ClosingCTA({ title = "Bring a plant, a process and the tools you run today." }: { title?: string }) {
   return <section className="es-closing"><div className="es-container"><span className="es-overline">Start a conversation</span><div><h2>{title}</h2><Link href="/contact" className="es-button es-button-light">Talk to our team <ArrowRight size={16} strokeWidth={1.5} /></Link></div></div></section>;
 }
 
@@ -292,46 +362,46 @@ function InteractiveWorkspace({ choices, initialPath }: { choices: Solution[]; i
 }
 
 const homeProof = [
-  { kicker: "Asset & Maintenance", title: "Know what needs attention before an asset stops work.", metric: "Unplanned downtime", detail: "Hours lost to emergency work, measured against your baseline." },
-  { kicker: "Inventory", title: "See every stock movement and the work it supports.", metric: "Stock accuracy", detail: "Physical counts compared with the recorded balance." },
-  { kicker: "Workforce", title: "Get the right person to the right work.", metric: "Time to dispatch", detail: "Minutes from request to an accepted assignment." },
-  { kicker: "SPEED", title: "See route risk before chemistry moves toward scale-up.", metric: "Screening cycle", detail: "Hours from submitted route to reviewed screen." },
+  { kicker: "Asset & Maintenance", title: "Stop running breakdowns on WhatsApp and planned work on a spreadsheet.", metric: "Unplanned downtime", detail: "Hours lost to emergency work, measured against the baseline we agree with you." },
+  { kicker: "Workforce", title: "Put a named, qualified person on the job — then export time that payroll can use.", metric: "Time to dispatch", detail: "Minutes from a staffing request to an accepted booking." },
+  { kicker: "Inventory", title: "Do not send a technician to a bin that was already empty.", metric: "Stock accuracy", detail: "Physical count versus recorded balance, including reservations against work." },
+  { kicker: "SPEED", title: "See energetic and thermal risk while the route can still change.", metric: "Screening cycle", detail: "Hours from a submitted route to a reviewed process-safety screen." },
 ];
 
 const architecture = [
-  { href: "/gigaops/data", icon: Zap, title: "Signal", copy: "A system or person reports what changed." },
-  { href: "/gigaops/connector-hub", icon: Database, title: "Connect", copy: "Source and identity travel with the event." },
-  { href: "/gigaops/ontology", icon: Layers3, title: "Context", copy: "Owning modules supply the permitted facts." },
-  { href: "/gigaops/automation", icon: Workflow, title: "Route", copy: "Rules, ownership and approvals shape the next step." },
-  { href: "/platform/mobile", icon: Smartphone, title: "Act", copy: "Each person sees the task in their workspace." },
-  { href: "/gigaops/analytics", icon: BarChart3, title: "Prove", copy: "The outcome returns to the record and the measure." },
+  { href: "/gigaops/maintenance", icon: Wrench, title: "The asset needs work", copy: "Open the register, the PM schedule and the work order on the real site." },
+  { href: "/gigaops/workforce", icon: Users2, title: "A qualified person is booked", copy: "Workforce answers with a named person, not a comment on the job." },
+  { href: "/gigaops/inventory", icon: Boxes, title: "Parts are reserved", copy: "ATP cannot go negative. Issues leave the stores against that work order." },
+  { href: "/gigaops/documents", icon: FileCheck2, title: "The job closes with evidence", copy: "Checklists, meters and signatures stay on the record — not on a phone." },
+  { href: "/gigaops/iot", icon: Cpu, title: "Condition can start the work", copy: "A critical sensor breach can write a meter and open downtime on the asset." },
+  { href: "/gigaops/analytics", icon: BarChart3, title: "The number opens the record", copy: "A downtime spike still drills to the work orders that caused it." },
 ];
 
 export function EnterpriseHome() {
-    useEffect(() => { document.title = "GigaOps | Connected enterprise software"; }, []);
+    useEffect(() => { document.title = "GigaOps | Operations software for plants and field work"; }, []);
   return <EnterpriseShell>
     <Leadspace
       kicker={<span className="es-kicker">GigaOps</span>}
-      title="When work changes, the right team already knows."
-      copy="Connect maintenance, inventory, procurement, field work and finance around one record, so the next decision is already in front of the right person."
+      title="Run the plant as one operation — not five systems."
+      copy="GigaOps is the operating platform for maintenance, people, parts and evidence. You configure how a site works. You do not rebuild the software for the next plant, depot or lab."
       primary={<Link href="/gigaops" className="es-button es-button-blue">Explore GigaOps <ArrowRight size={16} strokeWidth={1.5} /></Link>}
-      secondary={<Link href="/contact" className="es-button es-button-outline">Contact us</Link>}
+      secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your operation</Link>}
       visual={<SceneConnectedWork />}
     />
     <section className="es-section" id="overview">
       <div className="es-container">
-        <SectionHeading label="Recommended" title="Start with the work that matters." copy="Open a capability, not a screen. Each path is a job your teams already do." />
+        <SectionHeading label="What we solve" title="The jobs that currently live in the wrong tools." copy="Start where the plant already loses time: work orders, people, parts, or a chemistry route that is still a paper pack." />
         <div className="es-pictogram-grid">
-          <PictogramLink href="/gigaops/maintenance" icon={Wrench} title="Asset & Maintenance" copy="Bring asset records, planned work, parts and field execution into one work order." />
-          <PictogramLink href="/gigaops/inventory" icon={Boxes} title="Inventory" copy="Connect catalogue, locations, receipts and issues to the work they support." />
-          <PictogramLink href="/products/speed" icon={FlaskConical} title="SPEED" copy="Screen synthesis routes, keep findings visible and prepare a reviewable dossier." />
-          <PictogramLink href="/industries" icon={Factory} title="Industries" copy="See how the same platform holds context for plant, field, venue and care work." />
+          <PictogramLink href="/gigaops/maintenance" icon={Wrench} title="Asset & Maintenance" copy="One work order for the asset, the parts and the person who can finish it." />
+          <PictogramLink href="/gigaops/workforce" icon={Users2} title="Workforce" copy="Skills, bookings and pay-ready time that can staff maintenance work." />
+          <PictogramLink href="/gigaops/inventory" icon={Boxes} title="Inventory" copy="Reservations and issues that cannot over-commit the bin the job is counting on." />
+          <PictogramLink href="/products/speed" icon={FlaskConical} title="SPEED" copy="Desk-side process-safety screening before a route is politically locked." />
         </div>
       </div>
     </section>
     <section className="es-section es-section-soft" id="capabilities">
       <div className="es-container">
-        <SectionHeading label="How it works" title="From signal to verified action." copy="GigaOps connects source events, shared records, governed workflow, and a receipt when the work is done." ink />
+        <SectionHeading label="How a day actually runs" title="From a broken asset to a number you can defend." copy="This is the manufacturing operating loop. Other industries configure the same modules — plant, depot, ward or field — without a fork." ink />
         <div className="es-pictogram-grid es-pictogram-grid-3">
           {architecture.map((item) => (
             <PictogramLink key={item.title} href={item.href} icon={item.icon} title={item.title} copy={item.copy} />
@@ -341,39 +411,39 @@ export function EnterpriseHome() {
     </section>
     <section className="es-section" id="outcomes">
       <div className="es-container">
-        <SectionHeading label="What you can measure" title="Make the improvement visible." copy="Agree a baseline in discovery. These are the operational measures the software is built to move." />
+        <SectionHeading label="What you will be able to see" title="Measures taken from the operating record." copy="We agree a baseline in discovery. We do not publish someone else's percentages as yours." />
         <div className="es-proof-grid">{homeProof.map((card) => <ProofCard key={card.metric} {...card} />)}</div>
       </div>
     </section>
     <section className="es-section es-section-tint" id="mobile">
       <div className="es-container es-split">
         <div className="es-split-copy">
-          <span className="es-overline">Mobile</span>
-          <h2>Enterprise work moves with your people.</h2>
-          <p>Give field teams assigned work, asset context, procedures and evidence. Online completion first; controlled offline capture when the action is certified.</p>
+          <span className="es-overline">Frontline</span>
+          <h2>The record stays in GigaOps. The phone is how the crew writes to it.</h2>
+          <p>Operator rounds, work orders, stores issues and evidence are the first frontline journeys. Online completion is the default. Offline capture is a controlled queue — not a second system of record on a device.</p>
           <div className="es-pictogram-grid es-pictogram-grid-1">
-            <div className="es-pictogram"><Wifi size={32} strokeWidth={1.25} className="es-pic" /><h3>Online</h3><p>Current permissions, task updates and authoritative receipts.</p></div>
-            <div className="es-pictogram"><WifiOff size={32} strokeWidth={1.25} className="es-pic" /><h3>Offline, when certified</h3><p>Encrypted drafts, visible queue status and conflict recovery after reconnection.</p></div>
+            <div className="es-pictogram"><Wifi size={32} strokeWidth={1.25} className="es-pic" /><h3>Assigned work, live</h3><p>The person sees the job, the asset, the place and what is already known.</p></div>
+            <div className="es-pictogram"><WifiOff size={32} strokeWidth={1.25} className="es-pic" /><h3>Queued when the plant has no signal</h3><p>Drafts wait for a receipt from the owning module. Conflicts are visible, not silent.</p></div>
           </div>
-          <Link href="/platform/mobile" className="es-button es-button-blue">Explore mobile direction <ArrowRight size={16} strokeWidth={1.5} /></Link>
+          <Link href="/platform/mobile" className="es-button es-button-blue">See the frontline direction <ArrowRight size={16} strokeWidth={1.5} /></Link>
         </div>
-        <SceneMobile />
+        <FieldMobileScene />
       </div>
     </section>
     <section className="es-section" id="related">
       <div className="es-container">
-        <SectionHeading label="Choose a direction" title="Go deeper where it matters." ink />
+        <SectionHeading label="Choose a buying path" title="Platform, specialist product, or your industry." ink />
         <div className="es-direction-grid">
           <Link href="/gigaops" className="es-direction" id="modules">
-            <div className="es-direction-body"><span>01 / Platform</span><h3>GigaOps</h3><p>Explore connected operations and the modules behind them.</p></div>
+            <div className="es-direction-body"><span>01 / Platform</span><h3>GigaOps</h3><p>The operations suite: maintenance, workforce, materials, places and evidence.</p></div>
             <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
           </Link>
           <Link href="/products/speed" className="es-direction">
-            <div className="es-direction-body"><span>02 / Specialist</span><h3>SPEED</h3><p>Follow a synthesis route from screening to safety review.</p></div>
+            <div className="es-direction-body"><span>02 / Life sciences</span><h3>SPEED</h3><p>Screen a synthesis route at the desk before it moves toward the plant.</p></div>
             <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
           </Link>
-          <Link href="/industries" className="es-direction" id="industries">
-            <div className="es-direction-body"><span>03 / Industries</span><h3>Operating context</h3><p>See how products and modules connect for different teams.</p></div>
+          <Link href="/industries/manufacturing" className="es-direction" id="industries">
+            <div className="es-direction-body"><span>03 / First industry</span><h3>Manufacturing</h3><p>The first packaged solution: plant work, people, parts and MRP on one record.</p></div>
             <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
           </Link>
         </div>
@@ -384,47 +454,46 @@ export function EnterpriseHome() {
 }
 
 export function MobilePage() {
-  useEffect(() => { document.title = "GigaOps Mobile | GigaOps"; }, []);
+  useEffect(() => { document.title = "Frontline mobile | GigaOps"; }, []);
   return <EnterpriseShell>
     <Leadspace
-      kicker={<span className="es-kicker">GigaOps / Mobile</span>}
+      kicker={<span className="es-kicker">GigaOps / Frontline</span>}
       extra={<span className="es-stage">In development</span>}
-      title="The right work, wherever your team is."
-      copy="Extend GigaOps to iPhone, iPad and Android with role-scoped tasks, current context and a clear record of what happened."
-      primary={<a href="#overview" className="es-button es-button-blue">Explore the direction <ArrowRight size={16} strokeWidth={1.5} /></a>}
+      title="Rounds, work orders and stores — written from the floor, stored in GigaOps."
+      copy="Frontline mobile is how a technician, operator or stores person writes to the same record the plant already runs. It is not a second CMMS on a phone. Operator inspection rounds are the first native build."
+      primary={<a href="#overview" className="es-button es-button-blue">See the journeys <ArrowRight size={16} strokeWidth={1.5} /></a>}
       secondary={<Link href="/contact" className="es-button es-button-outline">Discuss field operations</Link>}
-      visual={<SceneMobile />}
+      visual={<FieldMobileScene compact />}
     />
-    <PageTabs links={[["#overview", "Overview"], ["#capabilities", "Capabilities"], ["#related", "Related"]]} />
+    <PageTabs links={[["#overview", "Overview"], ["#capabilities", "Journeys"], ["#related", "System of record"]]} />
     <section className="es-section" id="overview">
-      <div className="es-container es-split">
+      <div className="es-container">
         <div className="es-split-copy">
-          <span className="es-overline">Overview</span>
-          <h2>A native view of governed work.</h2>
-          <p>The owning module remains the source of truth. Mobile presents the permitted task and returns a receipt when an action is accepted.</p>
+          <span className="es-overline">The problem</span>
+          <h2>Paper rounds, clipboard nameplates and WhatsApp breakdowns.</h2>
+          <p>The owning GigaOps module remains the source of truth. The device shows the permitted task and returns a receipt when the action is accepted. If the plant has no signal, drafts queue until that receipt exists.</p>
         </div>
-        <SceneMobile />
       </div>
     </section>
     <section className="es-section es-section-soft" id="capabilities">
       <div className="es-container">
-        <SectionHeading label="How mobile fits" title="See, capture, recover." ink />
+        <SectionHeading label="First journeys" title="What a crew should be able to do from the floor." ink />
         <div className="es-pictogram-grid es-pictogram-grid-3">
-          <div className="es-pictogram"><Smartphone size={40} strokeWidth={1.25} className="es-pic" /><h3>Know what is assigned.</h3><p>Work, place, asset, procedure and freshness appear together for the authorized person.</p></div>
-          <div className="es-pictogram"><ClipboardCheck size={40} strokeWidth={1.25} className="es-pic" /><h3>Keep evidence with the task.</h3><p>Readings, photos and notes stay linked to the work that requires them.</p></div>
-          <div className="es-pictogram"><ShieldCheck size={40} strokeWidth={1.25} className="es-pic" /><h3>Know what reached the server.</h3><p>Supported offline work is queued locally until the owning module returns a receipt.</p></div>
+          <div className="es-pictogram"><ClipboardCheck size={40} strokeWidth={1.25} className="es-pic" /><h3>Operator rounds</h3><p>Walk a scheduled route, capture readings at the checkpoint, and stop a round that was only ticked on paper.</p></div>
+          <div className="es-pictogram"><Wrench size={40} strokeWidth={1.25} className="es-pic" /><h3>Work orders</h3><p>See the asset, the tasks, the parts and close with evidence — the same work order the planner opened.</p></div>
+          <div className="es-pictogram"><Boxes size={40} strokeWidth={1.25} className="es-pic" /><h3>Stores issues</h3><p>Issue reserved parts against the job, not a verbal pickup that never hit the ledger.</p></div>
         </div>
       </div>
     </section>
     <section className="es-section" id="related">
       <div className="es-container">
-        <SectionHeading label="Connected capabilities" title="Start with the work your people do." ink />
+        <SectionHeading label="System of record" title="Mobile writes to these modules. It does not replace them." ink />
         <div className="es-tile-grid es-tile-grid-3">
           {["/gigaops/maintenance", "/gigaops/workforce", "/gigaops/inventory"].map((path) => <CatalogTile key={path} item={solutionByPath.get(path)!} />)}
         </div>
       </div>
     </section>
-    <ClosingCTA title="Bring connected work into the field." />
+    <ClosingCTA title="Show us the round, the job or the stores window you want on a device." />
   </EnterpriseShell>;
 }
 
@@ -433,25 +502,31 @@ export function ProductIndexPage() {
   return <EnterpriseShell>
     <Leadspace
       breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><span>Products</span></div>}
-      title="Products built around clear work."
-      copy="Explore GigaOps as the connected enterprise platform, plus focused products for process safety, communications, commerce, talent and customer experiences."
+      title="Two enterprise products. A clear job for each."
+      copy="GigaOps is the operations platform for plants and field organizations. SPEED is process-safety screening for chemistry that has not yet reached the plant. Other Gigasys products sit beside that suite — they are not plant modules."
       visual={<ScenePlatform />}
     />
     <section className="es-section">
       <div className="es-container">
         <div className="es-featured">
-          <div><span className="es-overline">Platform product</span><h3>GigaOps</h3><p>Connected operations, from signal to action.</p></div>
+          <div><span className="es-overline">Operations platform</span><h3>GigaOps</h3><p>Maintenance, workforce, inventory, procurement, manufacturing, places and evidence — configured per site, not forked.</p></div>
           <Link href="/gigaops">Explore GigaOps <ArrowRight size={16} strokeWidth={1.5} /></Link>
         </div>
       </div>
     </section>
     <section className="es-section es-section-soft">
       <div className="es-container">
-        <SectionHeading label="Products" title="Explore the portfolio." copy="Open a product to see its workflow, outcomes and related capabilities." ink />
-        <div className="es-tile-grid">{products.filter((item) => item.path !== "/gigaops").map((item) => <CatalogTile key={item.path} item={item} />)}</div>
+        <SectionHeading label="Enterprise products" title="What an operations or EHS buyer is here to evaluate." copy="Open a product to see the problem it removes, the workflow, and the measures it is built to move." ink />
+        <div className="es-tile-grid">{enterpriseProducts.filter((item) => item.path !== "/gigaops").map((item) => <CatalogTile key={item.path} item={item} />)}</div>
       </div>
     </section>
-    <ClosingCTA />
+    <section className="es-section">
+      <div className="es-container">
+        <SectionHeading label="Also from Gigasys" title="Focused products, separate from the plant suite." copy="These solve communications, community, talent and identity problems. They are not substitutes for GigaOps maintenance or workforce." ink />
+        <div className="es-tile-grid">{digitalProducts.map((item) => <CatalogTile key={item.path} item={item} />)}</div>
+      </div>
+    </section>
+    <ClosingCTA title="Tell us whether you are buying a plant operation or a specialist product." />
   </EnterpriseShell>;
 }
 
@@ -460,80 +535,81 @@ export function IndustriesIndexPage() {
   return <EnterpriseShell>
     <Leadspace
       breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><span>Industries</span></div>}
-      title="See connected work in your world."
-      copy="The same platform supports different operating journeys without losing the context each team needs."
-      primary={<Link href="/contact" className="es-button es-button-blue">Contact us</Link>}
+      title="Same modules. Your vocabulary. No fork for the next site."
+      copy="Manufacturing is the first packaged GigaOps solution. Other industries — labs, networks, depots, sites, facilities, fields and venues — configure places, skills and defaults on the same operating core."
+      primary={<Link href="/industries/manufacturing" className="es-button es-button-blue">Start with manufacturing</Link>}
+      secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your industry</Link>}
       visual={<SceneIndustry />}
     />
     <section className="es-section">
       <div className="es-container">
-        <SectionHeading label="Industry journeys" title="Choose your operating context." ink />
+        <SectionHeading label="Industry solutions" title="Choose the operating context you run." copy="Each page names the problem, the GigaOps modules that remove it, and the measures a buyer should expect to see." ink />
         <div className="es-tile-grid">{industries.map((item) => <CatalogTile key={item.path} item={item} />)}</div>
       </div>
     </section>
-    <ClosingCTA />
+    <ClosingCTA title="Bring a site map, a crew list and the tools you want to retire." />
   </EnterpriseShell>;
 }
 
 export function PlatformPage() {
   const demoChoices = demoPaths.map((path) => solutionByPath.get(path)!);
   const layers = [
-    { href: "/gigaops/data", icon: Database, title: "Connect", copy: "Bring records and events from existing systems into a shared context." },
-    { href: "/gigaops/automation", icon: Settings2, title: "Configure", copy: "Shape workflows, rules and responsibilities around your operating model." },
-    { href: "/gigaops/maintenance", icon: Layers3, title: "Execute", copy: "Put the right next action in front of each team." },
-    { href: "/gigaops/documents", icon: ShieldCheck, title: "Govern", copy: "Keep decisions and evidence attached to the work they belong to." },
+    { href: "/gigaops/maintenance", icon: Wrench, title: "Operate", copy: "Assets, work orders, people, parts and production on one plant record." },
+    { href: "/gigaops/geospatial", icon: MapPin, title: "Scope", copy: "Every record sits on a place. Managers see their site, not the whole tenant." },
+    { href: "/gigaops/automation", icon: Settings2, title: "Configure", copy: "Industry packs, workflows and rules change how a site runs — they do not fork the product." },
+    { href: "/gigaops/documents", icon: ShieldCheck, title: "Prove", copy: "Checklists, signatures, meters and measures stay attached to the work they explain." },
   ];
-  useEffect(() => { document.title = "GigaOps Platform | GigaOps"; }, []);
+  useEffect(() => { document.title = "GigaOps platform | GigaOps"; }, []);
   return <EnterpriseShell>
     <Leadspace
       breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><Link href="/products">Products</Link><ChevronRight size={13} strokeWidth={1.5} /><span>GigaOps</span></div>}
       kicker={<span className="es-kicker">The GigaOps platform</span>}
-      title="Connected operations, from signal to decision to action."
-      copy="GigaOps brings modular workflows, operational records and clear ownership together so teams can act with context."
-      primary={<a href="#modules" className="es-button es-button-blue">Explore all modules <ArrowRight size={16} strokeWidth={1.5} /></a>}
-      secondary={<Link href="/contact" className="es-button es-button-outline">Contact us</Link>}
+      title="Configure how the operation runs. Do not rebuild it for every site."
+      copy="GigaOps is the operations suite: maintenance, workforce, inventory, procurement, manufacturing, places, evidence and analytics. Each module owns its record. Together they give the next person a job they can actually finish."
+      primary={<a href="#modules" className="es-button es-button-blue">See the modules <ArrowRight size={16} strokeWidth={1.5} /></a>}
+      secondary={<Link href="/contact" className="es-button es-button-outline">Talk about a site</Link>}
       visual={<ScenePlatform />}
     />
-    <PageTabs links={[["#overview", "Overview"], ["#capabilities", "How it works"], ["#modules", "Modules"], ["#tour", "Product tour"]]} />
+    <PageTabs links={[["#overview", "The problem"], ["#capabilities", "How it is assembled"], ["#modules", "Modules"], ["#tour", "Product tour"]]} />
     <section className="es-section" id="overview">
       <div className="es-container es-split">
         <div className="es-split-copy">
-          <span className="es-overline">Overview</span>
-          <h2>Unify the work across functions.</h2>
-          <p>One operational picture for data, workflows, people and evidence. Each module owns its record and hands the next action to the team that can complete it.</p>
+          <span className="es-overline">The problem</span>
+          <h2>CMMS, stores, the shift board, WhatsApp and finance do not share a record.</h2>
+          <p>A second plant usually means a second stack. GigaOps is built so you select modules, apply an industry pack, and keep evidence on the work — instead of copying screens for the next customer.</p>
         </div>
         <ScenePlatform />
       </div>
     </section>
     <section className="es-section es-section-soft" id="capabilities">
       <div className="es-container">
-        <SectionHeading label="How it works" title="Connect the system. Configure the work." ink />
+        <SectionHeading label="How it is assembled" title="A platform you configure, with modules you can name." ink />
         <div className="es-pictogram-grid">{layers.map((layer) => <PictogramLink key={layer.title} href={layer.href} icon={layer.icon} title={layer.title} copy={layer.copy} />)}</div>
       </div>
     </section>
     <section className="es-section" id="modules">
       <div className="es-container">
-        <SectionHeading label="Module catalogue" title="Every capability has its own next action." copy="Open a module to see its workflow, business value and measurements." ink />
+        <SectionHeading label="Operating modules" title="Start with the plant loop." copy="These are the capabilities a maintenance, operations or stores leader should evaluate first." ink />
         <div className="es-tile-grid">{modules.map((item) => <CatalogTile key={item.path} item={item} />)}</div>
         <div className="es-featured es-mt-32">
-          <div><span className="es-overline">Specialist product</span><h3>SPEED process safety</h3><p>Bring route screening and a reviewable dossier into the life sciences journey.</p></div>
+          <div><span className="es-overline">Life sciences product</span><h3>SPEED process safety</h3><p>Desk-side route screening for chemistry that has not yet reached the plant — on the same platform, as an optional module.</p></div>
           <Link href="/products/speed">Explore SPEED <ArrowRight size={16} strokeWidth={1.5} /></Link>
         </div>
       </div>
     </section>
     <section className="es-section es-section-soft">
       <div className="es-container">
-        <SectionHeading label="Specialist modules" title="The modules beneath the platform." ink />
+        <SectionHeading label="Commercial, finance and platform modules" title="The rest of the operating record." copy="Orders, catalogue, receivables, tax, rules and connectors sit here. Open a module to see what it actually owns — and what it does not claim." ink />
         <div className="es-tile-grid">{specialistModules.map((item) => <CatalogTile key={item.path} item={item} />)}</div>
       </div>
     </section>
     <section className="es-section" id="tour">
       <div className="es-container">
-        <SectionHeading label="Product tour" title="Follow an operational journey." copy="Optional. The same interaction pattern applies across the platform." ink />
-        <InteractiveWorkspace choices={demoChoices} initialPath="/gigaops/automation" />
+        <SectionHeading label="Product tour" title="Walk a work order, a booking, a parts issue or a route screen." copy="Example workflows. Your baseline and your sites belong in a conversation, not in this illustration." ink />
+        <InteractiveWorkspace choices={demoChoices} initialPath="/gigaops/maintenance" />
       </div>
     </section>
-    <ClosingCTA />
+    <ClosingCTA title="Bring one site’s work orders, roster and stores list." />
   </EnterpriseShell>;
 }
 
@@ -550,27 +626,27 @@ export function SolutionPage({ path }: { path: string }) {
     <Leadspace
       breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><Link href={parent.href}>{parent.label}</Link><ChevronRight size={13} strokeWidth={1.5} /><span>{item.name}</span></div>}
       kicker={<span className="es-kicker">{item.name} / {item.category}</span>}
-      extra={<>{moduleStages[item.path] && <span className="es-stage">{moduleStages[item.path]}</span>}<ChannelBadges path={item.path} /></>}
+      extra={<ChannelBadges path={item.path} />}
       title={item.headline}
       copy={item.summary}
-      primary={<a href="#overview" className="es-button es-button-blue">Explore overview <ArrowRight size={16} strokeWidth={1.5} /></a>}
-      secondary={<Link href="/contact" className="es-button es-button-outline">Discuss your use case</Link>}
+      primary={<a href="#overview" className="es-button es-button-blue">See the problem we remove</a>}
+      secondary={<Link href="/contact" className="es-button es-button-outline">Discuss this with your data</Link>}
       visual={visual}
     />
-    <PageTabs links={[["#overview", "Overview"], ["#use-cases", "Use cases"], ["#outcomes", "Outcomes"], ["#capabilities", "Capabilities"], ["#related", "Related"]]} />
+    <PageTabs links={[["#overview", "The problem"], ["#use-cases", "How it runs"], ["#outcomes", "What you will see"], ["#capabilities", "What it owns"], ["#related", "Related"]]} />
     <section className="es-section" id="overview">
       <div className="es-container es-split">
         <div className="es-split-copy">
-          <span className="es-overline">Overview</span>
-          <h2>Unify the work in one place.</h2>
-          <p>{item.summary} The working example is {item.scenario}.</p>
+          <span className="es-overline">The problem</span>
+          <h2>{item.problem}</h2>
+          <p>{item.summary} Built for {item.audience}. Working example: {item.scenario}.</p>
         </div>
         {visual}
       </div>
     </section>
     <section className="es-section es-section-soft" id="use-cases">
       <div className="es-container">
-        <SectionHeading label="Use cases" title={`Plan, operate and complete ${item.name}.`} ink />
+        <SectionHeading label="How it runs" title={`The ${item.name} path a buyer should recognise.`} ink />
         <div className="es-pictogram-grid">
           {item.steps.map(([title, copy], index) => {
             const icons = [ClipboardCheck, Workflow, Users2, FileCheck2];
@@ -582,21 +658,21 @@ export function SolutionPage({ path }: { path: string }) {
     </section>
     <section className="es-section" id="outcomes">
       <div className="es-container">
-        <SectionHeading label="Outcomes" title="Make the improvement measurable." copy="Agree on a baseline and target during discovery." ink />
+        <SectionHeading label="What you will see" title="Measures taken from this record — against your baseline." copy="We do not invent a customer percentage. Discovery agrees the starting point; the software is built to move these numbers." ink />
         <div className="es-proof-grid es-proof-grid-3">
-          {item.outcomes.map(([metric, detail]) => <ProofCard key={metric} kicker={item.name} title={detail} metric={metric} detail="Measured against your own baseline." />)}
+          {item.outcomes.map(([metric, detail]) => <ProofCard key={metric} kicker={item.name} title={detail} metric={metric} detail="Measured against your own operation." />)}
         </div>
       </div>
     </section>
     <section className="es-section es-section-tint" id="capabilities">
       <div className="es-container">
-        <SectionHeading label="Capabilities" title="Give every team a usable next step." />
+        <SectionHeading label="What it owns" title={item.kind === "industry" ? "The GigaOps modules this industry actually runs." : item.kind === "product" ? "What this product is responsible for." : "The record this module is responsible for."} />
         <div className="es-pictogram-grid es-pictogram-grid-3">
-          {item.capabilities.map((capability, index) => (
-            <div className="es-pictogram" key={capability}>
+          {item.capabilities.map(([title, copy]) => (
+            <div className="es-pictogram" key={title}>
               <Icon size={40} strokeWidth={1.25} className="es-pic" />
-              <h3>{capability}</h3>
-              <p>{item.steps[Math.min(index, item.steps.length - 1)][1]}</p>
+              <h3>{title}</h3>
+              <p>{copy}</p>
             </div>
           ))}
         </div>
@@ -605,25 +681,25 @@ export function SolutionPage({ path }: { path: string }) {
     {isSpeed && <section className="es-section" id="tour"><div className="es-container"><SectionHeading label="Product tour" title="Follow a screening route." ink /><SpeedExperience /></div></section>}
     <section className="es-section" id="related">
       <div className="es-container">
-        <SectionHeading label="Related" title="Continue the story." ink />
+        <SectionHeading label="Related" title="What a buyer usually evaluates next." ink />
         <div className="es-tile-grid es-tile-grid-3">{related.map((entry) => <CatalogTile key={entry.path} item={entry} />)}</div>
       </div>
     </section>
-    <ClosingCTA title={`Explore ${item.name} with your own use case.`} />
+    <ClosingCTA title={`Bring this ${item.name} process — and the tools you want it to replace.`} />
   </EnterpriseShell>;
 }
 
 export function CompanyPage({ page }: { page: "about" | "jobs" | "teams" | "contact" }) {
   const content = {
-    about: { label: "About Gigasys", title: "Software shaped around the work people actually do.", copy: "Gigasys builds connected enterprise software and focused digital products for teams that need clear decisions, accountable execution and useful context.", cards: [["What we build", "Operational workflows, products and data experiences designed to work together.", Building2], ["How we work", "Start with an operating problem, build a usable path through it and measure the result.", Workflow], ["Where we focus", "Enterprise operations, life sciences, communications, commerce and connected teams.", Landmark]] as [string, string, LucideIcon][] },
-    jobs: { label: "Careers", title: "Build software that helps people take action.", copy: "Our work spans product design, engineering and real operational problems. Tell us what you want to build.", cards: [["Product engineering", "Create dependable product experiences and connected systems.", Settings2], ["Design", "Make complex business workflows clear and useful.", Compass], ["Delivery", "Work with teams to translate real operating needs into software.", Users2]] as [string, string, LucideIcon][] },
-    teams: { label: "Our teams", title: "Cross-functional teams, working on connected problems.", copy: "The best product decisions come from understanding both software and the work it supports.", cards: [["Product", "Define focused jobs and useful experiences.", Compass], ["Engineering", "Build the systems that make those journeys possible.", Settings2], ["Customer work", "Connect operating context, implementation and feedback.", Users2]] as [string, string, LucideIcon][] },
-    contact: { label: "Contact", title: "Show us the work you want to improve.", copy: "Tell us which product, module or operating challenge you are exploring. We will direct the conversation to the right team.", cards: [["Product walkthrough", "See an example journey and discuss the parts that matter to you.", Play], ["Platform conversation", "Explore how modules could connect with your current systems.", Layers3], ["Partnership", "Discuss a focused product or industry use case.", BriefcaseBusiness]] as [string, string, LucideIcon][] },
+    about: { label: "About Gigasys", title: "We build GigaOps so a plant does not need a new stack for every site.", copy: "Gigasys Technologies Inc in the United States and Gigasys Technologies Pvt Ltd in India are the companies behind GigaOps — operations software assembled from modules you configure and reuse. SPEED is the life-sciences product on the same platform.", cards: [["What we build", "An operations platform: maintenance, workforce, materials, places, evidence — and SPEED for process-safety screening.", Building2], ["How we work", "Start with the operating record a site already struggles to keep: work orders, people, parts, or a route pack.", Workflow], ["Where we focus", "Manufacturing first. Then field, network, depot, facilities and lab operations on the same core.", Landmark]] as [string, string, LucideIcon][] },
+    jobs: { label: "Careers", title: "Build software a plant can run, not a demo it can watch.", copy: "The work is product, engineering and the messy reality of sites: work orders, qualifications, stock and evidence. Tell us what you want to build.", cards: [["Product engineering", "Modules with contracts, persistence and a record someone can audit.", Settings2], ["Design", "Make a work order, a roster and a stores issue obvious under pressure.", Compass], ["Delivery", "Sit with operations people and turn their current tools into a path through GigaOps.", Users2]] as [string, string, LucideIcon][] },
+    teams: { label: "Our teams", title: "People who understand both the module and the shift.", copy: "The useful decisions come from knowing what a planner, a technician and a controller each need from the same record.", cards: [["Product", "Name the job, the owner and the evidence the module must keep.", Compass], ["Engineering", "Kernel, modules and the contracts that stop one site becoming a fork.", Settings2], ["Customer work", "Configuration, industry packs and the baseline you will actually measure.", Users2]] as [string, string, LucideIcon][] },
+    contact: { label: "Contact", title: "Bring a site, a process and the tools you want to retire.", copy: "Tell us whether you are evaluating GigaOps for a plant, SPEED for process safety, or another Gigasys product. We will put the right people on the conversation.", cards: [["Plant walkthrough", "Work orders, roster and stores — mapped to the GigaOps record.", Play], ["SPEED conversation", "A route, a gate, and whether desk screening is the gap.", FlaskConical], ["Implementation", "Industry pack, integrations and what must be true before go-live.", BriefcaseBusiness]] as [string, string, LucideIcon][] },
   }[page];
   const offices = [
-    ["Dover, Delaware", "8 The Green, Suite B", "Dover, DE 19901, USA"],
-    ["Hyderabad, India", "103, New Mark House, Patrika Nagar", "HITEC City, Hyderabad, Telangana 500081, India"],
-    ["Ongole, India", "05-E-Zone, Maruthi Nagar, Kurnool Road (O)", "Prakasam District, Ongole, Andhra Pradesh 523002, India"],
+    { entity: "Gigasys Technologies Inc", city: "Dover, Delaware", line1: "8 The Green, Suite B", line2: "Dover, DE 19901, USA" },
+    { entity: "Gigasys Technologies Pvt Ltd", city: "Hyderabad, India", line1: "103, New Mark House, Patrika Nagar", line2: "HITEC City, Hyderabad, Telangana 500081, India" },
+    { entity: "Gigasys Technologies Pvt Ltd", city: "Ongole, India", line1: "05-E-Zone, Maruthi Nagar, Kurnool Road (O)", line2: "Prakasam District, Ongole, Andhra Pradesh 523002, India" },
   ];
   useEffect(() => { document.title = `${page === "jobs" ? "Careers" : page[0].toUpperCase() + page.slice(1)} | GigaOps`; }, [page]);
   return <EnterpriseShell>
@@ -635,7 +711,16 @@ export function CompanyPage({ page }: { page: "about" | "jobs" | "teams" | "cont
       secondary={<Link href="/gigaops" className="es-button es-button-outline">Explore GigaOps</Link>}
       visual={<SceneCompany />}
     />
-    {page === "about" && <section className="es-section es-section-soft"><div className="es-container"><div className="es-facts"><div className="es-fact"><strong>3</strong><span>Offices in the US and India</span></div><div className="es-fact"><strong>1</strong><span>Connected operations platform</span></div><div className="es-fact"><strong>8</strong><span>Industry operating contexts</span></div></div></div></section>}
+    {page === "about" && <section className="es-section es-section-soft"><div className="es-container"><div className="es-facts"><div className="es-fact"><strong>3</strong><span>Offices in the US and India</span></div><div className="es-fact"><strong>1</strong><span>Operations platform — GigaOps</span></div><div className="es-fact"><strong>1st</strong><span>Industry solution: manufacturing</span></div></div></div></section>}
+    {page === "jobs" && (
+      <PeopleSpotlight
+        src={fieldCrew}
+        alt="A site supervisor with a tablet walking a crew through the work in front of them"
+        label="Life at Gigasys"
+        title="You will sit with the plant, the lab and the review — not only with a backlog."
+        copy="Engineering, design and delivery share one operating problem: make the next action obvious under pressure."
+      />
+    )}
     <section className="es-section">
       <div className="es-container">
         <div className="es-pictogram-grid es-pictogram-grid-3">
@@ -643,7 +728,7 @@ export function CompanyPage({ page }: { page: "about" | "jobs" | "teams" | "cont
         </div>
       </div>
     </section>
-    {(page === "about" || page === "contact") && <section className="es-section es-section-soft"><div className="es-container"><SectionHeading label="Locations" title="Connect with the team." copy="We work across the US and India." ink /><div className="es-office-list">{offices.map(([city, line1, line2]) => <div className="es-office" key={city}><MapPin size={24} strokeWidth={1.5} color="#0f62fe" /><h3>{city}</h3><p>{line1}<br />{line2}</p></div>)}</div><div className="es-direct-contact"><a href="mailto:connect@gigasystech.com"><Mail size={16} strokeWidth={1.5} /> connect@gigasystech.com</a><a href="tel:+916303162096">+91-6303162096</a></div></div></section>}
+    {(page === "about" || page === "contact") && <section className="es-section es-section-soft"><div className="es-container"><SectionHeading label="Locations" title="Two companies. Three offices." copy="Gigasys Technologies Inc in the United States. Gigasys Technologies Pvt Ltd in India." ink /><div className="es-office-list">{offices.map((office) => <div className="es-office" key={office.city}><MapPin size={24} strokeWidth={1.5} color="#0f62fe" /><h3>{office.city}</h3><p>{office.line1}<br />{office.line2}</p><small>{office.entity}</small></div>)}</div><div className="es-direct-contact"><a href="mailto:connect@gigasystech.com"><Mail size={16} strokeWidth={1.5} /> connect@gigasystech.com</a><a href="tel:+916303162096">+91-6303162096</a></div></div></section>}
     <ClosingCTA />
   </EnterpriseShell>;
 }
