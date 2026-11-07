@@ -140,7 +140,7 @@ export function WorkflowCarousel() {
             <Fragment key={`${flow.id}-${step.label}`}>
               {index > 0 && (
                 <div className={["es-flow-link", tokenIndex >= index && "is-on", phase === "travel" && tokenIndex === index && "is-live"].filter(Boolean).join(" ")}>
-                  <span />
+                  <span><i className="es-flow-playhead" /></span>
                 </div>
               )}
               <div className={`es-flow-step ${state}`}>

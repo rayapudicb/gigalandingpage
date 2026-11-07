@@ -4,7 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { CompanyPage, EnterpriseHome, IndustriesIndexPage, MobilePage, PlatformPage, ProductIndexPage, SolutionPage } from "@/pages/EnterpriseSite";
+import { CompanyPage, ConsultingPage, EnterpriseHome, IndustriesIndexPage, MobilePage, PlatformPage, ProductIndexPage, SolutionPage } from "@/pages/EnterpriseSite";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 
@@ -15,19 +15,26 @@ function RedirectTo({ href }: { href: string }) {
 }
 
 function ScrollToTop() {
-  const [location] = useLocation();
-  
+  const [location, setLocation] = useLocation();
+
   useLayoutEffect(() => {
+    if (window.location.hash === "#consulting" && location !== "/consulting") {
+      setLocation("/consulting");
+      return;
+    }
+    if (location === "/consulting" && window.location.hash === "#consulting") {
+      window.history.replaceState(null, "", "/consulting");
+    }
     const hash = window.location.hash.slice(1);
     if (hash) {
       window.requestAnimationFrame(() => {
-        document.getElementById(decodeURIComponent(hash))?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+        document.getElementById(decodeURIComponent(hash))?.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
       });
     } else {
       window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     }
-  }, [location]);
-  
+  }, [location, setLocation]);
+
   return null;
 }
 
@@ -49,6 +56,7 @@ function Router() {
       <Route path="/jobs">{() => <CompanyPage page="jobs" />}</Route>
       <Route path="/teams">{() => <CompanyPage page="teams" />}</Route>
       <Route path="/about">{() => <CompanyPage page="about" />}</Route>
+      <Route path="/consulting" component={ConsultingPage} />
       <Route path="/contact">{() => <CompanyPage page="contact" />}</Route>
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />

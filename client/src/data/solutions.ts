@@ -538,7 +538,7 @@ export const specialistModules: Solution[] = [
     audience: "Integration and plant digital teams",
     problem: "Webhooks hit a script on someone's laptop. There is no journal, no owner and no way to prove what arrived.",
     headline: "Inbound events with an owner, a journal and a replay path.",
-    summary: "Connector Hub registers inbound connections, verifies what it can, journals attempts and keeps failed deliveries visible. Certified outbound adapters to SAP, Salesforce or similar remain a planned direction — not a live connector catalogue.",
+    summary: "Connector Hub registers inbound connections, verifies what it can, journals attempts and keeps failed deliveries visible. Named outbound adapters are scoped per programme — this is the intake journal, not a catalogue of every enterprise system.",
     scenario: "Inbound webhook · Failed delivery",
     steps: [
       ["Register", "Name the connection, the owner and the intake method."],
@@ -898,7 +898,7 @@ export const products: Solution[] = [
       ["Bills that posted", "Receipts that became a wallet credit after review."],
       ["Blocked fraud", "Bills refused before they hit the ledger."],
     ],
-    related: ["/products/swappy", "/products/gigacrm", "/gigaops/analytics"],
+    related: ["/industries/retail", "/products/swappy", "/products/gigacrm"],
   },
   {
     path: "/products/nyr", name: "nyr", kind: "product", category: "Local communities",
@@ -1034,6 +1034,32 @@ export const industries: Solution[] = [
     related: ["/gigaops/maintenance", "/gigaops/workforce", "/gigaops/inventory", "/gigaops/manufacturing"],
   },
   {
+    path: "/industries/retail", name: "E-Commerce & Retail", kind: "industry", category: "Store, DC and crew operations",
+    audience: "Store, distribution and merchant operations",
+    problem: "Store work, DC stock and shop-floor people live in three tools. A promotion hits a bin the warehouse already promised twice.",
+    headline: "Run the store, the DC and the crew as one operating record.",
+    summary: "Retail and e-commerce configure GigaOps around stores, distribution centres, associates and stock. Inventory ATP, workforce and places are the same modules a plant uses — with retail vocabulary. MyPint is the separate Gigasys product for shopper rewards, not the store operating core.",
+    scenario: "DC East · Promotion week",
+    steps: [
+      ["See the demand", "Open the store, the promotion and the DC that has to fulfil it."],
+      ["Protect ATP", "Reserve what the offer can actually keep. Refuse the oversell."],
+      ["Staff the floor", "Named people on the shift and the location, not a WhatsApp roster."],
+      ["Issue and review", "Stock leaves against the order; the merchant sees what moved."],
+    ],
+    capabilities: [
+      ["Store and DC places", "Sites, aisles and bays as a hierarchy the crew can actually use."],
+      ["Retail workforce", "Associates and DC crews with the shift and the location."],
+      ["Stock you can promise", "Reservations and ATP that a promotion cannot oversell."],
+      ["Merchant rewards beside it", "MyPint for governed wallet credits — not a second stock ledger."],
+    ],
+    outcomes: [
+      ["Oversell refused", "Offers that would have promised empty bins."],
+      ["Unfilled shifts", "Store or DC positions that went live without a named person."],
+      ["Issues against the order", "Stock that left the DC on the record, not a verbal pick."],
+    ],
+    related: ["/gigaops/inventory", "/gigaops/workforce", "/gigaops/geospatial", "/products/mypint"],
+  },
+  {
     path: "/industries/pharma", name: "Pharmaceuticals & Life Sciences", kind: "industry", category: "Process development and operations",
     audience: "Process chemistry, EHS, QA and CDMO operations",
     problem: "Process-safety review is late, paper-heavy and disconnected from the lab work that follows. Plant CMMS, if it exists, does not talk to the route decision.",
@@ -1090,7 +1116,7 @@ export const industries: Solution[] = [
     audience: "Fleet, depot and warehouse operations",
     problem: "Vehicles, bays, parts and drivers are planned in different tools. A delayed turnaround is noticed when the next load is already waiting.",
     headline: "Turn the depot into one operating record: vehicle, bay, parts and people.",
-    summary: "Transport and 3PL configure GigaOps around depots, fleet assets, stores and crews. Pre-trip and DVIR-style capture is on the frontline roadmap. The operating core is maintenance, inventory, places and workforce — the same modules as a plant, with logistics vocabulary.",
+    summary: "Transport and 3PL configure GigaOps around depots, fleet assets, stores and crews. Pre-trip and defect capture write to the same Frontline record as plant rounds. The operating core is maintenance, inventory, places and workforce — the same modules as a plant, with logistics vocabulary.",
     scenario: "Depot North · Vehicle turnaround",
     steps: [
       ["Inspect", "See the vehicle, open defects and the service the depot owes it."],
