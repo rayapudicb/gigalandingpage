@@ -1142,7 +1142,7 @@ export const industries: Solution[] = [
     audience: "Site managers, field service and project controls",
     problem: "The job pack is a PDF. Completions live on phones. The customer is asked to believe a verbal close-out.",
     headline: "Make site work visible from assignment to accepted evidence.",
-    summary: "Field and construction use workforce, project operations, maintenance of site equipment, and documents for handover. You configure trades, certificates and site language. Native mobile capture is the direction for crews; the system of record is already GigaOps.",
+    summary: "Field and construction use workforce, project operations, maintenance of site equipment, and documents for handover. You configure trades, certificates and site language. Crews write completions on Frontline. The system of record is already GigaOps.",
     scenario: "Site package · Completion review",
     steps: [
       ["Plan the package", "Scope, owner, dates and the skills the site needs."],

@@ -5,8 +5,8 @@ import {
   Check, ChevronDown, ChevronRight, ClipboardCheck, Code2, Compass, Cpu, Database,
   Factory, FileCheck2, FileSignature, FlaskConical, HardHat, HeartPulse,
   Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare,
-  Pause, Play, Repeat2, Settings2, ShieldCheck, ShoppingBag, Sparkles,
-  Store, Truck, Trophy, Users2, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
+  Monitor, Pause, Play, Repeat2, ScanLine, Settings2, ShieldCheck, ShoppingBag, Smartphone, Sparkles,
+  Store, Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
 import colleaguesReview from "@/assets/industry/colleagues-review.jpg";
@@ -259,11 +259,78 @@ function PeopleSpotlight({ src, alt, label, title, copy }: { src: string; alt: s
 const fieldModules: { icon: LucideIcon; title: string; copy: string; pos: string }[] = [
   { icon: ClipboardCheck, title: "Operator rounds", copy: "Route, checkpoint, reading.", pos: "tl" },
   { icon: Wrench, title: "Work orders", copy: "Asset, tasks, close-out.", pos: "tr" },
-  { icon: Boxes, title: "Parts issue", copy: "Reserve, pick, issue.", pos: "ml" },
-  { icon: FileCheck2, title: "Evidence", copy: "Photo, checklist, sign.", pos: "mr" },
-  { icon: WifiOff, title: "Offline queue", copy: "Draft until receipt.", pos: "bl" },
-  { icon: MapPin, title: "Site & asset", copy: "The place on the record.", pos: "br" },
+  { icon: MapPin, title: "Punch on site", copy: "Hours on a named person.", pos: "ml" },
+  { icon: Boxes, title: "Stores issue", copy: "Reserve, pick, issue.", pos: "mr" },
+  { icon: FileSignature, title: "Sign-off", copy: "Close on the record.", pos: "bl" },
+  { icon: WifiOff, title: "Offline queue", copy: "Draft until receipt.", pos: "br" },
 ];
+
+type FrontlineDevice = "tablet" | "phone";
+type FrontlineMode = "online" | "offline";
+type FrontlineFilter = FrontlineDevice | FrontlineMode;
+
+const FRONTLINE_FILTERS: [FrontlineFilter, string][] = [
+  ["tablet", "Tablet"],
+  ["phone", "Phone"],
+  ["online", "Online"],
+  ["offline", "Offline"],
+];
+
+const FRONTLINE_LIST_LABEL: Record<FrontlineFilter, string> = {
+  tablet: "Tablet journeys",
+  phone: "Phone journeys",
+  online: "Online — live receipt",
+  offline: "Offline — queued until receipt",
+};
+
+const frontlineCapabilities: {
+  title: string;
+  copy: string;
+  href: string;
+  icon: LucideIcon;
+  devices: FrontlineDevice[];
+  modes: FrontlineMode[];
+}[] = [
+  { title: "Operator rounds", copy: "A completed route with readings at the checkpoint — not a paper tick that never hit the asset.", href: "/gigaops/maintenance", icon: ClipboardCheck, devices: ["tablet"], modes: ["online", "offline"] },
+  { title: "Work orders", copy: "The same job the planner opened: asset, tasks, parts and close-out on the device.", href: "/gigaops/maintenance", icon: Wrench, devices: ["tablet", "phone"], modes: ["online", "offline"] },
+  { title: "Assigned work", copy: "The live job on a named person — not a printed list they left in the cabin.", href: "/gigaops/workforce", icon: Users2, devices: ["tablet", "phone"], modes: ["online"] },
+  { title: "Punch on site", copy: "Hours on a named person, on the place. Time that payroll can export.", href: "/gigaops/workforce", icon: MapPin, devices: ["phone", "tablet"], modes: ["online", "offline"] },
+  { title: "Qualified to start", copy: "Skills on the person. The job will not start if they are not qualified to finish it.", href: "/gigaops/workforce", icon: ShieldCheck, devices: ["tablet", "phone"], modes: ["online"] },
+  { title: "Stores issues", copy: "Issue reserved parts against the job — the bin movement the ledger will defend.", href: "/gigaops/inventory", icon: Boxes, devices: ["tablet"], modes: ["online", "offline"] },
+  { title: "Barcode identity", copy: "The right asset and the right part, scanned at the point of work.", href: "/gigaops/inventory", icon: ScanLine, devices: ["phone", "tablet"], modes: ["online", "offline"] },
+  { title: "Meter readings", copy: "A reading written to the meter. Condition that can start the next job.", href: "/gigaops/maintenance", icon: Activity, devices: ["tablet", "phone"], modes: ["online", "offline"] },
+  { title: "Evidence on close-out", copy: "Photo, checklist and the place — attached to the work, not parked on a phone.", href: "/gigaops/documents", icon: FileCheck2, devices: ["tablet", "phone"], modes: ["online", "offline"] },
+  { title: "Digital sign-off", copy: "The job is accepted on the record. Close-out is not a clipboard at the gate.", href: "/gigaops/documents", icon: FileSignature, devices: ["phone", "tablet"], modes: ["online", "offline"] },
+  { title: "Raise a defect", copy: "A breakdown writes a work order from the floor, not a WhatsApp thread.", href: "/gigaops/maintenance", icon: Repeat2, devices: ["phone"], modes: ["online", "offline"] },
+  { title: "Offline queue", copy: "If the plant has no signal, drafts wait until GigaOps accepts them.", href: "/platform/mobile", icon: WifiOff, devices: ["tablet", "phone"], modes: ["offline"] },
+];
+
+function matchesFrontline(item: (typeof frontlineCapabilities)[number], filter: FrontlineFilter) {
+  return filter === "tablet" || filter === "phone" ? item.devices.includes(filter) : item.modes.includes(filter);
+}
+
+function FrontlineFilterTabs({ value, onChange }: { value: FrontlineFilter; onChange: (id: FrontlineFilter) => void }) {
+  return (
+    <div className="es-filter-tabs" role="tablist" aria-label="Frontline channel">
+      {FRONTLINE_FILTERS.map(([id, label]) => (
+        <button type="button" role="tab" aria-selected={value === id} className={value === id ? "is-active" : undefined} onClick={() => onChange(id)} key={id}>{label}</button>
+      ))}
+    </div>
+  );
+}
+
+function FrontlineChips({ item }: { item: (typeof frontlineCapabilities)[number] }) {
+  return (
+    <div className="es-cap-meta">
+      {item.devices.map((device) => (
+        <span key={device}>{device === "tablet" ? <Monitor size={12} strokeWidth={1.5} /> : <Smartphone size={12} strokeWidth={1.5} />}{device === "tablet" ? "Tablet" : "Phone"}</span>
+      ))}
+      {item.modes.map((mode) => (
+        <span key={mode}>{mode === "offline" ? <WifiOff size={12} strokeWidth={1.5} /> : <Wifi size={12} strokeWidth={1.5} />}{mode === "offline" ? "Offline" : "Online"}</span>
+      ))}
+    </div>
+  );
+}
 
 function FieldMobileScene({ compact = false }: { compact?: boolean }) {
   return (
@@ -303,7 +370,7 @@ function PageTabs({ links }: { links: [string, string][] }) {
 }
 
 function Leadspace({
-  breadcrumb, kicker, extra, title, copy, primary, secondary, visual,
+  breadcrumb, kicker, extra, title, copy, primary, secondary, visual, home = false,
 }: {
   breadcrumb?: React.ReactNode;
   kicker?: React.ReactNode;
@@ -313,9 +380,10 @@ function Leadspace({
   primary?: React.ReactNode;
   secondary?: React.ReactNode;
   visual?: React.ReactNode;
+  home?: boolean;
 }) {
   return (
-    <section className="es-lead">
+    <section className={home ? "es-lead es-lead-home" : "es-lead"}>
       <div className="es-container">
         {breadcrumb}
         {!breadcrumb && kicker && <div className="es-kicker-row">{kicker}{extra}</div>}
@@ -333,7 +401,7 @@ function Leadspace({
 }
 
 function FeatureAnnounce({
-  src, alt, kicker, title, href, listLabel, items,
+  src, alt, kicker, title, href, listLabel, items, filters,
 }: {
   src: string;
   alt: string;
@@ -342,6 +410,7 @@ function FeatureAnnounce({
   href: string;
   listLabel: string;
   items: [string, string][];
+  filters?: React.ReactNode;
 }) {
   return (
     <div className="es-announce">
@@ -354,6 +423,7 @@ function FeatureAnnounce({
         </Link>
       </div>
       <nav className="es-announce-list" aria-label={listLabel}>
+        {filters}
         <h3>{listLabel}</h3>
         {items.map(([label, to]) => (
           to.startsWith("#")
@@ -362,6 +432,30 @@ function FeatureAnnounce({
         ))}
       </nav>
     </div>
+  );
+}
+
+function FrontlineBand() {
+  const [filter, setFilter] = useState<FrontlineFilter>("tablet");
+  const items = frontlineCapabilities.filter((item) => matchesFrontline(item, filter));
+  return (
+    <>
+      <SectionHeading
+        label="Frontline"
+        title="Tablet and phone. Online completion. Offline queue."
+        copy="Operator rounds and stores on the plant tablet. Assigned work, punch and defects in the pocket. If the plant has no signal, drafts wait until GigaOps accepts them."
+      />
+      <FeatureAnnounce
+        src={frontlinePhoto.src}
+        alt={frontlinePhoto.alt}
+        kicker="Frontline"
+        title="The record stays in GigaOps. The device is how the crew writes to it."
+        href="/platform/mobile"
+        listLabel={FRONTLINE_LIST_LABEL[filter]}
+        filters={<FrontlineFilterTabs value={filter} onChange={setFilter} />}
+        items={items.map((item) => [item.title, item.href] as [string, string])}
+      />
+    </>
   );
 }
 
@@ -441,9 +535,29 @@ const consultingCapabilities: {
     href: "/industries", link: "Explore industry packs", photo: consultingCapabilityPhotos.industries,
   },
   {
+    id: "integration", icon: Zap, title: "Integration",
+    copy: "Connector Hub keeps the systems that still earn their place — historian, payroll, stores, finance — talking to the operating record. Every handoff has an owner and a journal. We do not invent a second stack beside yours.",
+    href: "/gigaops/data", link: "See Data & Integration", photo: consultingCapabilityPhotos.integration,
+  },
+  {
     id: "customisation", icon: Settings2, title: "Customisation",
     copy: "Industry packs, places, skills, workflows and rules. Configure how the site runs. Do not fork the product when the next plant, depot or ward comes online.",
     href: "/gigaops", link: "How configuration works", photo: consultingCapabilityPhotos.customisation,
+  },
+  {
+    id: "frontline", icon: Smartphone, title: "Frontline operations",
+    copy: "Tablet on the plant floor. Phone in the pocket. Rounds, work orders, punch, stores and sign-off write to GigaOps. Online they receipt immediately. Offline they queue until the plant accepts them.",
+    href: "/platform/mobile", link: "Explore Frontline", photo: consultingCapabilityPhotos.frontline,
+  },
+  {
+    id: "evidence", icon: FileCheck2, title: "Evidence and close-out",
+    copy: "Checklists, photos, meters and signatures stay on the work they explain. Documents and e-sign are not a share drive the auditor has to hunt. Close-out is a receipt on the record.",
+    href: "/gigaops/documents", link: "See documents and evidence", photo: consultingCapabilityPhotos.evidence,
+  },
+  {
+    id: "process-safety", icon: FlaskConical, title: "Process safety",
+    copy: "SPEED screens a chemistry route at the desk before it is politically locked. Energetic and thermal risk on the same platform as the plant record — not a paper pack in a drawer.",
+    href: "/products/speed", link: "Explore SPEED", photo: consultingCapabilityPhotos.processSafety,
   },
   {
     id: "lifecycle", icon: Workflow, title: "End-to-end product lifecycle",
@@ -470,6 +584,7 @@ export function EnterpriseHome() {
     useEffect(() => { document.title = "GigaOps | Operations software you configure per site"; }, []);
   return <EnterpriseShell>
     <Leadspace
+      home
       kicker={<span className="es-kicker">GigaOps</span>}
       title="Close the operation as one record — not five systems."
       copy="GigaOps is the operating platform for work, people, parts and evidence. You configure how a site runs. You do not rebuild the software for the next plant, depot, ward or field."
@@ -477,6 +592,11 @@ export function EnterpriseHome() {
       secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your operation</Link>}
       visual={<WorkflowCarousel />}
     />
+    <section className="es-section" id="mobile">
+      <div className="es-container">
+        <FrontlineBand />
+      </div>
+    </section>
     <section className="es-section" id="overview">
       <div className="es-container">
         <SectionHeading label="What we solve" title="The jobs that currently live in the wrong tools." copy="Work with no owner. Hours that never bill. Stock that lies. A chemistry route that is still a paper pack." />
@@ -504,26 +624,6 @@ export function EnterpriseHome() {
         <div className="es-proof-grid">{homeProof.map((card) => <ProofCard key={card.metric} {...card} />)}</div>
       </div>
     </section>
-    <section className="es-section es-section-tint" id="mobile">
-      <div className="es-container">
-        <FeatureAnnounce
-          src={frontlinePhoto.src}
-          alt={frontlinePhoto.alt}
-          kicker="Frontline"
-          title="The record stays in GigaOps. The phone is how the crew writes to it."
-          href="/platform/mobile"
-          listLabel="Explore Frontline"
-          items={[
-            ["Operator rounds", "/platform/mobile#capabilities"],
-            ["Work orders", "/gigaops/maintenance"],
-            ["Stores issues", "/gigaops/inventory"],
-            ["Evidence on close-out", "/gigaops/documents"],
-            ["Offline queue", "/platform/mobile"],
-            ["Site and asset", "/gigaops/geospatial"],
-          ]}
-        />
-      </div>
-    </section>
     <section className="es-section" id="related">
       <div className="es-container">
         <SectionHeading label="Choose a buying path" title="Platform, specialist product, or your industry." ink />
@@ -544,27 +644,54 @@ export function EnterpriseHome() {
       </div>
     </section>
     <section className="es-section es-section-soft" id="consulting">
-      <div className="es-container es-split">
-        <div className="es-split-copy">
-          <span className="es-overline">Consulting</span>
-          <h2 className="is-ink">Architecture, industry packs, customisation, the product lifecycle and AI-driven design.</h2>
-          <p>Gigasys consulting is how a site gets onto GigaOps. We design the record, configure the pack and sit with the operation until the crew writes to it. We do not rent a hundred-thousand-person bench.</p>
-          <div className="es-lead-actions">
-            <Link href="/consulting" className="es-button es-button-blue">Explore consulting <ArrowRight size={16} strokeWidth={1.5} /></Link>
-            <Link href="/contact" className="es-button es-button-outline">Talk about a programme</Link>
-          </div>
-        </div>
-        <div className="es-spotlight"><img src={consultingPhoto.src} alt={consultingPhoto.alt} /></div>
+      <div className="es-container">
+        <FeatureAnnounce
+          src={consultingPhoto.src}
+          alt={consultingPhoto.alt}
+          kicker="Consulting"
+          title="Architecture, packs, Frontline, integration and a live record — not a slide that leaves with us."
+          href="/consulting"
+          listLabel="Explore consulting"
+          items={consultingCapabilities.map((item) => [item.title, `/consulting#${item.id}`] as [string, string])}
+        />
       </div>
-      <div className="es-container es-mt-32">
+    </section>
+    <ClosingCTA />
+  </EnterpriseShell>;
+}
+
+function FrontlineJourneys() {
+  const [filter, setFilter] = useState<FrontlineFilter>("tablet");
+  useEffect(() => {
+    const apply = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash === "tablet" || hash === "phone" || hash === "online" || hash === "offline") setFilter(hash);
+    };
+    apply();
+    window.addEventListener("hashchange", apply);
+    return () => window.removeEventListener("hashchange", apply);
+  }, []);
+  const items = frontlineCapabilities.filter((item) => matchesFrontline(item, filter));
+  return (
+    <section className="es-section es-section-soft" id="capabilities">
+      <div id="tablet" /><div id="phone" /><div id="online" /><div id="offline" />
+      <div className="es-container">
+        <SectionHeading
+          label="Journeys"
+          title="What a crew does from the floor."
+          copy="Tablet for rounds and stores. Phone for punch, defects and sign-off. Online they receipt immediately. Offline they queue until GigaOps accepts them."
+          ink
+        />
+        <FrontlineFilterTabs value={filter} onChange={setFilter} />
         <div className="es-pictogram-grid">
-          {consultingCapabilities.map((item) => {
+          {items.map((item) => {
             const Icon = item.icon;
             return (
-              <Link href={`/consulting#${item.id}`} className="es-pictogram" key={item.id}>
+              <Link href={item.href} className="es-pictogram" key={item.title}>
                 <Icon size={40} strokeWidth={1.25} className="es-pic" />
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
+                <FrontlineChips item={item} />
                 <span>Explore <ArrowRight size={16} strokeWidth={1.5} /></span>
               </Link>
             );
@@ -572,8 +699,7 @@ export function EnterpriseHome() {
         </div>
       </div>
     </section>
-    <ClosingCTA />
-  </EnterpriseShell>;
+  );
 }
 
 export function MobilePage() {
@@ -582,31 +708,22 @@ export function MobilePage() {
     <Leadspace
       breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><Link href="/gigaops">GigaOps</Link><ChevronRight size={13} strokeWidth={1.5} /><span>Frontline</span></div>}
       title="Rounds, work orders and stores — written from the floor, stored in GigaOps."
-      copy="Frontline is how a technician, operator or stores person writes to the same record the plant already runs. Operator rounds, work orders and stores issues complete on the device. If the plant has no signal, drafts queue until GigaOps accepts them."
+      copy="Frontline is how a technician, operator or stores person writes to the same record the plant already runs. Tablet on the floor. Phone in the pocket. Online they receipt immediately. If the plant has no signal, drafts queue until GigaOps accepts them."
       primary={<a href="#capabilities" className="es-button es-button-blue">See the journeys <ArrowRight size={16} strokeWidth={1.5} /></a>}
       secondary={<Link href="/contact" className="es-button es-button-outline">Discuss field operations</Link>}
       visual={<FieldMobileScene compact />}
     />
-    <PageTabs links={[["#overview", "Overview"], ["#capabilities", "Journeys"], ["#related", "System of record"]]} />
+    <PageTabs links={[["#overview", "Overview"], ["#tablet", "Tablet"], ["#phone", "Phone"], ["#online", "Online"], ["#offline", "Offline"], ["#related", "System of record"]]} />
     <section className="es-section" id="overview">
       <div className="es-container">
         <div className="es-split-copy">
           <span className="es-overline">The problem</span>
           <h2>Paper rounds, clipboard nameplates and WhatsApp breakdowns.</h2>
-          <p>The owning GigaOps module remains the source of truth. The device shows the permitted task and returns a receipt when the action is accepted. If the plant has no signal, drafts queue until that receipt exists.</p>
+          <p>The owning GigaOps module remains the source of truth. The tablet and the phone show the permitted task and return a receipt when the action is accepted. If the plant has no signal, drafts queue until that receipt exists.</p>
         </div>
       </div>
     </section>
-    <section className="es-section es-section-soft" id="capabilities">
-      <div className="es-container">
-        <SectionHeading label="Journeys" title="What a crew does from the floor." ink />
-        <div className="es-pictogram-grid es-pictogram-grid-3">
-          <div className="es-pictogram"><ClipboardCheck size={40} strokeWidth={1.25} className="es-pic" /><h3>Operator rounds</h3><p>Walk a scheduled route, capture readings at the checkpoint, and stop a round that was only ticked on paper.</p></div>
-          <div className="es-pictogram"><Wrench size={40} strokeWidth={1.25} className="es-pic" /><h3>Work orders</h3><p>See the asset, the tasks, the parts and close with evidence — the same work order the planner opened.</p></div>
-          <div className="es-pictogram"><Boxes size={40} strokeWidth={1.25} className="es-pic" /><h3>Stores issues</h3><p>Issue reserved parts against the job, not a verbal pickup that never hit the ledger.</p></div>
-        </div>
-      </div>
-    </section>
+    <FrontlineJourneys />
     <section className="es-section" id="related">
       <div className="es-container">
         <SectionHeading label="System of record" title="Frontline writes to these modules. It does not replace them." ink />
@@ -880,7 +997,7 @@ export function ConsultingPage() {
     <Leadspace
       breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><span>Consulting</span></div>}
       title="From architecture to a live operating record."
-      copy="Gigasys consulting designs how a site runs on GigaOps: the architecture, the industry pack, the configuration, the path from walkthrough to go-live, and AI that sits on the same record. We do not rent a hundred-thousand-person bench. We sit with the operation until the crew writes to it."
+      copy="Gigasys consulting designs how a site runs on GigaOps: the architecture, the industry pack, the connectors you keep, Frontline for the crew, evidence on close-out, SPEED for process safety, and AI that sits on the same record. We do not rent a hundred-thousand-person bench. We sit with the operation until the crew writes to it."
       primary={<Link href="/contact" className="es-button es-button-blue">Talk about a programme <ArrowRight size={16} strokeWidth={1.5} /></Link>}
       secondary={<a href="#capabilities" className="es-button es-button-outline">Explore capabilities</a>}
     />
@@ -923,7 +1040,7 @@ export function ConsultingPage() {
         <SectionHeading label="The path" title="From a walkthrough to a live record." ink />
         <div className="es-pictogram-grid es-pictogram-grid-3">
           <div className="es-pictogram"><ClipboardCheck size={40} strokeWidth={1.25} className="es-pic" /><h3>1 · Walk the site</h3><p>Work orders, roster and stores. Name the tools you want to retire — and the ones that still earn their place.</p></div>
-          <div className="es-pictogram"><Settings2 size={40} strokeWidth={1.25} className="es-pic" /><h3>2 · Configure the pack</h3><p>Architecture, industry vocabulary and the rules a site actually runs. Not a fork for the next plant.</p></div>
+          <div className="es-pictogram"><Settings2 size={40} strokeWidth={1.25} className="es-pic" /><h3>2 · Configure the pack</h3><p>Architecture, connectors, Frontline and the rules a site actually runs. Not a fork for the next plant.</p></div>
           <div className="es-pictogram"><FileCheck2 size={40} strokeWidth={1.25} className="es-pic" /><h3>3 · Go live on the record</h3><p>Discovery agrees the baseline. The crew writes to the same GigaOps record you designed.</p></div>
         </div>
       </div>

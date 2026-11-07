@@ -67,6 +67,10 @@ export const consultingCapabilityPhotos = {
   customisation: { src: engineeringTeam, alt: "Configuring how the site runs without forking the product" },
   lifecycle: { src: fieldCrew, alt: "Walking the site with the crew who will write to the live record" },
   ai: { src: colleaguesReview, alt: "Designing the next action on the GigaOps record, with the people who will use it" },
+  integration: { src: plantInstruments, alt: "Connecting the systems you keep to the operating record, with an owner and a journal" },
+  frontline: { src: industrialEngineer, alt: "A technician writing to GigaOps from the floor — tablet or phone, online or queued" },
+  evidence: { src: architectureWorkshop, alt: "Evidence, checklists and sign-off staying on the work they explain" },
+  processSafety: { src: labScientist, alt: "Desk-side process-safety screening before a chemistry route is politically locked" },
 };
 
 export const frontlinePhoto = {
