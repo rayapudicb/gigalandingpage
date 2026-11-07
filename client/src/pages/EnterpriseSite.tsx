@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Activity, ArrowRight, BarChart3, Bot, Boxes, BriefcaseBusiness, Building2,
   Check, ChevronDown, ChevronRight, ClipboardCheck, Code2, Compass, Cpu, Database,
   Factory, FileCheck2, FileSignature, FlaskConical, HardHat, HeartPulse,
-  Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare,
-  Monitor, Pause, Play, Repeat2, ScanLine, Settings2, ShieldCheck, ShoppingBag, Smartphone, Sparkles,
+  Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare, Monitor,
+  Pause, Play, Repeat2, ScanLine, Settings2, ShieldCheck, ShoppingBag, Smartphone, Sparkles,
   Store, Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
@@ -265,69 +265,49 @@ const fieldModules: { icon: LucideIcon; title: string; copy: string; pos: string
   { icon: WifiOff, title: "Offline queue", copy: "Draft until receipt.", pos: "br" },
 ];
 
-type FrontlineDevice = "tablet" | "phone";
-type FrontlineMode = "online" | "offline";
-type FrontlineFilter = FrontlineDevice | FrontlineMode;
-
-const FRONTLINE_FILTERS: [FrontlineFilter, string][] = [
-  ["tablet", "Tablet"],
-  ["phone", "Phone"],
-  ["online", "Online"],
-  ["offline", "Offline"],
+const frontlineCapabilities: { title: string; copy: string; href: string; icon: LucideIcon }[] = [
+  { title: "Operator rounds", copy: "A completed route with readings at the checkpoint — not a paper tick that never hit the asset.", href: "/gigaops/maintenance", icon: ClipboardCheck },
+  { title: "Work orders", copy: "The same job the planner opened: asset, tasks, parts and close-out on the device.", href: "/gigaops/maintenance", icon: Wrench },
+  { title: "Assigned work", copy: "The live job on a named person — not a printed list they left in the cabin.", href: "/gigaops/workforce", icon: Users2 },
+  { title: "Punch on site", copy: "Hours on a named person, on the place. Time that payroll can export.", href: "/gigaops/workforce", icon: MapPin },
+  { title: "Qualified to start", copy: "Skills on the person. The job will not start if they are not qualified to finish it.", href: "/gigaops/workforce", icon: ShieldCheck },
+  { title: "Stores issues", copy: "Issue reserved parts against the job — the bin movement the ledger will defend.", href: "/gigaops/inventory", icon: Boxes },
+  { title: "Barcode identity", copy: "The right asset and the right part, scanned at the point of work.", href: "/gigaops/inventory", icon: ScanLine },
+  { title: "Meter readings", copy: "A reading written to the meter. Condition that can start the next job.", href: "/gigaops/maintenance", icon: Activity },
+  { title: "Evidence on close-out", copy: "Photo, checklist and the place — attached to the work, not parked on a phone.", href: "/gigaops/documents", icon: FileCheck2 },
+  { title: "Digital sign-off", copy: "The job is accepted on the record. Close-out is not a clipboard at the gate.", href: "/gigaops/documents", icon: FileSignature },
+  { title: "Raise a defect", copy: "A breakdown writes a work order from the floor, not a WhatsApp thread.", href: "/gigaops/maintenance", icon: Repeat2 },
+  { title: "Offline queue", copy: "If the plant has no signal, drafts wait until GigaOps accepts them.", href: "/platform/mobile", icon: WifiOff },
 ];
 
-const FRONTLINE_LIST_LABEL: Record<FrontlineFilter, string> = {
-  tablet: "Tablet journeys",
-  phone: "Phone journeys",
-  online: "Online — live receipt",
-  offline: "Offline — queued until receipt",
-};
-
-const frontlineCapabilities: {
-  title: string;
-  copy: string;
-  href: string;
-  icon: LucideIcon;
-  devices: FrontlineDevice[];
-  modes: FrontlineMode[];
-}[] = [
-  { title: "Operator rounds", copy: "A completed route with readings at the checkpoint — not a paper tick that never hit the asset.", href: "/gigaops/maintenance", icon: ClipboardCheck, devices: ["tablet"], modes: ["online", "offline"] },
-  { title: "Work orders", copy: "The same job the planner opened: asset, tasks, parts and close-out on the device.", href: "/gigaops/maintenance", icon: Wrench, devices: ["tablet", "phone"], modes: ["online", "offline"] },
-  { title: "Assigned work", copy: "The live job on a named person — not a printed list they left in the cabin.", href: "/gigaops/workforce", icon: Users2, devices: ["tablet", "phone"], modes: ["online"] },
-  { title: "Punch on site", copy: "Hours on a named person, on the place. Time that payroll can export.", href: "/gigaops/workforce", icon: MapPin, devices: ["phone", "tablet"], modes: ["online", "offline"] },
-  { title: "Qualified to start", copy: "Skills on the person. The job will not start if they are not qualified to finish it.", href: "/gigaops/workforce", icon: ShieldCheck, devices: ["tablet", "phone"], modes: ["online"] },
-  { title: "Stores issues", copy: "Issue reserved parts against the job — the bin movement the ledger will defend.", href: "/gigaops/inventory", icon: Boxes, devices: ["tablet"], modes: ["online", "offline"] },
-  { title: "Barcode identity", copy: "The right asset and the right part, scanned at the point of work.", href: "/gigaops/inventory", icon: ScanLine, devices: ["phone", "tablet"], modes: ["online", "offline"] },
-  { title: "Meter readings", copy: "A reading written to the meter. Condition that can start the next job.", href: "/gigaops/maintenance", icon: Activity, devices: ["tablet", "phone"], modes: ["online", "offline"] },
-  { title: "Evidence on close-out", copy: "Photo, checklist and the place — attached to the work, not parked on a phone.", href: "/gigaops/documents", icon: FileCheck2, devices: ["tablet", "phone"], modes: ["online", "offline"] },
-  { title: "Digital sign-off", copy: "The job is accepted on the record. Close-out is not a clipboard at the gate.", href: "/gigaops/documents", icon: FileSignature, devices: ["phone", "tablet"], modes: ["online", "offline"] },
-  { title: "Raise a defect", copy: "A breakdown writes a work order from the floor, not a WhatsApp thread.", href: "/gigaops/maintenance", icon: Repeat2, devices: ["phone"], modes: ["online", "offline"] },
-  { title: "Offline queue", copy: "If the plant has no signal, drafts wait until GigaOps accepts them.", href: "/platform/mobile", icon: WifiOff, devices: ["tablet", "phone"], modes: ["offline"] },
+const syncFlow: { icon: LucideIcon; label: string }[] = [
+  { icon: Wifi, label: "Online" },
+  { icon: WifiOff, label: "Offline queue" },
+  { icon: Monitor, label: "Web sync" },
 ];
 
-function matchesFrontline(item: (typeof frontlineCapabilities)[number], filter: FrontlineFilter) {
-  return filter === "tablet" || filter === "phone" ? item.devices.includes(filter) : item.modes.includes(filter);
-}
-
-function FrontlineFilterTabs({ value, onChange }: { value: FrontlineFilter; onChange: (id: FrontlineFilter) => void }) {
+function StaticSyncFlow() {
   return (
-    <div className="es-filter-tabs" role="tablist" aria-label="Frontline channel">
-      {FRONTLINE_FILTERS.map(([id, label]) => (
-        <button type="button" role="tab" aria-selected={value === id} className={value === id ? "is-active" : undefined} onClick={() => onChange(id)} key={id}>{label}</button>
-      ))}
-    </div>
-  );
-}
-
-function FrontlineChips({ item }: { item: (typeof frontlineCapabilities)[number] }) {
-  return (
-    <div className="es-cap-meta">
-      {item.devices.map((device) => (
-        <span key={device}>{device === "tablet" ? <Monitor size={12} strokeWidth={1.5} /> : <Smartphone size={12} strokeWidth={1.5} />}{device === "tablet" ? "Tablet" : "Phone"}</span>
-      ))}
-      {item.modes.map((mode) => (
-        <span key={mode}>{mode === "offline" ? <WifiOff size={12} strokeWidth={1.5} /> : <Wifi size={12} strokeWidth={1.5} />}{mode === "offline" ? "Offline" : "Online"}</span>
-      ))}
+    <div className="es-flow-carousel es-flow-static" role="img" aria-label="Online completion, offline queue, then web sync to GigaOps">
+      <div className="es-flow-head">
+        <strong>Device to desk</strong>
+        <p>Online they receipt. Offline they queue. The web user sees the same GigaOps record.</p>
+      </div>
+      <div className="es-flow-track">
+        {syncFlow.map((step, index) => {
+          const Icon = step.icon;
+          return (
+            <Fragment key={step.label}>
+              {index > 0 && <div className="es-flow-link is-on"><span /></div>}
+              <div className="es-flow-step is-active">
+                <span className="es-flow-disc"><Icon size={26} strokeWidth={1.5} /></span>
+                <span className="es-flow-tick-slot" />
+                <small>{step.label}</small>
+              </div>
+            </Fragment>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -370,7 +350,7 @@ function PageTabs({ links }: { links: [string, string][] }) {
 }
 
 function Leadspace({
-  breadcrumb, kicker, extra, title, copy, primary, secondary, visual, home = false,
+  breadcrumb, kicker, extra, title, copy, primary, secondary, visual,
 }: {
   breadcrumb?: React.ReactNode;
   kicker?: React.ReactNode;
@@ -380,10 +360,9 @@ function Leadspace({
   primary?: React.ReactNode;
   secondary?: React.ReactNode;
   visual?: React.ReactNode;
-  home?: boolean;
 }) {
   return (
-    <section className={home ? "es-lead es-lead-home" : "es-lead"}>
+    <section className="es-lead">
       <div className="es-container">
         {breadcrumb}
         {!breadcrumb && kicker && <div className="es-kicker-row">{kicker}{extra}</div>}
@@ -401,7 +380,7 @@ function Leadspace({
 }
 
 function FeatureAnnounce({
-  src, alt, kicker, title, href, listLabel, items, filters,
+  src, alt, kicker, title, href, listLabel, items,
 }: {
   src: string;
   alt: string;
@@ -410,7 +389,6 @@ function FeatureAnnounce({
   href: string;
   listLabel: string;
   items: [string, string][];
-  filters?: React.ReactNode;
 }) {
   return (
     <div className="es-announce">
@@ -423,7 +401,6 @@ function FeatureAnnounce({
         </Link>
       </div>
       <nav className="es-announce-list" aria-label={listLabel}>
-        {filters}
         <h3>{listLabel}</h3>
         {items.map(([label, to]) => (
           to.startsWith("#")
@@ -432,30 +409,6 @@ function FeatureAnnounce({
         ))}
       </nav>
     </div>
-  );
-}
-
-function FrontlineBand() {
-  const [filter, setFilter] = useState<FrontlineFilter>("tablet");
-  const items = frontlineCapabilities.filter((item) => matchesFrontline(item, filter));
-  return (
-    <>
-      <SectionHeading
-        label="Frontline"
-        title="Tablet and phone. Online completion. Offline queue."
-        copy="Operator rounds and stores on the plant tablet. Assigned work, punch and defects in the pocket. If the plant has no signal, drafts wait until GigaOps accepts them."
-      />
-      <FeatureAnnounce
-        src={frontlinePhoto.src}
-        alt={frontlinePhoto.alt}
-        kicker="Frontline"
-        title="The record stays in GigaOps. The device is how the crew writes to it."
-        href="/platform/mobile"
-        listLabel={FRONTLINE_LIST_LABEL[filter]}
-        filters={<FrontlineFilterTabs value={filter} onChange={setFilter} />}
-        items={items.map((item) => [item.title, item.href] as [string, string])}
-      />
-    </>
   );
 }
 
@@ -546,7 +499,7 @@ const consultingCapabilities: {
   },
   {
     id: "frontline", icon: Smartphone, title: "Frontline operations",
-    copy: "Tablet on the plant floor. Phone in the pocket. Rounds, work orders, punch, stores and sign-off write to GigaOps. Online they receipt immediately. Offline they queue until the plant accepts them.",
+    copy: "One Frontline app for the crew: rounds, work orders, punch, stores and sign-off write to GigaOps. Online they receipt immediately. Offline they queue until the plant accepts them.",
     href: "/platform/mobile", link: "Explore Frontline", photo: consultingCapabilityPhotos.frontline,
   },
   {
@@ -583,18 +536,37 @@ const architecture = [
 export function EnterpriseHome() {
     useEffect(() => { document.title = "GigaOps | Operations software you configure per site"; }, []);
   return <EnterpriseShell>
-    <Leadspace
-      home
-      kicker={<span className="es-kicker">GigaOps</span>}
-      title="Close the operation as one record — not five systems."
-      copy="GigaOps is the operating platform for work, people, parts and evidence. You configure how a site runs. You do not rebuild the software for the next plant, depot, ward or field."
-      primary={<Link href="/gigaops" className="es-button es-button-blue">Explore GigaOps <ArrowRight size={16} strokeWidth={1.5} /></Link>}
-      secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your operation</Link>}
-      visual={<WorkflowCarousel />}
-    />
-    <section className="es-section" id="mobile">
+    <div className="es-home-fold">
+      <Leadspace
+        kicker={<span className="es-kicker">GigaOps</span>}
+        title="Close the operation as one record — not five systems."
+        copy="GigaOps is the operating platform for work, people, parts and evidence. You configure how a site runs. You do not rebuild the software for the next plant, depot, ward or field."
+        primary={<Link href="/gigaops" className="es-button es-button-blue">Explore GigaOps <ArrowRight size={16} strokeWidth={1.5} /></Link>}
+        secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your operation</Link>}
+        visual={<WorkflowCarousel />}
+      />
+      <section className="es-frontline-punch" id="mobile">
+        <div className="es-container es-lead-grid">
+          <div>
+            <span className="es-overline">Frontline</span>
+            <h2>Tablet and phone. Online completion. Offline queue.</h2>
+            <p>GigaOps mobile stores the workforce journeys — assigned work, punch and defects in the pocket. If the plant has no signal, drafts wait until GigaOps accepts them.</p>
+          </div>
+          <StaticSyncFlow />
+        </div>
+      </section>
+    </div>
+    <section className="es-section es-section-follow" id="journeys">
       <div className="es-container">
-        <FrontlineBand />
+        <FeatureAnnounce
+          src={frontlinePhoto.src}
+          alt={frontlinePhoto.alt}
+          kicker="Frontline"
+          title="One app for the floor. The record stays in GigaOps."
+          href="/platform/mobile"
+          listLabel="Mobility journeys"
+          items={frontlineCapabilities.map((item) => [item.title, item.href] as [string, string])}
+        />
       </div>
     </section>
     <section className="es-section" id="overview">
@@ -660,38 +632,43 @@ export function EnterpriseHome() {
   </EnterpriseShell>;
 }
 
-function FrontlineJourneys() {
-  const [filter, setFilter] = useState<FrontlineFilter>("tablet");
-  useEffect(() => {
-    const apply = () => {
-      const hash = window.location.hash.replace("#", "");
-      if (hash === "tablet" || hash === "phone" || hash === "online" || hash === "offline") setFilter(hash);
-    };
-    apply();
-    window.addEventListener("hashchange", apply);
-    return () => window.removeEventListener("hashchange", apply);
-  }, []);
-  const items = frontlineCapabilities.filter((item) => matchesFrontline(item, filter));
-  return (
+export function MobilePage() {
+  useEffect(() => { document.title = "Frontline | GigaOps"; }, []);
+  return <EnterpriseShell>
+    <Leadspace
+      breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><Link href="/gigaops">GigaOps</Link><ChevronRight size={13} strokeWidth={1.5} /><span>Frontline</span></div>}
+      title="Rounds, work orders and stores — written from the floor, stored in GigaOps."
+      copy="Frontline is one app for the crew. A technician, operator or stores person writes to the same record the plant already runs. Online they receipt immediately. If the plant has no signal, drafts queue until GigaOps accepts them."
+      primary={<a href="#capabilities" className="es-button es-button-blue">See the journeys <ArrowRight size={16} strokeWidth={1.5} /></a>}
+      secondary={<Link href="/contact" className="es-button es-button-outline">Discuss field operations</Link>}
+      visual={<FieldMobileScene compact />}
+    />
+    <PageTabs links={[["#overview", "Overview"], ["#capabilities", "Mobility journeys"], ["#related", "System of record"]]} />
+    <section className="es-section" id="overview">
+      <div className="es-container">
+        <div className="es-split-copy">
+          <span className="es-overline">The problem</span>
+          <h2>Paper rounds, clipboard nameplates and WhatsApp breakdowns.</h2>
+          <p>The owning GigaOps module remains the source of truth. Frontline shows the permitted task and returns a receipt when the action is accepted. If the plant has no signal, drafts queue until that receipt exists.</p>
+        </div>
+      </div>
+    </section>
     <section className="es-section es-section-soft" id="capabilities">
-      <div id="tablet" /><div id="phone" /><div id="online" /><div id="offline" />
       <div className="es-container">
         <SectionHeading
-          label="Journeys"
-          title="What a crew does from the floor."
-          copy="Tablet for rounds and stores. Phone for punch, defects and sign-off. Online they receipt immediately. Offline they queue until GigaOps accepts them."
+          label="Frontline"
+          title="Mobility journeys"
+          copy="What a crew writes from the floor. One app — online receipt or queued until GigaOps accepts it."
           ink
         />
-        <FrontlineFilterTabs value={filter} onChange={setFilter} />
         <div className="es-pictogram-grid">
-          {items.map((item) => {
+          {frontlineCapabilities.map((item) => {
             const Icon = item.icon;
             return (
               <Link href={item.href} className="es-pictogram" key={item.title}>
                 <Icon size={40} strokeWidth={1.25} className="es-pic" />
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
-                <FrontlineChips item={item} />
                 <span>Explore <ArrowRight size={16} strokeWidth={1.5} /></span>
               </Link>
             );
@@ -699,31 +676,6 @@ function FrontlineJourneys() {
         </div>
       </div>
     </section>
-  );
-}
-
-export function MobilePage() {
-  useEffect(() => { document.title = "Frontline | GigaOps"; }, []);
-  return <EnterpriseShell>
-    <Leadspace
-      breadcrumb={<div className="es-breadcrumb"><Link href="/">Home</Link><ChevronRight size={13} strokeWidth={1.5} /><Link href="/gigaops">GigaOps</Link><ChevronRight size={13} strokeWidth={1.5} /><span>Frontline</span></div>}
-      title="Rounds, work orders and stores — written from the floor, stored in GigaOps."
-      copy="Frontline is how a technician, operator or stores person writes to the same record the plant already runs. Tablet on the floor. Phone in the pocket. Online they receipt immediately. If the plant has no signal, drafts queue until GigaOps accepts them."
-      primary={<a href="#capabilities" className="es-button es-button-blue">See the journeys <ArrowRight size={16} strokeWidth={1.5} /></a>}
-      secondary={<Link href="/contact" className="es-button es-button-outline">Discuss field operations</Link>}
-      visual={<FieldMobileScene compact />}
-    />
-    <PageTabs links={[["#overview", "Overview"], ["#tablet", "Tablet"], ["#phone", "Phone"], ["#online", "Online"], ["#offline", "Offline"], ["#related", "System of record"]]} />
-    <section className="es-section" id="overview">
-      <div className="es-container">
-        <div className="es-split-copy">
-          <span className="es-overline">The problem</span>
-          <h2>Paper rounds, clipboard nameplates and WhatsApp breakdowns.</h2>
-          <p>The owning GigaOps module remains the source of truth. The tablet and the phone show the permitted task and return a receipt when the action is accepted. If the plant has no signal, drafts queue until that receipt exists.</p>
-        </div>
-      </div>
-    </section>
-    <FrontlineJourneys />
     <section className="es-section" id="related">
       <div className="es-container">
         <SectionHeading label="System of record" title="Frontline writes to these modules. It does not replace them." ink />
