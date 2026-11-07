@@ -9,7 +9,6 @@
   --blue-20: #d0e2ff;
   --blue-30: #a6c8ff;
   --brand: #0f62fe;
-  --photo: 320px;
   color: var(--ink);
   background: #fff;
   font-family: "IBM Plex Sans", Inter, system-ui, sans-serif;
@@ -84,8 +83,8 @@
 .es-channel-badges { display: inline-flex; flex-wrap: wrap; gap: 8px; }
 .es-channel-badges > span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background: #fff; color: var(--muted); font-size: 12px; }
 .es-lead-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(280px,.9fr); align-items: center; gap: 48px; }
-.es-lead-photo { position: relative; width: 100%; height: var(--photo); min-height: var(--photo); overflow: hidden; background: var(--blue-10); }
-.es-lead-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.es-lead-photo { position: relative; width: 100%; min-height: 420px; overflow: hidden; background: var(--blue-10); }
+.es-lead-photo img { display: block; width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
 .es-lead-photo-icon { position: absolute; left: 12px; bottom: 12px; width: 40px; height: 40px; display: grid; place-items: center; background: #fff; color: var(--blue); }
 .es-lead h1 { max-width: 920px; margin: 0 0 16px; font-size: clamp(40px, 4.6vw, 60px); line-height: 1.15; letter-spacing: 0; font-weight: 300; color: var(--ink); }
 .es-lead p { max-width: 560px; margin: 0; color: var(--ink); font-size: 16px; line-height: 1.5; font-weight: 400; }
@@ -188,15 +187,15 @@
 .es-field-br { bottom: 16px; right: 24px; }
 .es-field.is-compact { min-height: 360px; }
 .es-field.is-compact .es-field-photo { width: 200px; }
-.es-spotlight { height: var(--photo); min-height: var(--photo); overflow: hidden; background: var(--blue-10); }
-.es-spotlight img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 72%; display: block; }
+.es-spotlight { min-height: 420px; overflow: hidden; background: var(--blue-10); }
+.es-spotlight img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 72%; display: block; min-height: 420px; }
 
-.es-announce { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(280px,.72fr); gap: 48px; align-items: start; }
-.es-announce-media { position: relative; height: var(--photo); min-height: var(--photo); overflow: hidden; background: #161616; }
-.es-announce-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.es-announce-card { position: absolute; right: 0; bottom: 0; width: min(100%, 320px); padding: 20px 20px 16px; background: var(--soft); color: var(--ink); }
-.es-announce-card small { display: block; margin-bottom: 8px; color: var(--muted); font-size: 12px; }
-.es-announce-card h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.3; font-weight: 300; }
+.es-announce { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(280px,.72fr); gap: 48px; align-items: stretch; }
+.es-announce-media { position: relative; min-height: 640px; overflow: hidden; background: #161616; }
+.es-announce-media img { display: block; width: 100%; height: 100%; min-height: 640px; object-fit: cover; }
+.es-announce-card { position: absolute; right: 0; bottom: 0; width: min(100%, 380px); padding: 28px 24px 24px; background: var(--soft); color: var(--ink); }
+.es-announce-card small { display: block; margin-bottom: 12px; color: var(--muted); font-size: 12px; }
+.es-announce-card h3 { margin: 0 0 20px; font-size: 22px; line-height: 1.3; font-weight: 300; }
 .es-announce-card span { display: inline-flex; color: var(--blue); }
 .es-announce-list { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
 .es-announce-list > h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
@@ -204,14 +203,14 @@
 .es-announce-list a:hover { color: var(--blue-hover); }
 .es-announce-list a svg { flex: none; }
 
-.es-cap { display: grid; grid-template-columns: minmax(0,1fr) minmax(280px,.9fr); gap: 64px; align-items: start; }
+.es-cap { display: grid; grid-template-columns: minmax(0,1fr) minmax(280px,.9fr); gap: 64px; align-items: center; }
 .es-cap.is-flip { grid-template-columns: minmax(280px,.9fr) minmax(0,1fr); }
 .es-cap.is-flip .es-cap-copy { order: 2; }
 .es-cap-copy .es-button { margin-top: 24px; }
 .es-cap-copy h2 { margin: 8px 0 12px; font-size: clamp(32px, 3.2vw, 42px); line-height: 1.2; font-weight: 300; }
 .es-cap-copy p { max-width: 560px; margin: 0; font-size: 16px; line-height: 1.5; }
-.es-cap-photo { position: relative; height: var(--photo); min-height: var(--photo); overflow: hidden; background: var(--blue-10); }
-.es-cap-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.es-cap-photo { position: relative; min-height: 420px; overflow: hidden; background: var(--blue-10); }
+.es-cap-photo img { display: block; width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
 .es-cap-icon { position: absolute; left: 12px; bottom: 12px; width: 40px; height: 40px; display: grid; place-items: center; background: #fff; color: var(--blue); }
 
 @media (prefers-reduced-motion: reduce) {
@@ -402,7 +401,7 @@
   .es-lead h1 { font-size: 36px; }
   .es-section { padding: 80px 0; }
   .es-section-follow { padding-top: 32px; }
-  .es { --photo: 240px; }
+  .es-lead-photo, .es-lead-photo img, .es-spotlight, .es-spotlight img { min-height: 280px; }
   .es-pictogram-grid, .es-pictogram-grid-3, .es-tile-grid, .es-tile-grid-3, .es-proof-grid, .es-proof-grid-3, .es-direction-grid, .es-office-list, .es-facts, .es-footer-grid, .es-menu-grid { grid-template-columns: 1fr; }
   .es-field { min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 0; }
   .es-field-photo { width: 168px; margin: 8px auto; order: -1; }
@@ -414,6 +413,7 @@
   .es-page-tabs .es-tab-cta { display: none; }
   .es-job { grid-template-columns: 1fr; }
   .es-announce-card { position: static; width: 100%; }
+  .es-announce-media, .es-announce-media img, .es-cap-photo, .es-cap-photo img { min-height: 280px; }
   .es-featured, .es-closing .es-container > div { display: block; }
   .es-featured a, .es-closing .es-button { margin-top: 20px; }
   .es-footer-bottom { display: block; line-height: 1.8; }
