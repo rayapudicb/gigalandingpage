@@ -8,6 +8,12 @@ import { CompanyPage, EnterpriseHome, IndustriesIndexPage, MobilePage, PlatformP
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 
+function RedirectTo({ href }: { href: string }) {
+  const [, setLocation] = useLocation();
+  useLayoutEffect(() => { setLocation(href); }, [href, setLocation]);
+  return null;
+}
+
 function ScrollToTop() {
   const [location] = useLocation();
   
@@ -34,6 +40,9 @@ function Router() {
       <Route path="/platform/mobile" component={MobilePage} />
       <Route path="/products" component={ProductIndexPage} />
       <Route path="/industries" component={IndustriesIndexPage} />
+      <Route path="/products/textfly">{() => <RedirectTo href="/products" />}</Route>
+      <Route path="/products/gigahr">{() => <RedirectTo href="/products" />}</Route>
+      <Route path="/products/openface">{() => <RedirectTo href="/products" />}</Route>
       <Route path="/gigaops/:slug">{({ slug }) => <SolutionPage path={`/gigaops/${slug}`} />}</Route>
       <Route path="/products/:slug">{({ slug }) => <SolutionPage path={`/products/${slug}`} />}</Route>
       <Route path="/industries/:slug">{({ slug }) => <SolutionPage path={`/industries/${slug}`} />}</Route>

@@ -6,7 +6,7 @@ import {
   Factory, FileCheck2, FileSignature, FlaskConical, HardHat, HeartPulse,
   Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare, Monitor,
   Pause, Play, Repeat2, Settings2, ShieldCheck, Smartphone, Sparkles,
-  Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
+  Store, Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
 import colleaguesReview from "@/assets/industry/colleagues-review.jpg";
@@ -16,7 +16,8 @@ import industrialEngineer from "@/assets/industry/industrial-engineer.jpg";
 import labScientist from "@/assets/industry/lab-scientist.jpg";
 import { digitalProducts, enterpriseProducts, industries, modules, products, solutionByPath, specialistModules, type Solution } from "@/data/solutions";
 import { SpeedExperience } from "./EnterpriseDemos";
-import { SceneCompany, SceneConnectedWork, SceneIndustry, SceneModule, ScenePlatform } from "./enterpriseIllustrations";
+import { SceneCompany, SceneIndustry, SceneModule, ScenePlatform } from "./enterpriseIllustrations";
+import { WorkflowCarousel } from "./WorkflowCarousel";
 import "./EnterpriseSite.css";
 
 const iconByPath: Record<string, LucideIcon> = {
@@ -36,10 +37,9 @@ const iconByPath: Record<string, LucideIcon> = {
   "/gigaops/tax-configuration": FileCheck2, "/gigaops/connector-hub": Zap,
   "/gigaops/data-studio": Database, "/gigaops/orders": Truck,
   "/gigaops/rule-studio": Settings2,
-  "/products/nyr": Compass, "/products/textfly": MessageSquare,
-  "/products/swappy": Repeat2, "/products/gigahr": Users2,
-  "/products/gigacrm": BriefcaseBusiness, "/products/gigaai": Sparkles,
-  "/products/openface": ShieldCheck, "/industries/pharma": FlaskConical,
+  "/products/nyr": Compass, "/products/mypint": Store,
+  "/products/swappy": Repeat2, "/products/gigacrm": BriefcaseBusiness,
+  "/products/gigaai": Sparkles, "/industries/pharma": FlaskConical,
   "/industries/manufacturing": Factory, "/industries/agriculture": Leaf,
   "/industries/sports": Trophy, "/industries/energy": Zap,
   "/industries/healthcare": HeartPulse, "/industries/transport": Truck,
@@ -175,7 +175,7 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
         <div className="es-container es-footer-grid">
           <div><Link href="/" className="es-brand es-footer-brand"><img src={Logo} alt="" /><span>GigaOps</span></Link><p>Operations software for plants, field teams and regulated work — one record for the job, the person, the part and the evidence.</p><a href="mailto:connect@gigasystech.com">connect@gigasystech.com <ArrowRight size={14} strokeWidth={1.5} /></a></div>
           <div><strong>Platform</strong><Link href="/gigaops">GigaOps</Link><Link href="/gigaops/maintenance">Asset & Maintenance</Link><Link href="/gigaops/workforce">Workforce</Link><Link href="/gigaops/inventory">Inventory</Link><Link href="/platform/mobile">Frontline mobile</Link></div>
-          <div><strong>Products</strong><Link href="/gigaops">GigaOps</Link><Link href="/products/speed">SPEED</Link><Link href="/products/textfly">TextFly</Link><Link href="/products">Explore all</Link></div>
+          <div><strong>Products</strong><Link href="/gigaops">GigaOps</Link><Link href="/products/speed">SPEED</Link><Link href="/products/mypint">MyPint</Link><Link href="/products">Explore all</Link></div>
           <div><strong>Company</strong><Link href="/about">About</Link><Link href="/jobs">Careers</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
         </div>
         <div className="es-container es-footer-bottom"><span>© {new Date().getFullYear()} Gigasys Technologies Inc · Gigasys Technologies Pvt Ltd</span><span>Configure the operation. Do not fork the product.</span></div>
@@ -378,19 +378,19 @@ const architecture = [
 ];
 
 export function EnterpriseHome() {
-    useEffect(() => { document.title = "GigaOps | Operations software for plants and field work"; }, []);
+    useEffect(() => { document.title = "GigaOps | Operations software you configure per site"; }, []);
   return <EnterpriseShell>
     <Leadspace
       kicker={<span className="es-kicker">GigaOps</span>}
-      title="Run the plant as one operation — not five systems."
-      copy="GigaOps is the operating platform for maintenance, people, parts and evidence. You configure how a site works. You do not rebuild the software for the next plant, depot or lab."
+      title="Close the operation as one record — not five systems."
+      copy="GigaOps is the operating platform for work, people, parts and evidence. You configure how a site runs. You do not rebuild the software for the next plant, depot, ward or field."
       primary={<Link href="/gigaops" className="es-button es-button-blue">Explore GigaOps <ArrowRight size={16} strokeWidth={1.5} /></Link>}
       secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your operation</Link>}
-      visual={<SceneConnectedWork />}
+      visual={<WorkflowCarousel />}
     />
     <section className="es-section" id="overview">
       <div className="es-container">
-        <SectionHeading label="What we solve" title="The jobs that currently live in the wrong tools." copy="Start where the plant already loses time: work orders, people, parts, or a chemistry route that is still a paper pack." />
+        <SectionHeading label="What we solve" title="The jobs that currently live in the wrong tools." copy="Work with no owner. Hours that never bill. Stock that lies. A chemistry route that is still a paper pack." />
         <div className="es-pictogram-grid">
           <PictogramLink href="/gigaops/maintenance" icon={Wrench} title="Asset & Maintenance" copy="One work order for the asset, the parts and the person who can finish it." />
           <PictogramLink href="/gigaops/workforce" icon={Users2} title="Workforce" copy="Skills, bookings and pay-ready time that can staff maintenance work." />
@@ -401,7 +401,7 @@ export function EnterpriseHome() {
     </section>
     <section className="es-section es-section-soft" id="capabilities">
       <div className="es-container">
-        <SectionHeading label="How a day actually runs" title="From a broken asset to a number you can defend." copy="This is the manufacturing operating loop. Other industries configure the same modules — plant, depot, ward or field — without a fork." ink />
+        <SectionHeading label="How a day actually runs" title="From a broken asset to a number you can defend." copy="Same loop. Plant, depot, ward or field — the pack changes the words, not the modules." ink />
         <div className="es-pictogram-grid es-pictogram-grid-3">
           {architecture.map((item) => (
             <PictogramLink key={item.title} href={item.href} icon={item.icon} title={item.title} copy={item.copy} />
@@ -443,7 +443,7 @@ export function EnterpriseHome() {
             <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
           </Link>
           <Link href="/industries/manufacturing" className="es-direction" id="industries">
-            <div className="es-direction-body"><span>03 / First industry</span><h3>Manufacturing</h3><p>The first packaged solution: plant work, people, parts and MRP on one record.</p></div>
+            <div className="es-direction-body"><span>03 / First pack</span><h3>Manufacturing</h3><p>The first packaged solution: plant work, people, parts and MRP on one record.</p></div>
             <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
           </Link>
         </div>
@@ -522,7 +522,7 @@ export function ProductIndexPage() {
     </section>
     <section className="es-section">
       <div className="es-container">
-        <SectionHeading label="Also from Gigasys" title="Focused products, separate from the plant suite." copy="These solve communications, community, talent and identity problems. They are not substitutes for GigaOps maintenance or workforce." ink />
+        <SectionHeading label="Also from Gigasys" title="Focused products, separate from the operations suite." copy="Retail rewards, community, entitlements and revenue sit here. They are not substitutes for GigaOps maintenance or workforce." ink />
         <div className="es-tile-grid">{digitalProducts.map((item) => <CatalogTile key={item.path} item={item} />)}</div>
       </div>
     </section>
