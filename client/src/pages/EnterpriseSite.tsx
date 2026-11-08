@@ -2,11 +2,11 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Activity, ArrowRight, BarChart3, Bot, Boxes, BriefcaseBusiness, Building2,
-  Check, ChevronDown, ChevronRight, ClipboardCheck, Code2, Compass, Cpu, Database,
+  Check, ChevronDown, ChevronRight, ClipboardCheck, Cloud, Code2, Compass, Cpu, Database,
   Factory, FileCheck2, FileSignature, FlaskConical, HardHat, HeartPulse,
-  Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare, Monitor,
+  Landmark, Layers3, Leaf, Mail, MapPin, Menu, MessageSquare,
   Pause, Play, Repeat2, ScanLine, Settings2, ShieldCheck, ShoppingBag, Smartphone, Sparkles,
-  Store, Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
+  Store, Tablet, Truck, Trophy, Users2, Wifi, WifiOff, Workflow, Wrench, X, Zap, type LucideIcon,
 } from "lucide-react";
 import Logo from "@/assets/logo.svg";
 import colleaguesReview from "@/assets/industry/colleagues-review.jpg";
@@ -18,6 +18,7 @@ import { careerHero, careerLife, consultingCapabilityPhotos, consultingPhoto, fr
 import { digitalProducts, enterpriseProducts, industries, modules, products, solutionByPath, specialistModules, type Solution } from "@/data/solutions";
 import { SpeedExperience } from "./EnterpriseDemos";
 import { SceneCompany, SceneIndustry, SceneModule } from "./enterpriseIllustrations";
+import { HeroIndustryFilm } from "./HeroIndustryFilm";
 import { WorkflowCarousel } from "./WorkflowCarousel";
 import "./EnterpriseSite.css";
 
@@ -174,7 +175,7 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
           <div><strong>Products</strong><Link href="/gigaops">GigaOps</Link><Link href="/products/speed">SPEED</Link><Link href="/products/mypint">MyPint</Link><Link href="/products">Explore all</Link></div>
           <div><strong>Company</strong><Link href="/about">About</Link><Link href="/jobs">Careers</Link><Link href="/consulting">Consulting</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
         </div>
-        <div className="es-container es-footer-bottom"><span>© {new Date().getFullYear()} Gigasys Technologies Inc · Gigasys Technologies Pvt Ltd</span><span>Configure the operation. Do not fork the product.</span></div>
+        <div className="es-container es-footer-bottom"><span>© {new Date().getFullYear()} Gigasys Technologies Inc · Gigasys Technologies Pvt Ltd</span><span>Configure the operation. Do not fork the product. · <a href="/industry-videos/SOURCES.txt">Hero films: Pexels</a></span></div>
       </footer>
     </div>
   );
@@ -280,33 +281,63 @@ const frontlineCapabilities: { title: string; copy: string; href: string; icon: 
   { title: "Offline queue", copy: "If the plant has no signal, drafts wait until GigaOps accepts them.", href: "/platform/mobile", icon: WifiOff },
 ];
 
-const syncFlow: { icon: LucideIcon; label: string }[] = [
-  { icon: Wifi, label: "Online" },
-  { icon: WifiOff, label: "Offline queue" },
-  { icon: Monitor, label: "Web sync" },
+const writePersonas: { icon: LucideIcon; label: string }[] = [
+  { icon: HardHat, label: "Technician" },
+  { icon: ClipboardCheck, label: "Operator" },
+  { icon: Boxes, label: "Stores" },
+];
+const readPersonas: { icon: LucideIcon; label: string }[] = [
+  { icon: Users2, label: "Planner" },
+  { icon: ShieldCheck, label: "Supervisor" },
 ];
 
-function StaticSyncFlow() {
+function SyncLifeFlow() {
+  const [online, setOnline] = useState(true);
+  const [persona, setPersona] = useState(0);
+  useEffect(() => {
+    const path = window.setInterval(() => setOnline((value) => !value), 2200);
+    const people = window.setInterval(() => setPersona((index) => index + 1), 3200);
+    return () => {
+      window.clearInterval(path);
+      window.clearInterval(people);
+    };
+  }, []);
+  const PathIcon = online ? Wifi : WifiOff;
+  const writer = writePersonas[persona % writePersonas.length];
+  const reader = readPersonas[persona % readPersonas.length];
+  const WriteIcon = writer.icon;
+  const ReadIcon = reader.icon;
   return (
-    <div className="es-flow-carousel es-flow-static" role="img" aria-label="Online completion, offline queue, then web sync to GigaOps">
+    <div className="es-flow-carousel es-flow-static es-sync-life" role="img" aria-label="Tablet writes online or offline. A named worker sends the job to the tenant. The tenant returns the same record to planner and supervisor.">
       <div className="es-flow-head">
-        <strong>Device to desk</strong>
-        <p>Online they receipt. Offline they queue. The web user sees the same GigaOps record.</p>
+        <strong>Personas to tenant</strong>
+        <p>A named worker writes on the tablet. Online it receipts. Offline it queues. The tenant holds the record — then planner and supervisor see the same job.</p>
       </div>
-      <div className="es-flow-track">
-        {syncFlow.map((step, index) => {
-          const Icon = step.icon;
-          return (
-            <Fragment key={step.label}>
-              {index > 0 && <div className="es-flow-link is-on"><span /></div>}
-              <div className="es-flow-step is-active">
-                <span className="es-flow-disc"><Icon size={26} strokeWidth={1.5} /></span>
-                <span className="es-flow-tick-slot" />
-                <small>{step.label}</small>
-              </div>
-            </Fragment>
-          );
-        })}
+      <div className="es-sync-track">
+        <span className="es-saas-tile">
+          <Tablet size={22} strokeWidth={1.5} />
+          <small>Tablet</small>
+        </span>
+        <div className="es-flow-link is-on"><span /></div>
+        <span className="es-saas-tile es-saas-rotate" key={online ? "online" : "offline"}>
+          <PathIcon size={22} strokeWidth={1.5} />
+          <small>{online ? "Online" : "Offline"}</small>
+        </span>
+        <div className="es-flow-link is-on"><span /></div>
+        <span className="es-saas-tile es-saas-rotate" key={`write-${writer.label}`}>
+          <WriteIcon size={22} strokeWidth={1.5} />
+          <small>{writer.label}</small>
+        </span>
+        <div className="es-flow-link is-on"><span /></div>
+        <span className="es-saas-tile">
+          <Cloud size={22} strokeWidth={1.5} />
+          <small>Tenant</small>
+        </span>
+        <div className="es-flow-link is-on"><span /></div>
+        <span className="es-saas-tile es-saas-rotate" key={`read-${reader.label}`}>
+          <ReadIcon size={22} strokeWidth={1.5} />
+          <small>{reader.label}</small>
+        </span>
       </div>
     </div>
   );
@@ -350,7 +381,7 @@ function PageTabs({ links }: { links: [string, string][] }) {
 }
 
 function Leadspace({
-  breadcrumb, kicker, extra, title, copy, primary, secondary, visual,
+  breadcrumb, kicker, extra, title, copy, primary, secondary, visual, film, filmWorkflow,
 }: {
   breadcrumb?: React.ReactNode;
   kicker?: React.ReactNode;
@@ -360,9 +391,12 @@ function Leadspace({
   primary?: React.ReactNode;
   secondary?: React.ReactNode;
   visual?: React.ReactNode;
+  film?: boolean;
+  filmWorkflow?: string;
 }) {
   return (
-    <section className="es-lead">
+    <section className={film ? "es-lead es-lead-film" : "es-lead"}>
+      {film && <HeroIndustryFilm workflow={filmWorkflow} />}
       <div className="es-container">
         {breadcrumb}
         {!breadcrumb && kicker && <div className="es-kicker-row">{kicker}{extra}</div>}
@@ -534,6 +568,7 @@ const architecture = [
 ];
 
 export function EnterpriseHome() {
+  const [filmWorkflow, setFilmWorkflow] = useState("maintain");
     useEffect(() => { document.title = "GigaOps | Operations software you configure per site"; }, []);
   return <EnterpriseShell>
     <div className="es-home-fold">
@@ -543,16 +578,18 @@ export function EnterpriseHome() {
         copy="GigaOps is the operating platform for work, people, parts and evidence. You configure how a site runs. You do not rebuild the software for the next plant, depot, ward or field."
         primary={<Link href="/gigaops" className="es-button es-button-blue">Explore GigaOps <ArrowRight size={16} strokeWidth={1.5} /></Link>}
         secondary={<Link href="/contact" className="es-button es-button-outline">Talk about your operation</Link>}
-        visual={<WorkflowCarousel />}
+        visual={<WorkflowCarousel onFlowChange={setFilmWorkflow} />}
+        film
+        filmWorkflow={filmWorkflow}
       />
       <section className="es-frontline-punch" id="mobile">
         <div className="es-container es-lead-grid">
           <div>
             <span className="es-overline">Frontline</span>
-            <h2>Tablet and phone. Online completion. Offline queue.</h2>
-            <p>GigaOps mobile stores the workforce journeys — assigned work, punch and defects in the pocket. If the plant has no signal, drafts wait until GigaOps accepts them.</p>
+            <h2>Tablet. Online completion. Offline queue.</h2>
+            <p>GigaOps mobile stores the workforce journeys — assigned work, punch and defects on the tablet. If the plant has no signal, drafts wait until GigaOps accepts them.</p>
           </div>
-          <StaticSyncFlow />
+          <SyncLifeFlow />
         </div>
       </section>
     </div>

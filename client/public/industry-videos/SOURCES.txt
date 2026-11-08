@@ -1,0 +1,77 @@
+Open-license files in this folder, plus YouTube pages for reference.
+YouTube films were not downloaded.
+
+Hero (1080p, Pexels License — free commercial use)
+  file: plant-aerial.mp4
+  source: https://www.pexels.com/video/drone-footage-of-an-industrial-plant-4380422/
+  file: agri-farm.mp4
+  source: https://www.pexels.com/video/drone-footage-of-tractor-harvesting-on-a-farmland-4809178/
+  file: pharma-lab.mp4
+  source: https://www.pexels.com/video/chemist-working-in-a-laboratory-8533994/
+  file: workforce-tablet.mp4
+  source: https://www.pexels.com/video/a-man-using-a-modern-electronic-note-pad-3195703/
+  file: warehouse-tablet.mp4
+  source: https://www.pexels.com/video/man-doing-inventory-at-the-warehouse-in-his-digital-tablet-4292901/
+  file: workforce-punch.mp4
+  source: https://www.pexels.com/video/guy-with-safety-helmet-looking-into-the-checklist-5100051/
+  file: repair-equipment.mp4
+  source: https://www.pexels.com/video/a-man-fixing-the-machine-6685031/
+  file: metro.mp4
+  source: https://www.pexels.com/video/video-a-train-in-metro-station-5755152/
+  file: stadium.mp4
+  source: https://www.pexels.com/video/aerial-view-of-packed-stadium-during-a-soccer-match-31472390/
+
+Pharmaceuticals & Life Sciences
+  file: pharmaceuticals-life-sciences.webm
+  source: https://commons.wikimedia.org/wiki/File:Video_einer_Rundl%C3%A4uferpresse_an_der_Uni_T%C3%BCbingen,_in_Betrieb_02.webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/8/8a/Video_einer_Rundl%C3%A4uferpresse_an_der_Uni_T%C3%BCbingen%2C_in_Betrieb_02.webm
+  license: CC BY-SA 3.0, Robin Müller
+  youtube: https://www.youtube.com/watch?v=OSj8XzlKvsM
+
+Manufacturing & Industrial
+  file: manufacturing-industrial.webm
+  source: https://commons.wikimedia.org/wiki/File:Assembly_line.webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/a/a4/Assembly_line.webm
+  license: CC BY 4.0, Automotive garage
+  youtube: https://www.youtube.com/watch?v=yA1IV8SADkA
+  youtube: https://www.youtube.com/watch?v=YK3B70XFCmU
+
+Agriculture & Agri-Tech
+  file: agriculture-agritech.webm
+  source: https://commons.wikimedia.org/wiki/File:Harvest_(20180715-FPAC-KLS-0002).webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/f/f4/Harvest_%2820180715-FPAC-KLS-0002%29.webm
+  license: Public domain, U.S. Department of Agriculture
+  youtube: https://www.youtube.com/watch?v=QJndIoPDnBY
+
+Sports, Venues & Entertainment
+  file: sports-venues.webm
+  source: https://commons.wikimedia.org/wiki/File:NSF_Diego_Garcia_hosts_basketball_game_(989713).webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/e/eb/NSF_Diego_Garcia_hosts_basketball_game_%28989713%29.webm
+  license: Public domain, U.S. Navy
+  youtube: https://www.youtube.com/watch?v=mVMTlV_RNbA
+
+Energy & Utilities
+  file: energy-utilities-turbine-hall.webm
+  source: https://commons.wikimedia.org/wiki/File:Turbine_hall_in_a_power_plant_in_Philadelphia.webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/4/4c/Turbine_hall_in_a_power_plant_in_Philadelphia.webm
+  license: CC BY 2.0
+  file: energy-utilities-wind.webm
+  source: https://commons.wikimedia.org/wiki/File:Lawrence_Weston_Wind_Turbine_-_February_2026.webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/4/44/Lawrence_Weston_Wind_Turbine_-_February_2026.webm
+  license: CC BY 4.0
+  youtube: https://www.youtube.com/watch?v=Ljq5OS9H4Fc
+
+Healthcare & Facilities
+  file: healthcare-facilities.webm
+  source: https://commons.wikimedia.org/wiki/File:U.S._Navy_Reservist_and_Surgical_Nurse_-_Lends_a_Hand_in_NY_Hospitals.webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/9/9d/U.S._Navy_Reservist_and_Surgical_Nurse_-_Lends_a_Hand_in_NY_Hospitals.webm
+  license: CC BY 3.0, U.S. Navy
+  youtube: https://www.youtube.com/watch?v=nudZuhYjHAo
+
+Transport & Logistics
+  file: transport-logistics.webm
+  source: https://commons.wikimedia.org/wiki/File:20201119-TFAA-LSC-0052-CLIP.webm
+  direct: https://upload.wikimedia.org/wikipedia/commons/c/c0/20201119-TFAA-LSC-0052-CLIP.webm
+  license: Public domain. Container ships at Wando Welch Terminal, South Carolina.
+  youtube: https://www.youtube.com/watch?v=BW001cAgob0
+  youtube: https://www.youtube.com/watch?v=UP_jJQDT1Pc

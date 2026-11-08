@@ -61,7 +61,7 @@ const RING_MS = 900;
 const TICK_MS = 450;
 const TRAVEL_MS = 900;
 
-export function WorkflowCarousel() {
+export function WorkflowCarousel({ onFlowChange }: { onFlowChange?: (id: string) => void }) {
   const [flowIndex, setFlowIndex] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
   const [tokenIndex, setTokenIndex] = useState(0);
@@ -69,6 +69,10 @@ export function WorkflowCarousel() {
   const [paused, setPaused] = useState(false);
   const flow = workflows[flowIndex];
   const last = flow.steps.length - 1;
+
+  useEffect(() => {
+    onFlowChange?.(flow.id);
+  }, [flow.id, onFlowChange]);
 
   useEffect(() => {
     if (paused) return;
@@ -149,7 +153,7 @@ export function WorkflowCarousel() {
                     <circle className="es-flow-ring-track" cx="26" cy="26" r="24" pathLength="100" />
                     <circle className="es-flow-ring-draw" cx="26" cy="26" r="24" pathLength="100" />
                   </svg>
-                  <Icon size={26} strokeWidth={1.5} />
+                  <Icon size={30} strokeWidth={1.5} />
                 </span>
                 <span className="es-flow-tick-slot">
                   {ticked && <Check className="es-flow-tick" size={16} strokeWidth={2} />}
