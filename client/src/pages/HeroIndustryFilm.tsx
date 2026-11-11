@@ -47,7 +47,7 @@ function lumaFrom(source: CanvasImageSource, sw: number, sh: number) {
       sampleCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
     }
     if (!sampleCtx) return null;
-    sampleCtx.drawImage(source, 0, sh * 0.18, sw * 0.5, sh * 0.5, 0, 0, SAMPLE_W, SAMPLE_H);
+    sampleCtx.drawImage(source, 0, 0, sw * 0.5, sh * 0.5, 0, 0, SAMPLE_W, SAMPLE_H);
     const { data } = sampleCtx.getImageData(0, 0, SAMPLE_W, SAMPLE_H);
     let sum = 0;
     const step = 16;

@@ -170,7 +170,7 @@ export function EnterpriseShell({ children }: { children: React.ReactNode }) {
       <main>{children}</main>
       <footer className="es-footer">
         <div className="es-container es-footer-grid">
-          <div><Link href="/" className="es-brand es-footer-brand"><img src={Logo} alt="" /><span>GigaOps</span></Link><p>Operations software for plants, field teams and regulated work — one record for the job, the person, the part and the evidence.</p><a href="mailto:connect@gigasystech.com">connect@gigasystech.com <ArrowRight size={14} strokeWidth={1.5} /></a></div>
+          <div><Link href="/" className="es-brand es-footer-brand"><img src={Logo} alt="" /><span>GigaOps</span></Link><p>Operations software for plants, field teams and regulated work — one record for the job, the person, the part and the evidence.</p><p>A plant job has an owner, a person, a spare, and evidence — and the customer's books stay where they are.</p><a href="mailto:connect@gigasystech.com">connect@gigasystech.com <ArrowRight size={14} strokeWidth={1.5} /></a></div>
           <div><strong>Platform</strong><Link href="/gigaops">GigaOps</Link><Link href="/gigaops/maintenance">Asset & Maintenance</Link><Link href="/gigaops/workforce">Workforce</Link><Link href="/gigaops/inventory">Inventory</Link><Link href="/platform/mobile">Frontline</Link></div>
           <div><strong>Products</strong><Link href="/gigaops">GigaOps</Link><Link href="/products/speed">SPEED</Link><Link href="/products/mypint">MyPint</Link><Link href="/products">Explore all</Link></div>
           <div><strong>Company</strong><Link href="/about">About</Link><Link href="/jobs">Careers</Link><Link href="/consulting">Consulting</Link><Link href="/contact">Contact</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
@@ -185,12 +185,13 @@ function SectionHeading({ label, title, copy, ink = false }: { label: string; ti
   return <div className="es-section-heading"><span className="es-overline">{label}</span><h2 className={ink ? "is-ink" : undefined}>{title}</h2>{copy && <p>{copy}</p>}</div>;
 }
 
-function PictogramLink({ href, icon: Icon, title, copy }: { href: string; icon: LucideIcon; title: string; copy: string }) {
+function PictogramLink({ href, icon: Icon, title, copy, result }: { href: string; icon: LucideIcon; title: string; copy: string; result?: string }) {
   return (
     <Link href={href} className="es-pictogram">
       <Icon className="es-pic" size={40} strokeWidth={1.25} />
       <h3>{title}</h3>
       <p>{copy}</p>
+      {result && <p className="es-pictogram-result">{result}</p>}
       <span>Explore <ArrowRight size={16} strokeWidth={1.5} /></span>
     </Link>
   );
@@ -266,19 +267,19 @@ const fieldModules: { icon: LucideIcon; title: string; copy: string; pos: string
   { icon: WifiOff, title: "Offline queue", copy: "Draft until receipt.", pos: "br" },
 ];
 
-const frontlineCapabilities: { title: string; copy: string; href: string; icon: LucideIcon }[] = [
-  { title: "Operator rounds", copy: "A completed route with readings at the checkpoint — not a paper tick that never hit the asset.", href: "/gigaops/maintenance", icon: ClipboardCheck },
-  { title: "Work orders", copy: "The same job the planner opened: asset, tasks, parts and close-out on the device.", href: "/gigaops/maintenance", icon: Wrench },
-  { title: "Assigned work", copy: "The live job on a named person — not a printed list they left in the cabin.", href: "/gigaops/workforce", icon: Users2 },
-  { title: "Punch on site", copy: "Hours on a named person, on the place. Time that payroll can export.", href: "/gigaops/workforce", icon: MapPin },
-  { title: "Qualified to start", copy: "Skills on the person. The job will not start if they are not qualified to finish it.", href: "/gigaops/workforce", icon: ShieldCheck },
-  { title: "Stores issues", copy: "Issue reserved parts against the job — the bin movement the ledger will defend.", href: "/gigaops/inventory", icon: Boxes },
-  { title: "Barcode identity", copy: "The right asset and the right part, scanned at the point of work.", href: "/gigaops/inventory", icon: ScanLine },
-  { title: "Meter readings", copy: "A reading written to the meter. Condition that can start the next job.", href: "/gigaops/maintenance", icon: Activity },
-  { title: "Evidence on close-out", copy: "Photo, checklist and the place — attached to the work, not parked on a phone.", href: "/gigaops/documents", icon: FileCheck2 },
-  { title: "Digital sign-off", copy: "The job is accepted on the record. Close-out is not a clipboard at the gate.", href: "/gigaops/documents", icon: FileSignature },
-  { title: "Raise a defect", copy: "A breakdown writes a work order from the floor, not a WhatsApp thread.", href: "/gigaops/maintenance", icon: Repeat2 },
-  { title: "Offline queue", copy: "If the plant has no signal, drafts wait until GigaOps accepts them.", href: "/platform/mobile", icon: WifiOff },
+const frontlineCapabilities: { title: string; copy: string; result: string; href: string; icon: LucideIcon }[] = [
+  { title: "Operator rounds", copy: "A completed route with readings at the checkpoint — not a paper tick that never hit the asset.", result: "A bad reading becomes a job with an owner.", href: "/gigaops/maintenance", icon: ClipboardCheck },
+  { title: "Work orders", copy: "The same job the planner opened: asset, tasks, parts and close-out on the device.", result: "The asset, the tasks, and the due work sit on one order.", href: "/gigaops/maintenance", icon: Wrench },
+  { title: "Assigned work", copy: "The live job on a named person — not a printed list they left in the cabin.", result: "The technician sees only the job assigned to them.", href: "/gigaops/workforce", icon: Users2 },
+  { title: "Punch on site", copy: "Hours on a named person, on the place. Time that payroll can export.", result: "Time is captured against that job.", href: "/gigaops/workforce", icon: MapPin },
+  { title: "Qualified to start", copy: "Skills on the person. The job will not start if they are not qualified to finish it.", result: "An expired or missing skill blocks the start.", href: "/gigaops/workforce", icon: ShieldCheck },
+  { title: "Stores issues", copy: "Issue reserved parts against the job — the bin movement the ledger will defend.", result: "The part leaves the bin against that work order.", href: "/gigaops/inventory", icon: Boxes },
+  { title: "Barcode identity", copy: "The right asset and the right part, scanned at the point of work.", result: "The scan opens the asset or the part, not a free-text name.", href: "/gigaops/inventory", icon: ScanLine },
+  { title: "Meter readings", copy: "A reading written to the meter. Condition that can start the next job.", result: "The reading stays on the asset.", href: "/gigaops/maintenance", icon: Activity },
+  { title: "Evidence on close-out", copy: "Photo, checklist and the place — attached to the work, not parked on a phone.", result: "Photos, checks, and notes stay on the order.", href: "/gigaops/documents", icon: FileCheck2 },
+  { title: "Digital sign-off", copy: "The job is accepted on the record. Close-out is not a clipboard at the gate.", result: "A second person accepts the asset back.", href: "/gigaops/documents", icon: FileSignature },
+  { title: "Raise a defect", copy: "A breakdown writes a work order from the floor, not a WhatsApp thread.", result: "The request is acknowledged and linked, not duplicated.", href: "/gigaops/maintenance", icon: Repeat2 },
+  { title: "Offline queue", copy: "If the plant has no signal, drafts wait until GigaOps accepts them.", result: "A draft waits until GigaOps accepts it. It does not pretend the plant already has it.", href: "/platform/mobile", icon: WifiOff },
 ];
 
 const writePersonas: { icon: LucideIcon; label: string }[] = [
@@ -310,7 +311,7 @@ function SyncLifeFlow() {
   return (
     <div className="es-flow-carousel es-flow-static es-sync-life" role="img" aria-label="Tablet writes online or offline. A named worker sends the job to the tenant. The tenant returns the same record to planner and supervisor.">
       <div className="es-flow-head">
-        <strong>Personas to tenant</strong>
+        <strong>The floor writes it. The plant keeps it.</strong>
         <p>A named worker writes on the tablet. Online it receipts. Offline it queues. The tenant holds the record — then planner and supervisor see the same job.</p>
       </div>
       <div className="es-sync-track">
@@ -396,17 +397,21 @@ function Leadspace({
 }) {
   return (
     <section className={film ? "es-lead es-lead-film" : "es-lead"}>
-      {film && <HeroIndustryFilm workflow={filmWorkflow} />}
       <div className="es-container">
         {breadcrumb}
-        {!breadcrumb && kicker && <div className="es-kicker-row">{kicker}{extra}</div>}
-        <div className={visual ? "es-lead-grid" : undefined}>
+        <div className={film || visual ? "es-lead-grid" : undefined}>
           <div>
+            {!breadcrumb && kicker && <div className="es-kicker-row">{kicker}{extra}</div>}
             <h1>{title}</h1>
             <p>{copy}</p>
             {(primary || secondary) && <div className="es-lead-actions">{primary}{secondary}</div>}
+            {film && visual}
           </div>
-          {visual}
+          {film ? (
+            <div className="es-hero-well">
+              <HeroIndustryFilm workflow={filmWorkflow} />
+            </div>
+          ) : visual}
         </div>
       </div>
     </section>
@@ -422,7 +427,7 @@ function FeatureAnnounce({
   title: string;
   href: string;
   listLabel: string;
-  items: [string, string][];
+  items: { label: string; href: string; result?: string }[];
 }) {
   return (
     <div className="es-announce">
@@ -436,11 +441,20 @@ function FeatureAnnounce({
       </div>
       <nav className="es-announce-list" aria-label={listLabel}>
         <h3>{listLabel}</h3>
-        {items.map(([label, to]) => (
-          to.startsWith("#")
-            ? <a href={to} key={label}>{label}<ArrowRight size={16} strokeWidth={1.5} /></a>
-            : <Link href={to} key={label}>{label}<ArrowRight size={16} strokeWidth={1.5} /></Link>
-        ))}
+        {items.map((item) => {
+          const row = (
+            <>
+              <span className="es-announce-row">
+                <strong>{item.label}</strong>
+                {item.result && <small>{item.result}</small>}
+              </span>
+              <ArrowRight size={16} strokeWidth={1.5} />
+            </>
+          );
+          return item.href.startsWith("#")
+            ? <a href={item.href} key={item.label}>{row}</a>
+            : <Link href={item.href} key={item.label}>{row}</Link>;
+        })}
       </nav>
     </div>
   );
@@ -496,10 +510,10 @@ function InteractiveWorkspace({ choices, initialPath }: { choices: Solution[]; i
 }
 
 const homeProof = [
-  { kicker: "Asset & Maintenance", title: "Stop running breakdowns on WhatsApp and planned work on a spreadsheet.", metric: "Unplanned downtime", detail: "Hours lost to emergency work, measured against the baseline we agree with you." },
-  { kicker: "Workforce", title: "Put a named, qualified person on the job — then export time that payroll can use.", metric: "Time to dispatch", detail: "Minutes from a staffing request to an accepted booking." },
-  { kicker: "Inventory", title: "Do not send a technician to a bin that was already empty.", metric: "Stock accuracy", detail: "Physical count versus recorded balance, including reservations against work." },
-  { kicker: "SPEED", title: "See energetic and thermal risk while the route can still change.", metric: "Screening cycle", detail: "Hours from a submitted route to a reviewed process-safety screen." },
+  { kicker: "Asset & Maintenance", title: "Stop running breakdowns on WhatsApp and planned work on a spreadsheet.", metric: "Unplanned downtime", detail: "Hours lost to emergency work, split from waiting on parts and waiting on people." },
+  { kicker: "Workforce", title: "Put a named, qualified person on the job — then export time that payroll can use.", metric: "Time to dispatch", detail: "Minutes from the request to an accepted assignment." },
+  { kicker: "Inventory", title: "Do not send a technician to a bin that was already empty.", metric: "Stock accuracy", detail: "Count versus the balance, including what is already reserved for jobs." },
+  { kicker: "SPEED", title: "See energetic and thermal risk while the route can still change.", metric: "Screening cycle", detail: "Hours from a submitted route to a reviewed process-safety decision." },
 ];
 
 const consultingCapabilities: {
@@ -507,6 +521,7 @@ const consultingCapabilities: {
   icon: LucideIcon;
   title: string;
   copy: string;
+  result?: string;
   href: string;
   link: string;
   photo: { src: string; alt: string };
@@ -514,41 +529,49 @@ const consultingCapabilities: {
   {
     id: "architecture", icon: Layers3, title: "Architecture",
     copy: "Design how GigaOps modules compose for the site: work, people, parts, places and evidence as one record. Connect what you keep. Do not stand up a second stack beside it.",
+    result: "Which system owns the asset, the person, and the quantity.",
     href: "/gigaops", link: "See the GigaOps platform", photo: consultingCapabilityPhotos.architecture,
   },
   {
     id: "industries", icon: Factory, title: "Industries",
     copy: "Manufacturing is the first packaged solution. Plant, store, depot, ward or field — the vocabulary changes. The modules do not fork for the next site.",
+    result: "The plant's words and rules on the same modules.",
     href: "/industries", link: "Explore industry packs", photo: consultingCapabilityPhotos.industries,
   },
   {
     id: "integration", icon: Zap, title: "Integration",
     copy: "Connector Hub keeps the systems that still earn their place — historian, payroll, stores, finance — talking to the operating record. Every handoff has an owner and a journal. We do not invent a second stack beside yours.",
+    result: "GigaOps writes back to the system the customer already trusts.",
     href: "/gigaops/data", link: "See Data & Integration", photo: consultingCapabilityPhotos.integration,
   },
   {
     id: "customisation", icon: Settings2, title: "Customisation",
     copy: "Industry packs, places, skills, workflows and rules. Configure how the site runs. Do not fork the product when the next plant, depot or ward comes online.",
+    result: "The site's job rules, without a separate product for the next plant.",
     href: "/gigaops", link: "How configuration works", photo: consultingCapabilityPhotos.customisation,
   },
   {
     id: "frontline", icon: Smartphone, title: "Frontline operations",
     copy: "One Frontline app for the crew: rounds, work orders, punch, stores and sign-off write to GigaOps. Online they receipt immediately. Offline they queue until the plant accepts them.",
+    result: "The technician finishes the job on the tablet.",
     href: "/platform/mobile", link: "Explore Frontline", photo: consultingCapabilityPhotos.frontline,
   },
   {
     id: "evidence", icon: FileCheck2, title: "Evidence and close-out",
     copy: "Checklists, photos, meters and signatures stay on the work they explain. Documents and e-sign are not a share drive the auditor has to hunt. Close-out is a receipt on the record.",
+    result: "The signature and the parts stay on the order.",
     href: "/gigaops/documents", link: "See documents and evidence", photo: consultingCapabilityPhotos.evidence,
   },
   {
     id: "process-safety", icon: FlaskConical, title: "Process safety",
     copy: "SPEED screens a chemistry route at the desk before it is politically locked. Energetic and thermal risk on the same platform as the plant record — not a paper pack in a drawer.",
+    result: "The route is reviewed before the plant commits.",
     href: "/products/speed", link: "Explore SPEED", photo: consultingCapabilityPhotos.processSafety,
   },
   {
     id: "lifecycle", icon: Workflow, title: "End-to-end product lifecycle",
     copy: "Walk the site, configure the pack, go-live on the same record the crew writes to, then operate and improve. Discovery, delivery and the live operation are one path.",
+    result: "The production order and the maintenance order can share the part.",
     href: "/contact", link: "Start with a walkthrough", photo: consultingCapabilityPhotos.lifecycle,
   },
   {
@@ -559,12 +582,12 @@ const consultingCapabilities: {
 ];
 
 const architecture = [
-  { href: "/gigaops/maintenance", icon: Wrench, title: "The asset needs work", copy: "Open the register, the PM schedule and the work order on the real site." },
-  { href: "/gigaops/workforce", icon: Users2, title: "A qualified person is booked", copy: "Workforce answers with a named person, not a comment on the job." },
-  { href: "/gigaops/inventory", icon: Boxes, title: "Parts are reserved", copy: "ATP cannot go negative. Issues leave the stores against that work order." },
-  { href: "/gigaops/documents", icon: FileCheck2, title: "The job closes with evidence", copy: "Checklists, meters and signatures stay on the record — not on a phone." },
-  { href: "/gigaops/iot", icon: Cpu, title: "Condition can start the work", copy: "A critical sensor breach can write a meter and open downtime on the asset." },
-  { href: "/gigaops/analytics", icon: BarChart3, title: "The number opens the record", copy: "A downtime spike still drills to the work orders that caused it." },
+  { href: "/gigaops/maintenance", icon: Wrench, title: "The asset needs work", copy: "Open the register, the PM schedule and the work order on the real site.", result: "A request, a round, or a due PM opens one order on the real asset." },
+  { href: "/gigaops/workforce", icon: Users2, title: "A qualified person is assigned", copy: "Workforce answers with a named person, not a comment on the job.", result: "The job shows who is eligible and who accepted it." },
+  { href: "/gigaops/inventory", icon: Boxes, title: "Parts are reserved", copy: "ATP cannot go negative. Issues leave the stores against that work order.", result: "The store cannot promise the same spare twice." },
+  { href: "/gigaops/documents", icon: FileCheck2, title: "The job closes with evidence", copy: "Checklists, meters and signatures stay on the record — not on a phone.", result: "Operations can see why the asset was returned to service." },
+  { href: "/gigaops/iot", icon: Cpu, title: "Condition can start the work", copy: "A critical sensor breach can write a meter and open downtime on the asset.", result: "An out-of-limit reading opens downtime on that asset." },
+  { href: "/gigaops/analytics", icon: BarChart3, title: "The number opens the record", copy: "A downtime spike still drills to the work orders that caused it.", result: "Downtime, repeat failure, and overdue PM drill back to the orders that caused them." },
 ];
 
 export function EnterpriseHome() {
@@ -602,7 +625,7 @@ export function EnterpriseHome() {
           title="One app for the floor. The record stays in GigaOps."
           href="/platform/mobile"
           listLabel="Mobility journeys"
-          items={frontlineCapabilities.map((item) => [item.title, item.href] as [string, string])}
+          items={frontlineCapabilities.map((item) => ({ label: item.title, href: item.href, result: item.result }))}
         />
       </div>
     </section>
@@ -610,10 +633,10 @@ export function EnterpriseHome() {
       <div className="es-container">
         <SectionHeading label="What we solve" title="The jobs that currently live in the wrong tools." copy="Work with no owner. Hours that never bill. Stock that lies. A chemistry route that is still a paper pack." />
         <div className="es-pictogram-grid">
-          <PictogramLink href="/gigaops/maintenance" icon={Wrench} title="Asset & Maintenance" copy="One work order for the asset, the parts and the person who can finish it." />
-          <PictogramLink href="/gigaops/workforce" icon={Users2} title="Workforce" copy="Skills, bookings and pay-ready time that can staff maintenance work." />
-          <PictogramLink href="/gigaops/inventory" icon={Boxes} title="Inventory" copy="Reservations and issues that cannot over-commit the bin the job is counting on." />
-          <PictogramLink href="/products/speed" icon={FlaskConical} title="SPEED" copy="Desk-side process-safety screening before a route is politically locked." />
+          <PictogramLink href="/gigaops/maintenance" icon={Wrench} title="Asset & Maintenance" copy="The asset is accepted back, with the tasks, permit, and signature on the order. Planned work and breakdowns share that record." />
+          <PictogramLink href="/gigaops/workforce" icon={Users2} title="Workforce" copy="A named, qualified person is assigned, and approved time is ready for the customer's payroll." />
+          <PictogramLink href="/gigaops/inventory" icon={Boxes} title="Inventory" copy="The spare on the order matches the bin. Issue and return are recorded on that job. A shortage stays visible." />
+          <PictogramLink href="/products/speed" icon={FlaskConical} title="SPEED" copy="A route is screened at the desk, with the hazard review and the decision on the dossier, before it moves toward the plant." />
         </div>
       </div>
     </section>
@@ -622,7 +645,7 @@ export function EnterpriseHome() {
         <SectionHeading label="How a day actually runs" title="From a broken asset to a number you can defend." copy="Same loop. Plant, depot, ward or field — the pack changes the words, not the modules." ink />
         <div className="es-pictogram-grid es-pictogram-grid-3">
           {architecture.map((item) => (
-            <PictogramLink key={item.title} href={item.href} icon={item.icon} title={item.title} copy={item.copy} />
+            <PictogramLink key={item.title} href={item.href} icon={item.icon} title={item.title} copy={item.copy} result={item.result} />
           ))}
         </div>
       </div>
@@ -637,18 +660,36 @@ export function EnterpriseHome() {
       <div className="es-container">
         <SectionHeading label="Choose a buying path" title="Platform, specialist product, or your industry." ink />
         <div className="es-direction-grid">
-          <Link href="/gigaops" className="es-direction" id="modules">
-            <div className="es-direction-body"><span>01 / Platform</span><h3>GigaOps</h3><p>The operations suite: maintenance, workforce, materials, places and evidence.</p></div>
-            <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
-          </Link>
-          <Link href="/products/speed" className="es-direction">
-            <div className="es-direction-body"><span>02 / Life sciences</span><h3>SPEED</h3><p>Screen a synthesis route at the desk before it moves toward the plant.</p></div>
-            <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
-          </Link>
-          <Link href="/industries/manufacturing" className="es-direction" id="industries">
-            <div className="es-direction-body"><span>03 / First pack</span><h3>Manufacturing</h3><p>The first packaged solution: plant work, people, parts and MRP on one record.</p></div>
-            <div className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></div>
-          </Link>
+          <article className="es-direction" id="modules">
+            <div className="es-direction-body">
+              <span>01 / Platform</span>
+              <h3>GigaOps</h3>
+              <p>Run the plant job. Restore the asset, put a qualified person on it, issue the spare, and keep the evidence.</p>
+              <nav className="es-direction-links" aria-label="GigaOps modules">
+                <Link href="/gigaops/maintenance">Maintenance</Link>
+                <Link href="/gigaops/workforce">Workforce</Link>
+                <Link href="/gigaops/inventory">Inventory</Link>
+                <Link href="/platform/mobile">Frontline</Link>
+              </nav>
+            </div>
+            <Link href="/gigaops" className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></Link>
+          </article>
+          <article className="es-direction">
+            <div className="es-direction-body">
+              <span>02 / Life sciences</span>
+              <h3>SPEED</h3>
+              <p>Decide the route while it can still change. The dossier, the review, and the recommendation stay together.</p>
+            </div>
+            <Link href="/products/speed" className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></Link>
+          </article>
+          <article className="es-direction" id="industries">
+            <div className="es-direction-body">
+              <span>03 / First pack</span>
+              <h3>Manufacturing</h3>
+              <p>The separate production offer. A bill of materials, a production order, and material readiness on the same record as the plant.</p>
+            </div>
+            <Link href="/industries/manufacturing" className="es-direction-foot">Explore <ArrowRight size={18} strokeWidth={1.5} /></Link>
+          </article>
         </div>
       </div>
     </section>
@@ -661,7 +702,7 @@ export function EnterpriseHome() {
           title="Architecture, packs, Frontline, integration and a live record — not a slide that leaves with us."
           href="/consulting"
           listLabel="Explore consulting"
-          items={consultingCapabilities.map((item) => [item.title, `/consulting#${item.id}`] as [string, string])}
+          items={consultingCapabilities.map((item) => ({ label: item.title, href: `/consulting#${item.id}`, result: item.result }))}
         />
       </div>
     </section>
@@ -999,7 +1040,7 @@ export function ConsultingPage() {
           title="Lasting capability on your record — not a slide that leaves with us."
           href="/contact"
           listLabel="Explore capabilities"
-          items={consultingCapabilities.map((item) => [item.title, `#${item.id}`] as [string, string])}
+          items={consultingCapabilities.map((item) => ({ label: item.title, href: `#${item.id}`, result: item.result }))}
         />
       </div>
     </section>
